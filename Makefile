@@ -1,5 +1,5 @@
 frupal: main.cpp
-	g++ main.cpp frupal.cpp hero.cpp -Werror -Wall -lncurses -o frupal
+	g++ main.cpp frupal.cpp hero.cpp -Werror -Wall -lncurses -ltinfo -o frupal
 
 clean:
 	rm frupal
