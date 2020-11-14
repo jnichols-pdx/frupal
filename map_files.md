@@ -25,7 +25,6 @@ The following elements are optional, but are suggested for a more interesting ga
 
 ## Elements
 
----
 ### Frupal_kingdom
 
 Frupal_Kindgom:
