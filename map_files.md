@@ -1,15 +1,15 @@
-#Map Files
+# Map Files
 
 A map file describes the Kingdom of Frupal's condition at the start of a game.  
 This includes the size of the Kingdom, the terrain (meadows, marshes, waterways 
 and walls) at every grovnik, and descriptions of every item found in the Kingdom.
 
 
-###Filename convention
+### Filename convention
 Map files may have any filename, but typically will end with the ".fmap" suffix.
 
 
-##Structure
+## Structure
 * Every element in the map file begins with the name of the element type at the start of a line, followed by a colon.  
 * The first line of the file must be the `Frupal_Kingdom:` element.  
 * Parameters describing the element follow the colon and are separated by white space.  
@@ -23,10 +23,10 @@ The following elements are required for a complete game map: `size:`, `start:`, 
 The following elements are optional, but are suggested for a more interesting game experience: *TBD*  
 
 
-##Elements
+## Elements
 
 ---
-###Frupal_kingdom
+### Frupal_kingdom
 
 Frupal_Kindgom:
 
@@ -38,7 +38,7 @@ This may only be specified **once**.
 Example: `Frupal_Kingdom:`
 
 ---
-###Size
+### Size
 
 size: *<x dimension\>* *<y dimension\>*
 
@@ -49,7 +49,7 @@ This may only be specified **once**.
 Example: `size: 128 128`
 
 ---
-###Start
+### Start
 
 start: *<x location\>* *<y location\>*
 
@@ -60,7 +60,7 @@ The following example places the Hero just inside of the northwest corner of the
 Example: `start: 1 1`
 
 ---
-###Terrain
+### Terrain
 
 terrain:  
 *<first row of terrain characters\>*  
@@ -97,7 +97,7 @@ The supported terrain characters are:
 <span style="color:black">████████</span><br>
 
 ---
-###Diamonds
+### Diamonds
 
 diamonds: *<x location\>* *<y location\>*
 
