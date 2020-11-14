@@ -88,13 +88,8 @@ The supported terrain characters are:
     ..~~~.
     ..""..
     ......
-<span style="color:black">████████</span><br>
-<span style="color:black">█</span><span style="color:green">████</span><span style="color:white">█<span style="color:green">█<span style="color:black">█</span><br>
-<span style="color:black">█</span><span style="color:green">████</span><span style="color:white">█<span style="color:green">█<span style="color:black">█</span><br>
-<span style="color:black">█</span><span style="color:green">██</span><span style="color:blue">███<span style="color:green">█<span style="color:black">█</span><br>
-<span style="color:black">█</span><span style="color:green">██</span><span style="color:magenta">██<span style="color:green">██<span style="color:black">█</span><br>
-<span style="color:black">█</span><span style="color:green">██████</span><span style="color:black">█</span><br>
-<span style="color:black">████████</span><br>
+
+![6x5 example colorized](example_map_tiny.png)
 
 ---
 ### Diamonds
