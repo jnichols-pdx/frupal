@@ -31,3 +31,6 @@
 *.out
 *.app
 frupal
+
+#vi/vim swap files:
+*.swp
