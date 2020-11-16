@@ -90,7 +90,7 @@ The supported terrain characters are:
     ..""..
     ......
 
-![6x5 example colorized](example_map_tiny.png 6x5 color example)
+![6x5 example colorized](example_map_tiny.png)
 
 ---
 ### Diamonds
