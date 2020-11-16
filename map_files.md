@@ -108,8 +108,8 @@ Example: `diamonds: 100 24`
 
 treasure: *<x location\>* *<y location\>* *<value\>* *<description\>*
 
-Specifies one of many treasure items on the map, including location, value in whiffles to be added to the player's bank account, and a name.
-The following example places a gold bar worth 4000 whiffles in the southwest region of a 128x128 map:
+Specifies one of many treasure items on the map, including location, value in whiffles to be added to the player's bank account, and a name.  
+The following example places a gold bar worth 4000 whiffles in the southwest region of a 128x128 map:  
 
 Example: `treasure: 10 127 4000 A medium sized gold bar.`
 
@@ -118,10 +118,10 @@ Example: `treasure: 10 127 4000 A medium sized gold bar.`
 
 food: *<x location\>* *<y location\>* *<cost\>* *<energy\>* *<description\>*
 
-Specifies one of many food items on a map.
-*<Cost\>* is the price in whiffles to purchase this food item.
-*<Energy\>* is the number units of energy buying and eating this food will give to the player.
-The following example places a hotdog worth 10 energy, costing 2 whiffles near the center of a 128x128 map:
+Specifies one of many food items on a map.  
+*<Cost\>* is the price in whiffles to purchase this food item.  
+*<Energy\>* is the number units of energy buying and eating this food will give to the player.  
+The following example places a hotdog worth 10 energy, costing 2 whiffles near the center of a 128x128 map:  
 
 Example: `food: 60 77 2 10 Hotdog with relish and mustard.`
 
@@ -130,10 +130,34 @@ Example: `food: 60 77 2 10 Hotdog with relish and mustard.`
 
 clue: *<x location\>* *<y location\>* *<text\>*
 
-Specifies one of many clue items on a map.
-*<Text\>* Is the information shown to the player when they discover this clue.
-Clues are either 100% correct, or 100% false.
-Clues typically make several claims at once, which allows the player to determine whether the whole clue is true or not.
-The following example places a clue about the location of some treasure one grovnik to the east from the northwest corner of the map:
+Specifies one of many clue items on a map.  
+*<Text\>* Is the information shown to the player when they discover this clue.  
+Clues are either 100% correct, or 100% false.  
+Clues typically make several claims at once, which allows the player to determine whether the whole clue is true or not.  
+The following example places a clue about the location of some treasure one grovnik to the east from the northwest corner of the map:  
 
 Example: `clue: 1 0 You are 10 grovniks west of water. There is a treasure 40 grovniks south and 3 grovniks east of here.`
+
+---
+### Ship
+
+ship: *<x location\>* *<y location\>* *<cost\>*
+
+Specifies the location of the Ship on the map.  
+The Ship allows a player to travel on water grovniks.  
+This may only be specified **once**.  
+The following example places the Ship, with a purchase price of 10000 whiffles, along the eastern edge of a 128x128 map:  
+
+Example: `ship: 128 64 10000`
+
+---
+### Binoculars
+
+binoculars: *<x location\>* *<y location\>* *<cost\>*
+
+Specifies the location of the Binoculars on the map.  
+The Binoculars allow a player to see two grovniks around themselves, instead of one.  
+This may only be specified **once**.  
+The following example places the Binoculars, which cost 500 whiffles to purchase, along the southern edge of a 128x128 map:  
+
+Example: `binoculars: 70 128 500`
