@@ -11,6 +11,7 @@ Map files may have any filename, but typically will end with the ".fmap" suffix.
 
 ## Structure
 * Every element in the map file begins with the name of the element type at the start of a line, followed by a colon.  
+* Element names must not contain whitespace.
 * The first line of the file must be the `Frupal_Kingdom:` element.  
 * Parameters describing the element follow the colon and are separated by white space.  
 * All elements, except for `terrain:` are contained on a single line in the map file.  
@@ -72,6 +73,7 @@ This must come **after** `size:` in the map file.
 This may only be specified **once**.  
 Each row of terrain characters should have the same number of characters as the *<x dimension\>* of `size:`.  
 There should be as many rows of terrain characters as the *<y dimension\>* of `size:`.  
+Blank lines and comment lines may not appear in the middle of the rows of terrain characters.
 The supported terrain characters are:
 
 * `.` (period) - Meadow
