@@ -99,4 +99,4 @@ Specifies the location of the Royal Diamonds.
 This may only be specified **once**.  
 The following example places the diamonds in the northeast region of a 128x128 map:
 
-Example: `diamond: 100 24`
+Example: `diamonds: 100 24`
