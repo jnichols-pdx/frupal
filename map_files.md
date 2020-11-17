@@ -73,7 +73,7 @@ This must come **after** `size:` in the map file.
 This may only be specified **once**.  
 Each row of terrain characters should have the same number of characters as the *<x dimension\>* of `size:`.  
 There should be as many rows of terrain characters as the *<y dimension\>* of `size:`.  
-No blank lines or comment lines are allowed between `terrain:` and the last row of terrain characters.
+No blank lines or comment lines are allowed between `terrain:` and the last row of terrain characters.  
 The supported terrain characters are:
 
 * `.` (period) - Meadow
