@@ -8,13 +8,13 @@ class terrain   	//base class for terrains
   public:
     terrain();
 		virtual ~terrain();
-    virtual void display_info() = 0;   //displays information of the grovik in the menu
+    virtual void display_info() = 0;   //displays information of the terrain in the menu
     int get_travel_cost();	//returns cost to travel
-    int get_color();	//displays correct color
+    int get_color();	//returns color of terrain
 
   protected:
     int travel_cost;    //cost of energy for player to travel through 
-		int color;
+		int color; //color of terrain
 };
 
 class meadow: public terrain
