@@ -3,14 +3,25 @@
 Frupal::Frupal(WINDOW * win, int y, int x)
 {
   curWin = win;
+
   xCur = x;
   yCur = y;
   getmaxyx(curWin, yMax, xMax);
   yMax -= 2;
   xMax -= 2;
+
   keypad(curWin, true);
+
   mainGuy = new Hero(1000, 100);
+
+  for(int i = 0; i < 128; ++i){
+    for(int j = 0; j < 128; ++j){
+      visitMap[i][j] = false;
+    }
+  }
 }
+
+Frupal::~Frupal(){}
 
 //lk series updates cursors location coordinates for the map window, which will get updated in the disp() function
 
@@ -79,4 +90,14 @@ int Frupal::getmv()
       break;
   }
   return ch;
+}
+
+bool Frupal::updateVisitMap(int y, int x)
+{
+  if(!visitMap[y][x])
+  {
+    visitMap[y][x] = true;
+    return true;
+  }
+  return false;
 }
