@@ -1,6 +1,5 @@
 //source code for terrain classes
 
-#include <ncurses.h>
 #include "terrain.h"
 
 terrain::terrain(): travel_cost(0), color(0){}
@@ -17,7 +16,8 @@ int terrain::get_travel_cost(){
 
 //----------------------------------------------------------------------------
 
-meadow::meadow(){
+meadow::meadow()
+{
 	color = COLOR_GREEN;
 	travel_cost = 1;
 }    
@@ -39,19 +39,21 @@ void swamp::display_info(){}
 
 //----------------------------------------------------------------------------
 
-water::water(){
+water::water()
+{
 	color = COLOR_BLUE;
 	travel_cost = 0;
 }
 
 water::~water(){}
 
+
 void water::display_info(){
-}
 
 //----------------------------------------------------------------------------
 
-wall::wall(){
+wall::wall()
+{
 	color = COLOR_WHITE;
 	travel_cost = 1;
 }

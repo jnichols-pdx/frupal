@@ -1,4 +1,5 @@
 //this file is for managing the classes of the terrains
+#include <ncurses.h>
 
 class terrain   	//base class for terrains
 {
