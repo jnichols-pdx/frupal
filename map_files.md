@@ -19,9 +19,9 @@ Map files may have any filename, but typically will end with the ".fmap" suffix.
 * Lines beginning with `#` are ignored. This may be used to include comments in a map file.  
 * X,Y locations are zero indexed. The `0 0` origin is at the top left (northwest) corner of the map.
 
-The following elements are required for a complete game map: `size:`, `start:`, `terrain:`, `diamond:`.  
+The following elements are required for a complete game map: [`size:`](#size), [`start:`](#start), [`terrain:`](#terrain), [`diamonds:`](#diamonds).
 
-The following elements are optional, but are suggested for a more interesting game experience: `ship:`, `binoculars:`, `food:`, `clue:`, `treasure:`, [`obstacle:`](#obstacles), [`tool:`](#tools)
+The following elements are optional, but are suggested for a more interesting game experience: [`ship:`](#ship), [`binoculars:`](#binoculars), [`food:`](#food), [`clue:`](#clues), [`treasure:`](#treasure), [`obstacle:`](#obstacles), [`tool:`](#tools)
 
 
 ## Elements
