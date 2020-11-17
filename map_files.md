@@ -21,7 +21,7 @@ Map files may have any filename, but typically will end with the ".fmap" suffix.
 
 The following elements are required for a complete game map: `size:`, `start:`, `terrain:`, `diamond:`.  
 
-The following elements are optional, but are suggested for a more interesting game experience: `ship:`, `binoculars:`, `food:`, `clue:`, `treasure:`, `obstacle:`, `tool:`
+The following elements are optional, but are suggested for a more interesting game experience: `ship:`, `binoculars:`, `food:`, `clue:`, `treasure:`, `obstacle:`(#obstacle), `tool:`(#tools)
 
 
 ## Elements
