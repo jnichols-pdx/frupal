@@ -21,7 +21,7 @@ Map files may have any filename, but typically will end with the ".fmap" suffix.
 
 The following elements are required for a complete game map: `size:`, `start:`, `terrain:`, `diamond:`.  
 
-The following elements are optional, but are suggested for a more interesting game experience: *TBD*  
+The following elements are optional, but are suggested for a more interesting game experience: `ship:`, `binoculars:`, `food:`, `clue:`, `treasure:`, `obstacle:`, `tool:`
 
 
 ## Elements
@@ -73,7 +73,7 @@ This must come **after** `size:` in the map file.
 This may only be specified **once**.  
 Each row of terrain characters should have the same number of characters as the *<x dimension\>* of `size:`.  
 There should be as many rows of terrain characters as the *<y dimension\>* of `size:`.  
-Blank lines and comment lines may not appear in the middle of the rows of terrain characters.
+No blank lines or comment lines are allowed within the `terrain:` specification.  
 The supported terrain characters are:
 
 * `.` (period) - Meadow
@@ -89,6 +89,8 @@ The supported terrain characters are:
     ..~~~.
     ..""..
     ......
+
+As rendered in game:
 
 ![6x5 example colorized](example_map_tiny.png)
 
@@ -119,19 +121,19 @@ Example: `treasure: 10 127 4000 A medium sized gold bar.`
 food: *<x location\>* *<y location\>* *<cost\>* *<energy\>* *<description\>*
 
 Specifies one of many food items on a map.  
-*<Cost\>* is the price in whiffles to purchase this food item.  
-*<Energy\>* is the number units of energy buying and eating this food will give to the player.  
+*<cost\>* is the price in whiffles to purchase this food item.  
+*<energy\>* is the number units of energy buying and eating this food will give to the player.  
 The following example places a hotdog worth 10 energy, costing 2 whiffles near the center of a 128x128 map:  
 
 Example: `food: 60 77 2 10 Hotdog with relish and mustard.`
 
 ---
-### Clue
+### Clues
 
 clue: *<x location\>* *<y location\>* *<text\>*
 
 Specifies one of many clue items on a map.  
-*<Text\>* Is the information shown to the player when they discover this clue.  
+*<text\>* Is the information shown to the player when they discover this clue.  
 Clues are either 100% correct, or 100% false.  
 Clues typically make several claims at once, which allows the player to determine whether the whole clue is true or not.  
 The following example places a clue about the location of some treasure one grovnik to the east from the northwest corner of the map:  
@@ -146,6 +148,7 @@ ship: *<x location\>* *<y location\>* *<cost\>*
 Specifies the location of the Ship on the map.  
 The Ship allows a player to travel on water grovniks.  
 This may only be specified **once**.  
+*<cost\>* is the price in whiffles to purchase the ship.
 The following example places the Ship, with a purchase price of 10000 whiffles, along the eastern edge of a 128x128 map:  
 
 Example: `ship: 128 64 10000`
@@ -158,6 +161,36 @@ binoculars: *<x location\>* *<y location\>* *<cost\>*
 Specifies the location of the Binoculars on the map.  
 The Binoculars allow a player to see two grovniks around themselves, instead of one.  
 This may only be specified **once**.  
+*<cost\>* is the price in whiffles to purchase the Binoculars.
 The following example places the Binoculars, which cost 500 whiffles to purchase, along the southern edge of a 128x128 map:  
 
 Example: `binoculars: 70 128 500`
+
+---
+### Obstacles
+
+obstacle: *<x location\>* *<y location\>* *<kind\>* *<energy cost\>* *<description\>*
+
+Specifies one of many obstacles on a map.  
+*<kind\>* is a string that defines what type of obstacle this is, and thus what tools affect this obstacle.  
+*<kind\>* may not contain whitespace, and is not expected to be visible to the player.  
+*<energy cost\>* is the amount of energy required for a player to remove this obstacle without the appropriate tool.  
+*<description\>* Should be used for the player-visible description of an obstacle instead of *<kind\>*.  
+The following example places a boulder requiring 15 energy to remove on the western edge of a 128x128 map:  
+
+Example: `obstacle: 0 44 boulder 15 Someone or something has driven a pillar of granite into the ground here, blocking your path.`
+
+---
+### Tools
+
+tool: *<x location\>* *<y location\>* *<target\>* *<divisor\>* *<cost\>* *<description\>*
+
+Specifies one of many tools on a map.  
+*<target\>* is a string that defines what type of obstacle this tool helps to remove. (by matching the obstacle's *<kind\>*)  
+*<target\>* may not contain whitespace, and is not expected to be visible to the player.  
+*<divisor\>* is a number that will be used to divide the energy cost of an obstacle.  
+A tool with a divisor of `3` would make the obstacle it removes cost only 1/3 the normal energy to remove.  
+*<cost\>* is the amount of energy required for a player to remove this obstacle without the appropriate tool.  
+The following example places a hammer, costing 100 grovnicks, with divisor 2, that affects boulders, along the northern edge of a 128x128 map:  
+
+Example: `tool: 61 0 boulder 2 100 Rock smashing hammer X2`
