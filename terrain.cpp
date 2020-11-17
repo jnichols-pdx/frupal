@@ -48,7 +48,7 @@ water::water()
 water::~water(){}
 
 
-void water::display_info(){
+void water::display_info(){}
 
 //----------------------------------------------------------------------------
 
