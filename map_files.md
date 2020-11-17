@@ -170,8 +170,8 @@ Example: `binoculars: 70 128 500`
 
 obstacle: *<x location\>* *<y location\>* *<kind\>* *<energy cost\>* *<description\>*
 
-Specifies one of many obstacles on a map.  
-*<kind\>* is a string that defines what type of obstacle this is, and thus what tools affect this obstacle.  
+Specifies one of many obstacles on a map, which cost energy to remove.  
+*<kind\>* is a string that defines what type of obstacle this is, and thus what tools affect this obstacle. (Should match a tool's *<target\>*)
 *<kind\>* may not contain whitespace, and is not expected to be visible to the player.  
 *<energy cost\>* is the amount of energy required for a player to remove this obstacle without the appropriate tool.  
 *<description\>* Should be used for the player-visible description of an obstacle instead of *<kind\>*.  
@@ -184,8 +184,8 @@ Example: `obstacle: 0 44 boulder 15 Someone or something has driven a pillar of 
 
 tool: *<x location\>* *<y location\>* *<target\>* *<divisor\>* *<cost\>* *<description\>*
 
-Specifies one of many tools on a map.  
-*<target\>* is a string that defines what type of obstacle this tool helps to remove. (by matching the obstacle's *<kind\>*)  
+Specifies one of many tools on a map, which can lower the energy cost of removing obstacles.
+*<target\>* is a string that defines what type of obstacle this tool helps to remove. (Should match an obstacle's *<kind\>*)  
 *<target\>* may not contain whitespace, and is not expected to be visible to the player.  
 *<divisor\>* is a number that will be used to divide the energy cost of an obstacle.  
 A tool with a divisor of `3` would make the obstacle it removes cost only 1/3 the normal energy to remove.  
