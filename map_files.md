@@ -160,7 +160,7 @@ Example: `binoculars: 70 128 500`
 obstacle: *<x location\>* *<y location\>* *<kind\>* *<energy cost\>* *<description\>*
 
 Specifies one of many obstacles on a map, which cost energy to remove.  
-*<kind\>* is a string that defines what type of obstacle this is, and thus what tools affect this obstacle. (Should match a tool's *<target\>*)
+*<kind\>* is a string that defines what type of obstacle this is, and thus what tools affect this obstacle. (Should match a tool's *<target\>*)  
 *<kind\>* may not contain whitespace, and is not visible to the player.  
 *<energy cost\>* is the amount of energy required for a player to remove this obstacle without the appropriate tool.  
 *<description\>* Should be used for the player-visible description of an obstacle instead of *<kind\>*.  
