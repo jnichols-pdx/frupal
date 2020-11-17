@@ -21,7 +21,7 @@ Map files may have any filename, but typically will end with the ".fmap" suffix.
 
 The following elements are required for a complete game map: [`Frupal_Kingdom:`](#frupal_kingdom), [`terrain:`](#terrain), [`start:`](#start), [`diamonds:`](#diamonds).
 
-The following elements are optional, but are suggested for a more interesting game experience: [`ship:`](#ship), [`binoculars:`](#binoculars), [`food:`](#food), [`clue:`](#clues), [`treasure:`](#treasure), [`obstacle:`](#obstacles), [`tool:`](#tools)
+The following elements are optional, but are suggested for a more interesting game experience: [`treasure:`](#treasure), [`food:`](#food), [`clue:`](#clues), [`ship:`](#ship), [`binoculars:`](#binoculars), [`obstacle:`](#obstacles), [`tool:`](#tools)
 
 
 ## Elements
@@ -33,7 +33,7 @@ Frupal_Kindgom:
 Declares that the file contains a map description for the Kingdom of Frupal game.  
 This element **MUST** be specified on the very first line of the map file.  
 This element has no parameters.  
-This may only be specified **once**.  
+This element may only be specified **once**.  
 
 Example: `Frupal_Kingdom:`
 
@@ -47,11 +47,11 @@ terrain: *<x dimension\>* *<y dimension\>*
 *<last row of terrain characters\>*  
 
 Defines the dimensions of and the kind of terrain grovnik at every location on the map.
-The only element allowed before `terrain:` in the map file is `Frupal_Kingdom:`.
+The only element allowed before `terrain:` in the map file is `Frupal_Kingdom:`.  
 Each row of terrain characters **must** have the same number of characters as *<x dimension\>*.  
 There **must** be as many rows of terrain characters as *<y dimension\>*.  
 **No** blank lines or comment lines are allowed between `terrain:` and the last row of terrain characters.  
-This may only be specified **once**.  
+This element may only be specified **once**.  
 The supported terrain characters are:
 
 * `.` (period) - Meadow
@@ -78,7 +78,7 @@ As rendered in game:
 start: *<x location\>* *<y location\>*
 
 Specifies the starting location of the Hero.  
-This may only be specified **once**.  
+This element may only be specified **once**.  
 The following example places the Hero just inside of the northwest corner of the map.
 
 Example: `start: 1 1`
@@ -89,7 +89,7 @@ Example: `start: 1 1`
 diamonds: *<x location\>* *<y location\>*
 
 Specifies the location of the Royal Diamonds.  
-This may only be specified **once**.  
+This element may only be specified **once**.  
 The following example places the diamonds in the northeast region of a 128x128 map:
 
 Example: `diamonds: 100 24`
@@ -135,8 +135,8 @@ Example: `clue: 1 0 You are 10 grovniks west of water. There is a treasure 40 gr
 ship: *<x location\>* *<y location\>* *<cost\>*
 
 Specifies the location of the Ship on the map, which allows a player to travel on water grovniks.  
-This may only be specified **once**.  
 *<cost\>* is the price in whiffles to purchase the ship.  
+This element may only be specified **once**.  
 The following example places the Ship, with a purchase price of 10000 whiffles, along the eastern edge of a 128x128 map:  
 
 Example: `ship: 128 64 10000`
@@ -148,8 +148,8 @@ binoculars: *<x location\>* *<y location\>* *<cost\>*
 
 Specifies the location of the Binoculars on the map.  
 The Binoculars allow a player to see two grovniks around themselves, instead of one.  
-This may only be specified **once**.  
 *<cost\>* is the price in whiffles to purchase the Binoculars.  
+This element may only be specified **once**.  
 The following example places the Binoculars, which cost 500 whiffles to purchase, along the southern edge of a 128x128 map:  
 
 Example: `binoculars: 70 128 500`
