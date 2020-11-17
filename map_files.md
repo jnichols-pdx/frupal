@@ -188,7 +188,7 @@ Specifies one of many tools on a map, which can lower the energy cost of removin
 *<target\>* is a string that defines what type of obstacle this tool helps to remove. (Should match an obstacle's *<kind\>*)  
 *<target\>* may not contain whitespace, and is not visible to the player.  
 *<divisor\>* is a number that will be used to divide the energy cost of an obstacle.  
-A tool with a divisor of `3` would make the obstacle it removes cost only 1/3 the normal energy to remove.  
+A tool with a divisor of `3` would make the obstacle it removes cost only 1/3 as much energy to remove.  
 *<cost\>* is the amount of energy required for a player to remove this obstacle without the appropriate tool.  
 The following example places a hammer, costing 100 grovnicks, with divisor 2, that affects boulders, along the northern edge of a 128x128 map:  
 
