@@ -19,7 +19,7 @@ Map files may have any filename, but typically will end with the ".fmap" suffix.
 * Lines beginning with `#` are ignored. This may be used to include comments in a map file.  
 * X,Y locations are zero indexed. The `0 0` origin is at the top left (northwest) corner of the map.
 
-The following elements are required for a complete game map: [`size:`](#size), [`start:`](#start), [`terrain:`](#terrain), [`diamonds:`](#diamonds).
+The following elements are required for a complete game map: [`Frupal_Kingdom`](#frupal_kingdom), [`terrain:`](#terrain), [`start:`](#start), [`diamonds:`](#diamonds).
 
 The following elements are optional, but are suggested for a more interesting game experience: [`ship:`](#ship), [`binoculars:`](#binoculars), [`food:`](#food), [`clue:`](#clues), [`treasure:`](#treasure), [`obstacle:`](#obstacles), [`tool:`](#tools)
 
@@ -38,15 +38,39 @@ This may only be specified **once**.
 Example: `Frupal_Kingdom:`
 
 ---
-### Size
+### Terrain
 
-size: *<x dimension\>* *<y dimension\>*
+terrain: *<x dimension\>* *<y dimension\>*  
+*<first row of terrain characters\>*  
+*<second row of terrain characters\>*  
+*...*  
+*<last row of terrain characters\>*  
 
-Specifies the dimensions of the map.  
-This must come **before** `terrain:` in the map file.  
+Defines the dimensions of and the kind of terrain grovnik at every location on the map.
+The only element allowed before `terrain:` in the map file is `Frupal_Kingdom:`.
+Each row of terrain characters **must** have the same number of characters as *<x dimension\>*.  
+There **must** be as many rows of terrain characters as *<y dimension\>*.  
+**No** blank lines or comment lines are allowed between `terrain:` and the last row of terrain characters.  
 This may only be specified **once**.  
+The supported terrain characters are:
 
-Example: `size: 128 128`
+* `.` (period) - Meadow
+* `=` (equals) - Wall
+* `"` (double quote) - Swamp
+* `~` (tilde) - Water
+
+6x5 Example:
+
+    terrain: 6 5
+    ....=.  
+    ....=.
+    ..~~~.
+    ..""..
+    ......
+
+As rendered in game:
+
+![6x5 example colorized](example_map_tiny.png)
 
 ---
 ### Start
@@ -58,41 +82,6 @@ This may only be specified **once**.
 The following example places the Hero just inside of the northwest corner of the map.
 
 Example: `start: 1 1`
-
----
-### Terrain
-
-terrain:  
-*<first row of terrain characters\>*  
-*<second row of terrain characters\>*  
-*...*  
-*<last row of terrain characters\>*  
-
-Defines the kind of terrain grovnik found at every location on the map.
-This must come **after** `size:` in the map file.  
-This may only be specified **once**.  
-Each row of terrain characters should have the same number of characters as the *<x dimension\>* of `size:`.  
-There should be as many rows of terrain characters as the *<y dimension\>* of `size:`.  
-No blank lines or comment lines are allowed between `terrain:` and the last row of terrain characters.  
-The supported terrain characters are:
-
-* `.` (period) - Meadow
-* `=` (equals) - Wall
-* `"` (double quote) - Swamp
-* `~` (tilde) - Water
-
-6x5 Example:
-
-    terrain:  
-    ....=.  
-    ....=.
-    ..~~~.
-    ..""..
-    ......
-
-As rendered in game:
-
-![6x5 example colorized](example_map_tiny.png)
 
 ---
 ### Diamonds
