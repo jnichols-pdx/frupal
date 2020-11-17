@@ -6,7 +6,7 @@ frupal: grovnik.o frupal.o hero.o main.o
 main.o: main.cpp
 	g++ -g -c main.cpp
   
-hero.o: frupal.h hero.cpp
+hero.o: hero.h hero.cpp
 	g++ -g -c hero.cpp
   
 frupal.o: frupal.h frupal.cpp
