@@ -11,9 +11,9 @@ int main()
   
   
   WINDOW * mapwin = newwin(y, x*0.75, 0, 0); //Create a new window y lines high, and 75% of x value as described by the standard screen (terminal window size)
-  wborder(mapwin, 32,35,32,32,32,35,32,35); //create border using # character (integer representation = 35) along the right edge of the map window
 
-
+	move(0, x*.75);
+	vline('#', y);
   mvwprintw(stdscr, 0, x*0.75+13, "Arrow Keys to Move Cursor"); //Print out instructions to the menu
   refresh();
 
@@ -22,7 +22,6 @@ int main()
   {
     //menuref(stdscr...
     //refresh();
-    g -> disp();
     wrefresh(mapwin);
   }
 

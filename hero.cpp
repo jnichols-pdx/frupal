@@ -12,12 +12,28 @@ Hero::Hero(int whif, int nRG){
 	energy = nRG;
 }
 
-void Hero::modEner(int nRG)
+bool Hero::modEner(int nRG)
 {
   energy += nRG;
+
+	if(energy <= 0){
+		return false;
+	}
+
+	return true;
 }
 
-void Hero::modWhif(int Whif)
+bool Hero::modWhif(int whif)
 {
-  whiffles += Whif;
+	if(whiffles += whif < 0){
+		return false;
+	}
+
+  whiffles += whif;
+	return true;
+}
+
+//checks inventory for a certain item
+bool Hero::checkInventory(std::string item){
+	return true;
 }
