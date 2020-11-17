@@ -173,7 +173,7 @@ Example: `obstacle: 0 44 boulder 15 Someone or something has driven a pillar of 
 
 tool: *<x location\>* *<y location\>* *<target\>* *<divisor\>* *<cost\>* *<description\>*
 
-Specifies one of many tools on a map, which can lower the energy cost of removing obstacles.
+Specifies one of many tools on a map, which can lower the energy cost of removing obstacles.  
 *<target\>* is a string that defines what type of obstacle this tool helps to remove. (Should match an obstacle's *<kind\>*)  
 *<target\>* may not contain whitespace, and is not visible to the player.  
 *<divisor\>* is a number that will be used to divide the energy cost of an obstacle.  
