@@ -145,10 +145,9 @@ Example: `clue: 1 0 You are 10 grovniks west of water. There is a treasure 40 gr
 
 ship: *<x location\>* *<y location\>* *<cost\>*
 
-Specifies the location of the Ship on the map.  
-The Ship allows a player to travel on water grovniks.  
+Specifies the location of the Ship on the map, which allows a player to travel on water grovniks.  
 This may only be specified **once**.  
-*<cost\>* is the price in whiffles to purchase the ship.
+*<cost\>* is the price in whiffles to purchase the ship.  
 The following example places the Ship, with a purchase price of 10000 whiffles, along the eastern edge of a 128x128 map:  
 
 Example: `ship: 128 64 10000`
@@ -161,7 +160,7 @@ binoculars: *<x location\>* *<y location\>* *<cost\>*
 Specifies the location of the Binoculars on the map.  
 The Binoculars allow a player to see two grovniks around themselves, instead of one.  
 This may only be specified **once**.  
-*<cost\>* is the price in whiffles to purchase the Binoculars.
+*<cost\>* is the price in whiffles to purchase the Binoculars.  
 The following example places the Binoculars, which cost 500 whiffles to purchase, along the southern edge of a 128x128 map:  
 
 Example: `binoculars: 70 128 500`
