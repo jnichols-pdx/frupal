@@ -1,34 +1,39 @@
-#include "frupal.h"
+//Character class for Kingdom of Frupal
 
-Hero::Hero(int whif, int nRG)
-{
-  whiffles = whif;
-  energy = nRG;
-  for(int i = 0; i < 128; ++i)
-  {
-    for(int j = 0; j < 128; ++j)
-    {
-      visitMap[i][j] = false;
-    }
-  }
+#include "hero.h"
+
+Hero::Hero(){
+	whiffles = 1000;
+	energy = 100;
 }
 
-void Hero::modEner(int nRG)
+Hero::Hero(int whif, int nRG){
+	whiffles = whif;
+	energy = nRG;
+}
+
+bool Hero::modEner(int nRG)
 {
   energy += nRG;
+
+	if(energy <= 0){
+		return false;
+	}
+
+	return true;
 }
 
-void Hero::modWhif(int Whif)
+bool Hero::modWhif(int whif)
 {
-  whiffles += Whif;
+	if(whiffles += whif < 0){
+		return false;
+	}
+
+  whiffles += whif;
+	return true;
 }
 
-bool Hero::updateMap(int y, int x)
-{
-  if(!visitMap[y][x])
-  {
-    visitMap[y][x] = true;
-    return true;
-  }
-  return false;
+//checks inventory for a certain item
+bool Hero::checkInventory(std::string item){
+	return true;
 }

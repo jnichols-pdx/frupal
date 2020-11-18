@@ -1,6 +1,5 @@
 //source code for terrain classes
 
-#include <ncurses.h>
 #include "terrain.h"
 
 terrain::terrain(){}

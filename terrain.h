@@ -1,6 +1,7 @@
-//this file is for managing the classes of the terrains
+//this file is for getting terrain information
 
 #include "frupal.h"
+#include <ncurses.h>
 
 class terrain   	//base class for terrains
 {
