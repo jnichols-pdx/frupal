@@ -73,7 +73,7 @@ class tool : public grovnik
 		~tool();
 		void display_info();
 	protected:
-		char * name;
+		char name;
 	
 	private:	
 };
@@ -82,10 +82,16 @@ class food : public grovnik
 {
 	public:
 		food();
-		food(int type);
+		food(char name, int cost, int energy);
 		~food();
 		void display_info();
+		char get_name();
+		int get_cost();
+		int get_energy();
 	protected:
+		char name;
+		int cost;
+		int energy;
 	
 	private:	
 };

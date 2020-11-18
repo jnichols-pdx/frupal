@@ -28,6 +28,8 @@ char grovnik::get_character() const
 	return character;
 }
 
+//-------------------------------------------------------------------
+
 binocular::binocular()
 {
 	
@@ -42,6 +44,8 @@ void binocular::display_info()
 {
 	
 }
+
+//-------------------------------------------------------------------
 
 treasure_chest::treasure_chest()
 {
@@ -58,6 +62,8 @@ void treasure_chest::display_info()
 	
 }
 
+//-------------------------------------------------------------------
+
 royal_diamond::royal_diamond()
 {
 	
@@ -72,6 +78,8 @@ void royal_diamond::display_info()
 {
 	
 }
+
+//-------------------------------------------------------------------
 
 obstacle::obstacle()
 {
@@ -88,7 +96,9 @@ void obstacle::display_info()
 	
 }
 
-tool::tool()
+//-------------------------------------------------------------------
+
+tool::tool() : name(NULL)
 {
 	
 }
@@ -103,9 +113,20 @@ void tool::display_info()
 	
 }
 
-food::food()
+//-------------------------------------------------------------------
+
+//default constructor
+food::food() : name(NULL), cost(0), energy(0)
 {
 	
+}
+
+//constructor with args
+food::food(char name, int cost, int energy)
+{
+	this->name = name;
+	this->cost = cost;
+	this->energy = energy;
 }
 
 food::~food()
@@ -117,6 +138,23 @@ void food::display_info()
 {
 	
 }
+
+char food::name
+{
+	return name;
+}
+
+int food::cost
+{
+	return cost;
+}
+
+int food::energy
+{
+	return energy;
+}
+
+//-------------------------------------------------------------------
 
 clue::clue()
 {
