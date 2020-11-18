@@ -10,38 +10,20 @@ grovnik::grovnik() : character(NULL)
 }
 
 //grovnik constructor with arguments
-grovnik::grovnik(char * character)
+grovnik::grovnik(char character)
 {
-	if(this->character != NULL)
-	{
-		delete [] this->character;
-	}
-	this->character = new char[strlen(character)+1];
-	strcpy(this->character,character);
-
-}
-
-//grovnik copy constructor
-grovnik::grovnik(const grovnik &to_copy)
-{
-	if(character != NULL)
-	{
-		delete [] character;
-	}
-	character = new char[strlen(to_copy.character)+1];
-	strcpy(character,to_copy.character);
-
+	this->character = character;
 }
 
 //grovnik destructor
 //this destructor is virtual
 grovnik::~grovnik()
 {
-	delete [] character;
+
 }
 
 //grovnik character getter function
-char * grovnik::get_character() const
+char grovnik::get_character() const
 {
 	return character;
 }

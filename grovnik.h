@@ -8,8 +8,7 @@ class grovnik
 {
 	public:
 		grovnik();
-		grovnik(const grovnik &to_copy);
-		grovnik(char * character);
+		grovnik(char character);
 		char get_character() const;
 		
 		//virtual functions
@@ -17,7 +16,7 @@ class grovnik
 		virtual void display_info() = 0;   //displays information of the grovnik
 		
 	protected:
-		char * character;
+		char character;
 
 	private:
 };
