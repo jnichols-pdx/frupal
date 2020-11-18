@@ -3,7 +3,30 @@
 
 #include "grovnik.h"
 
+//grovnik default constructor
+grovnik::grovnik() : character(NULL)
+{
+	
+}
 
+//grovnik constructor with arguments
+grovnik::grovnik(char character)
+{
+	this->character = character;
+}
+
+//grovnik destructor
+//this destructor is virtual
+grovnik::~grovnik()
+{
+
+}
+
+//grovnik character getter function
+char grovnik::get_character() const
+{
+	return character;
+}
 
 binocular::binocular()
 {
