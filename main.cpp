@@ -1,6 +1,6 @@
 #include "frupal.h"
 
-int main()
+int main(int argc, char ** argv)
 {
   initscr(); //Inits screen / sets up ncurses
   noecho();
@@ -17,7 +17,22 @@ int main()
   mvwprintw(stdscr, 0, x*0.75+13, "Arrow Keys to Move Cursor"); //Print out instructions to the menu
   refresh();
 
-  Frupal * g = new Frupal(mapwin,1,1);
+  Frupal * g;
+  bool goodMapFile = false;
+  //Attempt to load the map from a file if one was provided as a command line argument.
+  if(argc > 1)
+  {
+    g = new Frupal(mapwin,argv[1]);
+    goodMapFile = g->mapLoaded();
+    if(!goodMapFile)
+      delete g;
+  }
+  //If we were not given a map file, or the map file wasn't correct, load the default map.
+  if(!goodMapFile)
+  {
+    g = new Frupal(mapwin,1,1);
+  }
+
   while(g->getmv()!='q')
   {
     //menuref(stdscr...
@@ -26,6 +41,8 @@ int main()
   }
 
   endwin(); //Ends ncurses / deallocates memory
+
+  delete g;
 
   return 0;
 }
