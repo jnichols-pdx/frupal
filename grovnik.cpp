@@ -81,11 +81,21 @@ void royal_diamond::display_info()
 
 //-------------------------------------------------------------------
 
-obstacle::obstacle()
+//default constructor
+obstacle::obstacle() : name(NULL), name_b(NULL), b_energy(0)
 {
 
 }
 
+//constructor with args
+obstacle::obstacle(char name, char name_b, int b_energy)
+{
+	this->name = name;
+	this->name_b = name_b;
+	this->b_energy = b_energy;
+}
+
+//destructor
 obstacle::~obstacle()
 {
 
@@ -94,6 +104,21 @@ obstacle::~obstacle()
 void obstacle::display_info()
 {
 	
+}
+
+char obstacle::get_name()
+{
+	return name;
+}
+
+char obstacle::get_name_b()
+{
+	return name_b;
+}
+
+int obstacle::get_b_energy()
+{
+	return b_energy;
 }
 
 //-------------------------------------------------------------------
@@ -139,17 +164,17 @@ void food::display_info()
 	
 }
 
-char food::name
+char food::name()
 {
 	return name;
 }
 
-int food::cost
+int food::cost()
 {
 	return cost;
 }
 
-int food::energy
+int food::energy()
 {
 	return energy;
 }
