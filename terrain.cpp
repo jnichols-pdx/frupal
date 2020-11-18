@@ -24,18 +24,33 @@ meadow::meadow()
 
 meadow::~meadow(){}
 
-void meadow::display_info(){}
+void meadow::display_info()
+{
+	int y = 9;   	//change this variable to move the position of the text up or down
+	int x = 3;      //change this to move it right or left
+	mvwprintw(stdscr, y, COLS*0.75+x, "Meadow");
+	mvwprintw(stdscr, y+1, COLS*0.75+x, "Cost to move through is 1 energy");
+	mvwprintw(stdscr, y+2, COLS*0.75+x, "                                          ");
+}
 
 //----------------------------------------------------------------------------
 
-swamp::swamp(){
+swamp::swamp()
+{
 	color = COLOR_MAGENTA;
 	travel_cost = 2;
 }
 
 swamp::~swamp(){}
 
-void swamp::display_info(){}
+void swamp::display_info()
+{
+	int y = 9;   	//change this variable to move the position of the text up or down
+	int x = 3;      //change this to move it right or left
+	mvwprintw(stdscr, y, COLS*0.75+x, "Swamp   ");
+	mvwprintw(stdscr, y+1, COLS*0.75+x, "Cost to move through is 2 energy");
+	mvwprintw(stdscr, y+2, COLS*0.75+x, "                                         ");
+}
 
 //----------------------------------------------------------------------------
 
@@ -48,7 +63,14 @@ water::water()
 water::~water(){}
 
 
-void water::display_info(){}
+void water::display_info()
+{
+	int y = 9;   	//change this variable to move the position of the text up or down
+	int x = 3;      //change this to move it right or left
+	mvwprintw(stdscr, y, COLS*0.75+x, "Water    ");
+	mvwprintw(stdscr, y+1, COLS*0.75+x, "Cost to move through is 0 energy");
+	mvwprintw(stdscr, y+2, COLS*0.75+x, "A Boat is required to move through      ");
+}
 
 //----------------------------------------------------------------------------
 
@@ -60,4 +82,11 @@ wall::wall()
 
 wall::~wall(){}
 
-void wall::display_info(){}
+void wall::display_info()
+{
+	int y = 9;   	//change this variable to move the position of the text up or down
+	int x = 3;      //change this to move it right or left
+	mvwprintw(stdscr, y, COLS*0.75+x, "Wall         ");
+	mvwprintw(stdscr, y+1, COLS*0.75+x, "You can't pass through                ");
+	mvwprintw(stdscr, y+2, COLS*0.75+x, "An attempt to do so will cost 1 energy");
+}
