@@ -155,7 +155,13 @@ bool Frupal::loadMap(char * mapFileName)
 
 bool Frupal::mapLoaded() { return loadFinished; }
 
-Frupal::~Frupal(){}
+Frupal::~Frupal()
+{
+  for(int i = 0; i < yMax; ++i){
+    delete [] terrainMap[i];
+  }
+  delete [] terrainMap;
+}
 
 //lk series updates cursors location coordinates for the map window, which will get updated in the disp() function
 

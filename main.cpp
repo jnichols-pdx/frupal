@@ -42,5 +42,7 @@ int main(int argc, char ** argv)
 
   endwin(); //Ends ncurses / deallocates memory
 
+  delete g;
+
   return 0;
 }
