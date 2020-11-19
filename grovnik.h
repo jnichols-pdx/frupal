@@ -77,16 +77,14 @@ class tool : public grovnik
 {
 	public:
 		tool();
-		tool(char * name, int cost, int r_cost);
+		tool(char * name, int cost);
 		~tool();
 		void display_info();
 		char * get_name();
 		int get_cost();
-		int get_r_cost();
 	protected:
 		char * name;
 		int cost;
-		int r_cost; //return cost
 	
 	private:	
 };
