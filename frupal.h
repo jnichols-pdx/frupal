@@ -24,22 +24,23 @@ class Frupal
     void lkdn();  //move cursor down
     void lklt();  //move cursor left
     void lkrt();  //move cursor right
-		void mvup();
-		void mvdn();
-		void mvlt();
-		void mvrt();
-  	bool updateVisitMap(int y, int x); //update discovered map		
-		bool validMove(int y, int x);
-		void loseGame();
-		void winGame();
-    bool loadMap(char * mapFileName);
+		void mvup(); //move hero up
+		void mvdn(); //move hero down
+		void mvlt(); //move hero left
+		void mvrt(); //move hero right
+		void updateVisitMap();
+		bool validMove(int y, int x); //validates move
+		void loseGame(); //called when player runs out of energy
+		void winGame(); //called when player gets royal diamond
+    bool loadMap(char * mapFileName); //loads map from a filename
 
     int xCur, yCur, xMax, yMax; //current, current, maximum, maximum
-		int xHero, yHero;
-    WINDOW * curWin;
+		int xHero, yHero; //hero location
+    WINDOW * curWin; //ncurses window
     Hero mainGuy;
   	bool visitMap[128][128]; //map to track discovered places
-		char terrainMap[128][128];
+		char terrainMap[128][128]; //map that holds terrain
+		terrain terrainInfo; //terrain info object
     bool loadFinished;
 };
 
