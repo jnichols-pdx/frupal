@@ -128,20 +128,19 @@ int obstacle::get_b_energy()
 
 //-------------------------------------------------------------------
 
-tool::tool() : name(NULL), cost(0), r_cost(0)
+tool::tool() : name(NULL), cost(0)
 {
 	
 }
 
 //constructor with args
-tool::tool(char * name, int cost, int r_cost)
+tool::tool(char * name, int cost)
 {
 	this->name = new char[strlen(name)+1];
 	strcpy(this->name,name);
 	
 	this->cost = cost;
 	
-	this->r_cost = r_cost;
 }
 
 tool::~tool()
@@ -162,11 +161,6 @@ char * tool::get_name()
 int tool::get_cost()
 {
 	return cost;
-}
-
-int tool::get_r_cost()
-{
-	return r_cost;
 }
 
 //-------------------------------------------------------------------
