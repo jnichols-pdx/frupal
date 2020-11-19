@@ -20,7 +20,7 @@ int main(int argc, char ** argv)
   Frupal * g;
   bool goodMapFile = false;
   //Attempt to load the map from a file if one was provided as a command line argument.
-  if(argc >= 1)
+  if(argc > 1)
   {
     g = new Frupal(mapwin,argv[1]);
     goodMapFile = g->mapLoaded();
