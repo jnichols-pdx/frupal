@@ -155,6 +155,14 @@ char * tool::get_name()
 	return name;
 }
 
+bool tool::check_equal(const char * item)
+{
+	if(item == NULL) return false;
+	if(this->name == NULL) return false;	
+	if(strcmp(this->name,item) == 0) return true;
+	else return false;
+}
+
 //-------------------------------------------------------------------
 
 //default constructor

@@ -81,6 +81,7 @@ class tool : public grovnik
 		~tool();
 		void display_info();
 		char * get_name();
+		bool check_equal(const char * item);
 	protected:
 		char * name;
 	
