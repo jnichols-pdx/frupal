@@ -1,7 +1,7 @@
 //This file is for managing the classes of the grovniks
 
 #include "frupal.h"
-
+#include <cstring>
 
 //base class for grovniks
 class grovnik
@@ -61,7 +61,8 @@ class obstacle : public grovnik
 {
 	public:
 		obstacle();
-		obstacle(char name, char name_b, int b_energy);
+		obstacle(char * name, char * name_b, int b_energy);
+    ~obstacle();
 		void display_info();
 		char * get_name();
 		char * get_name_b();
@@ -95,7 +96,7 @@ class food : public grovnik
 {
 	public:
 		food();
-		food(char name, int cost, int energy);
+		food(char * name, int cost, int energy);
 		~food();
 		void display_info();
 		char * get_name();
@@ -118,7 +119,7 @@ class clue : public grovnik
 		char * get_clue();
 		void display_info();
 	protected:
-		char * clue; //clue string
+		char * clueText; //clue string
 	
 	private:	
 };

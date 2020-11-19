@@ -4,7 +4,7 @@
 #include "grovnik.h"
 
 //grovnik default constructor
-grovnik::grovnik() : character(NULL)
+grovnik::grovnik() : character('\0')
 {
 	
 }
@@ -202,17 +202,17 @@ void food::display_info()
 	
 }
 
-char * food::name()
+char * food::get_name()
 {
 	return name;
 }
 
-int food::cost()
+int food::get_cost()
 {
 	return cost;
 }
 
-int food::energy()
+int food::get_energy()
 {
 	return energy;
 }
@@ -228,14 +228,14 @@ clue::clue() : clue(NULL)
 //constructor with args
 clue::clue(char * clue)
 {
-	this->clue = new char[strlen(clue)+1];
-	strcpy(this->clue,clue);
+	this->clueText = new char[strlen(clue)+1];
+	strcpy(this->clueText,clue);
 }
 
 //destructor
 clue::~clue()
 {
-	delete [] clue;
+	delete [] clueText;
 }
 
 void clue::display_info()
@@ -245,5 +245,5 @@ void clue::display_info()
 
 char * clue::get_clue()
 {
-	return clue;
+	return clueText;
 }
