@@ -35,7 +35,7 @@ int main(int argc, char ** argv)
   start_color();//star ncurses color
 
   //series of inits initializes our color pairs for drawing the map
-  init_pair(1,COLOR_BLACK, COLOR_RED);
+  init_pair(1,COLOR_YELLOW, COLOR_RED);
   init_pair(2,COLOR_BLACK, COLOR_BLUE);
   init_pair(3,COLOR_BLACK, COLOR_WHITE);
   init_pair(4,COLOR_BLACK, COLOR_GREEN);
