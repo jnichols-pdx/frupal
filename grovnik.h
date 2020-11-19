@@ -38,8 +38,10 @@ class treasure_chest : public grovnik
 		treasure_chest();
 		treasure_chest(int amount);
 		~treasure_chest();
+		int get_amount();
 		void display_info();
 	protected:
+		int amount;
 	
 	private:	
 };
@@ -110,8 +112,13 @@ class food : public grovnik
 class clue : public grovnik
 {
 	public:
+		clue();
+		clue(char * clue);
+		~clue();
+		char * get_clue();
 		void display_info();
 	protected:
+		char * clue; //clue string
 	
 	private:	
 };

@@ -47,9 +47,14 @@ void binocular::display_info()
 
 //-------------------------------------------------------------------
 
-treasure_chest::treasure_chest()
+treasure_chest::treasure_chest() : amount(0)
 {
 
+}
+
+treasure_chest::treasure_chest(int amount)
+{
+	this->amount = amount;
 }
 
 treasure_chest::~treasure_chest()
@@ -60,6 +65,11 @@ treasure_chest::~treasure_chest()
 void treasure_chest::display_info()
 {
 	
+}
+
+int treasure_chest::get_amount()
+{
+	return amount;
 }
 
 //-------------------------------------------------------------------
@@ -209,17 +219,31 @@ int food::energy()
 
 //-------------------------------------------------------------------
 
-clue::clue()
+//default constructor
+clue::clue() : clue(NULL)
 {
 	
 }
 
+//constructor with args
+clue::clue(char * clue)
+{
+	this->clue = new char[strlen(clue)+1];
+	strcpy(this->clue,clue);
+}
+
+//destructor
 clue::~clue()
 {
-	
+	delete [] clue;
 }
 
 void clue::display_info()
 {
 	
+}
+
+char * clue::get_clue()
+{
+	return clue;
 }
