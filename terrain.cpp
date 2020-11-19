@@ -9,20 +9,20 @@ terrain::~terrain(){}
 //returns ncurses color constant for terrain type
 //terrain type passed in as character representation 
 int terrain::get_color(char terType){
-	int color = 0;
+	int color = COLOR_PAIR(0);
 
 	switch(terType){
 		case '~': //water
-			color = COLOR_BLUE;
+			color = COLOR_PAIR(2);
 			break;
 		case '=': //wall
-			color = COLOR_WHITE;
+			color = COLOR_PAIR(3);
 			break;
 		case '.': //meadow
-			color = COLOR_GREEN;
+			color = COLOR_PAIR(4);
 			break;
 		case '"': //swamp
-			color = COLOR_MAGENTA;
+			color = COLOR_PAIR(5);
 			break;
 		default:	
 			break;

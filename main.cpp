@@ -30,16 +30,17 @@ int main(int argc, char ** argv)
   //If we were not given a map file, or the map file wasn't correct, load the default map.
   if(!goodMapFile)
   {
-    g = new Frupal(mapwin,1,1);
+    g = new Frupal(mapwin,5,5);
   }
   start_color();//star ncurses color
 
   //series of inits initializes our color pairs for drawing the map
-  init_pair(1,COLOR_WHITE, COLOR_RED);
-  init_pair(2,COLOR_BLUE, COLOR_BLUE);
-  init_pair(3,COLOR_WHITE, COLOR_WHITE);
-  init_pair(4,COLOR_GREEN, COLOR_GREEN);
-  init_pair(5,COLOR_MAGENTA, COLOR_MAGENTA);
+  init_pair(1,COLOR_YELLOW, COLOR_RED);
+  init_pair(2,COLOR_BLACK, COLOR_BLUE);
+  init_pair(3,COLOR_BLACK, COLOR_WHITE);
+  init_pair(4,COLOR_BLACK, COLOR_GREEN);
+  init_pair(5,COLOR_BLACK, COLOR_MAGENTA);
+	init_pair(6, COLOR_BLACK, COLOR_BLACK);
 
   while(g->getmv()!='q')
   {
