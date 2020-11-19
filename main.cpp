@@ -20,7 +20,7 @@ int main(int argc, char ** argv)
   Frupal * g;
   bool goodMapFile = false;
   //Attempt to load the map from a file if one was provided as a command line argument.
-  if(argc > 1)
+  if(argc >= 1)
   {
     g = new Frupal(mapwin,argv[1]);
     goodMapFile = g->mapLoaded();
@@ -32,12 +32,18 @@ int main(int argc, char ** argv)
   {
     g = new Frupal(mapwin,1,1);
   }
+  start_color();//star ncurses color
+
+  //series of inits initializes our color pairs for drawing the map
+  init_pair(1,COLOR_WHITE, COLOR_RED);
+  init_pair(2,COLOR_BLUE, COLOR_BLUE);
+  init_pair(3,COLOR_WHITE, COLOR_WHITE);
+  init_pair(4,COLOR_GREEN, COLOR_GREEN);
+  init_pair(5,COLOR_MAGENTA, COLOR_MAGENTA);
 
   while(g->getmv()!='q')
   {
-    //menuref(stdscr...
-    //refresh();
-    wrefresh(mapwin);
+    //Handle the Menu In Here Probably
   }
 
   endwin(); //Ends ncurses / deallocates memory

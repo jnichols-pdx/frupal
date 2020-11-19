@@ -16,9 +16,10 @@ class Frupal
     Frupal(WINDOW * win, char * mapFileName);
 		~Frupal();
     int  getmv(); //move cursor
-    bool mapLoaded();
-		
+    bool mapLoaded();	
+    void showMap();
   private:
+
     void lkup();  //move cursor up
     void lkdn();  //move cursor down
     void lklt();  //move cursor left
