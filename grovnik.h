@@ -59,8 +59,16 @@ class obstacle : public grovnik
 {
 	public:
 		obstacle();
+		obstacle(char name, char name_b, int b_energy);
 		void display_info();
+		char * get_name();
+		char * get_name_b();
+		int get_b_energy();
+		
 	protected:
+		char * name; //name of obstacle
+		char * name_b; //name of tool that can break it
+		int b_energy; //amount of energy that is required to break it
 	
 	private:	
 };
@@ -69,9 +77,10 @@ class tool : public grovnik
 {
 	public:
 		tool();
-		tool(int type);
+		tool(char * name);
 		~tool();
 		void display_info();
+		char * get_name();
 	protected:
 		char * name;
 	
@@ -82,10 +91,16 @@ class food : public grovnik
 {
 	public:
 		food();
-		food(int type);
+		food(char name, int cost, int energy);
 		~food();
 		void display_info();
+		char * get_name();
+		int get_cost();
+		int get_energy();
 	protected:
+		char * name; //food name
+		int cost; //food cost
+		int energy; //food energy
 	
 	private:	
 };
