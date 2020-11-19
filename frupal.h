@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include "hero.h"
+#include "grovnik.h"
 
 using namespace std;
 

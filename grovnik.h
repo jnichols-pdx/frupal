@@ -1,6 +1,5 @@
 //This file is for managing the classes of the grovniks
 
-#include "frupal.h"
 #include <cstring>
 
 //base class for grovniks
