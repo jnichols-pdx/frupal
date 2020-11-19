@@ -10,20 +10,18 @@ Frupal::Frupal(WINDOW * win, int y, int x)
 
   xCur = x;
   yCur = y;
-  getmaxyx(curWin, yMax, xMax);
+  xMax = yMax = 128;
 
   keypad(curWin, true);
 
   mainGuy = Hero(1000, 100);
-
-	terrainMap = new char *[yMax];
-  for(int i = 0; i < yMax; ++i){
-		terrainMap[i] = new char [xMax];
-    for(int j = 0; j < xMax; ++j){
-			terrainMap[i][j] = '.';
+  for(int i = 0; i < yMax; ++i)
+    for(int j = 0; j < xMax; ++j)
+    {
+      terrainMap[i][j] = '.';
       visitMap[i][j] = false;
-    }
-  }
+    }	    
+  
   loadFinished = true;
 }
 
@@ -71,9 +69,7 @@ bool Frupal::loadMap(char * mapFileName)
       mapFile >> xMax >> yMax;
       mapFile.ignore(1000, '\n');
 
-      terrainMap = new char *[yMax];
       for(int i = 0; i < yMax; ++i){
-        terrainMap[i] = new char [xMax];
         for(int j = 0; j < xMax; ++j){
           terrainMap[i][j] = mapFile.get();
           visitMap[i][j] = false;
@@ -157,10 +153,6 @@ bool Frupal::mapLoaded() { return loadFinished; }
 
 Frupal::~Frupal()
 {
-  for(int i = 0; i < yMax; ++i){
-    delete [] terrainMap[i];
-  }
-  delete [] terrainMap;
 }
 
 //lk series updates cursors location coordinates for the map window, which will get updated in the disp() function
@@ -285,6 +277,7 @@ bool Frupal::validMove(int y, int x){
 
 //function displays loss and waits to exit game
 void Frupal::loseGame(){
+  mvwprintw(curWin, xHero, yHero, "Game Over!");
 }
 
 //function displays win and waits to exit game

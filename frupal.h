@@ -38,7 +38,7 @@ class Frupal
     WINDOW * curWin;
     Hero mainGuy;
   	bool visitMap[128][128]; //map to track discovered places
-		char ** terrainMap;
+		char terrainMap[128][128];
     bool loadFinished;
 };
 
