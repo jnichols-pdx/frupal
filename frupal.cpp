@@ -10,20 +10,20 @@ Frupal::Frupal(WINDOW * win, int y, int x)
 
   xCur = x;
   yCur = y;
-  getmaxyx(curWin, yMax, xMax);
+  xMax = yMax = 128;
 
   keypad(curWin, true);
 
   mainGuy = Hero(1000, 100);
-
-	terrainMap = new char *[yMax];
-  for(int i = 0; i < yMax; ++i){
-		terrainMap[i] = new char [xMax];
-    for(int j = 0; j < xMax; ++j){
-			terrainMap[i][j] = '.';
+  //Talked to bart - dynamic map size is unncecessary.
+  //Made static.
+  for(int i = 0; i < yMax; ++i)
+    for(int j = 0; j < xMax; ++j)
+    {
+      terrainMap[i][j] = '.';
       visitMap[i][j] = false;
-    }
-  }
+    }	    
+  
   loadFinished = true;
 }
 
@@ -70,10 +70,8 @@ bool Frupal::loadMap(char * mapFileName)
     {
       mapFile >> xMax >> yMax;
       mapFile.ignore(1000, '\n');
-
-      terrainMap = new char *[yMax];
+//Adjusted for static map size
       for(int i = 0; i < yMax; ++i){
-        terrainMap[i] = new char [xMax];
         for(int j = 0; j < xMax; ++j){
           terrainMap[i][j] = mapFile.get();
           visitMap[i][j] = false;
@@ -157,10 +155,6 @@ bool Frupal::mapLoaded() { return loadFinished; }
 
 Frupal::~Frupal()
 {
-  for(int i = 0; i < yMax; ++i){
-    delete [] terrainMap[i];
-  }
-  delete [] terrainMap;
 }
 
 //lk series updates cursors location coordinates for the map window, which will get updated in the disp() function
@@ -209,9 +203,10 @@ void Frupal::mvup(){
 		yHero -= 1;
 		if(!mainGuy.modEner(-1)){ //terrain.get_travel_cost(terrainMap[yHero][xHero]))){
 			loseGame();
-		}else{
-			mvwaddch(curWin, yHero, xHero, '@');
 		}
+    //moving our hero now updates the cursor location to him
+    yCur = yHero;
+    xCur = xHero;
 	}
 }
 
@@ -223,9 +218,10 @@ void Frupal::mvdn(){
 		
 		if(!mainGuy.modEner(-1)){ //terrain.get_travel_cost(terrainMap[yHero][xHero]))){
 			loseGame();
-		}else{
-			mvwaddch(curWin, yHero, xHero, '@');
 		}
+    //moving our hero now updates the cursor location to him
+    yCur = yHero;
+    xCur = xHero;
 	}
 }
 
@@ -237,9 +233,10 @@ void Frupal::mvlt(){
 		xHero -= 1;
 		if(!mainGuy.modEner(-1)){ //terrain.get_travel_cost(terrainMap[yHero][xHero]))){
 			loseGame();
-		}else{
-			mvwaddch(curWin, yHero, xHero, '@');
 		}
+    //moving our hero now updates the cursor location to him
+    yCur = yHero;
+    xCur = xHero;
 	}
 }
 
@@ -251,9 +248,10 @@ void Frupal::mvrt(){
 		xHero += 1;
 		if(!mainGuy.modEner(-1)){ //terrain.get_travel_cost(terrainMap[yHero][xHero]))){
 			loseGame();
-		}else{
-			mvwaddch(curWin, yHero, xHero, '@');
 		}
+    //moving our hero now updates the cursor location to him
+    yCur = yHero;
+    xCur = xHero;
 	}
 }
 
@@ -299,29 +297,33 @@ int Frupal::getmv()
   wattroff(curWin, A_REVERSE);
   switch(ch)
   {
-    case KEY_UP:
+    case KEY_UP://cursor up
       lkup();
       break;
-    case KEY_DOWN:
+    case KEY_DOWN://cursor down
       lkdn();
       break;
-    case KEY_LEFT:
+    case KEY_LEFT://cursor left
       lklt();
       break;
-    case KEY_RIGHT:
+    case KEY_RIGHT://cursor right
       lkrt();
       break;
-		case 'w':
+		case 'w'://hero up
 			mvup();
+      showMap();//update map
 			break;
-		case 'a':
+		case 'a'://hero left
 			mvlt();
+      showMap();//update map
 			break;
-		case 's':
+		case 's': //hero down
 			mvdn();
+      showMap();//update map
 			break;
-		case 'd':
+		case 'd'://hero right
 			mvrt();
+      showMap();//update map
 			break;
     case 'q':
       break;
@@ -329,6 +331,7 @@ int Frupal::getmv()
       ch = getmv();
       break;
   }
+    wrefresh(curWin);//refresh the window
   return ch;
 }
 
@@ -341,4 +344,48 @@ bool Frupal::updateVisitMap(int y, int x)
     return true;
   }
   return false;
+}
+
+//new show map function handles the color display, and updates
+//the heros location when he moves, rather than having that
+//occur in four separate functions
+void Frupal::showMap()
+{
+  for(int i = 0; i < yMax; ++i)
+    for(int j = 0; j < xMax; ++j)
+    {
+      if(xHero == j && yHero == i)//Override map drawing with hero draw
+      {
+        wattron(curWin,COLOR_PAIR(1));//turn on color pair 1
+        mvwaddch(curWin, i,j,'@');//write @ to map
+        wattroff(curWin,COLOR_PAIR(1));//turn off color pair 1
+      } else { //Otherwise, if not hero, draw map
+
+          switch(terrainMap[i][j]) //switch statement reads map
+          {
+          case '~'://water
+            wattron(curWin,COLOR_PAIR(2));//turn on color pair 2
+            mvwaddch(curWin,i,j,' ');//write space to map
+            wattroff(curWin,COLOR_PAIR(2));//turn off color pair
+            break;
+          case '='://wall
+            wattron(curWin,COLOR_PAIR(3));//turn on color pair 3
+            mvwaddch(curWin,i,j,' '); //write space to map
+            wattroff(curWin,COLOR_PAIR(3));//turn off color pair
+            break;
+          case '.'://meadow
+            wattron(curWin,COLOR_PAIR(4));//turn on color pair 4
+            mvwaddch(curWin,i,j,' '); //write space to map
+            wattroff(curWin,COLOR_PAIR(4));//turn off color pair
+            break;
+          case '"'://swamp
+            wattron(curWin,COLOR_PAIR(5));//turn on color pair 5
+            mvwaddch(curWin,i,j,' ');//write space to map
+            wattroff(curWin,COLOR_PAIR(5));//turn off color pair
+            break;
+          default:
+            break;
+          }
+       }
+    }
 }
