@@ -5,6 +5,9 @@
 Hero::Hero(){
 	whiffles = 1000;
 	energy = 100;
+        for(int i = 0; i<10; ++i){
+ 		inventory[i] = NULL;	
+	}
 }
 
 Hero::Hero(int whif, int nRG){
@@ -34,6 +37,6 @@ bool Hero::modWhif(int whif)
 }
 
 //checks inventory for a certain item
-bool Hero::checkInventory(std::string item){
+bool Hero::checkInventory(const char * item){
 	return true;
 }

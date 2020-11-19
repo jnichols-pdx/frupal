@@ -4,7 +4,7 @@
 #include <fstream>
 #include <string>
 #include <unistd.h>
-#include "hero.h"
+//#include "hero.h"
 #include "terrain.h"
 
 using namespace std;

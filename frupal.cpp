@@ -247,6 +247,7 @@ void Frupal::mvlt(){
     //moving our hero now updates the cursor location to him
     yCur = yHero;
     xCur = xHero;
+
 	}
 }
 
