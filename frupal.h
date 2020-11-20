@@ -1,12 +1,5 @@
-#include <ncurses.h>
-#include <cmath>
-#include <stdio.h>
-#include <fstream>
-#include <string>
-#include <unistd.h>
-//#include "hero.h"
-#include "terrain.h"
 
+#include "terrain.h"
 using namespace std;
 
 class Frupal

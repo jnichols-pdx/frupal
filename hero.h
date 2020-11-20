@@ -1,5 +1,4 @@
 #include <string>
-#include <cstring>
 #include "grovnik.h"
 
 const int INVSIZE = 10;

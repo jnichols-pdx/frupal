@@ -4,7 +4,7 @@
 #include "grovnik.h"
 
 //grovnik default constructor
-grovnik::grovnik() : character(NULL)
+grovnik::grovnik()
 {
 	
 }
@@ -103,7 +103,9 @@ obstacle::obstacle(char * name, char * name_b, int b_energy)
 obstacle::~obstacle()
 {
 	delete [] name;
+	name = NULL;
 	delete [] name_b;
+	name_b = NULL;
 }
 
 void obstacle::display_info()
@@ -185,6 +187,7 @@ food::food(char * name, int cost, int energy)
 food::~food()
 {
 	delete [] name;
+	name = NULL;
 }
 
 void food::display_info()
@@ -192,17 +195,17 @@ void food::display_info()
 	
 }
 
-char * food::name()
+char * food::get_name()
 {
 	return name;
 }
 
-int food::cost()
+int food::get_cost()
 {
 	return cost;
 }
 
-int food::energy()
+int food::get_energy()
 {
 	return energy;
 }
