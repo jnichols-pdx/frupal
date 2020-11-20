@@ -1,4 +1,5 @@
 //Character class for Kingdom of Frupal
+
 #include "hero.h"
 
 Hero::Hero(){

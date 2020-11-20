@@ -1,6 +1,5 @@
 //grovnik class functions
 
-
 #include "grovnik.h"
 
 //grovnik default constructor
@@ -29,6 +28,7 @@ char grovnik::get_character() const
 }
 
 //-------------------------------------------------------------------
+//TODO
 
 binocular::binocular()
 {
@@ -46,6 +46,7 @@ void binocular::display_info()
 }
 
 //-------------------------------------------------------------------
+//TODO
 
 treasure_chest::treasure_chest()
 {
@@ -63,6 +64,7 @@ void treasure_chest::display_info()
 }
 
 //-------------------------------------------------------------------
+//TODO
 
 royal_diamond::royal_diamond()
 {
@@ -147,12 +149,6 @@ void tool::display_info()
 {
 	
 }
-/*
-char * tool::get_name()
-{
-	return name;
-}
-*/
 
 bool tool::check_equal(std::string item)
 {

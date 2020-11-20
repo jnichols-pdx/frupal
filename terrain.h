@@ -1,7 +1,6 @@
 //this file is for getting terrain information
 
 #include <ncurses.h>
-#include "hero.h"
 
 class terrain   	//base class for terrains
 {

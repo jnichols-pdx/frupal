@@ -294,11 +294,11 @@ bool Frupal::validMove(int y, int x){
 	return true;
 }
 
-//function displays loss and waits to exit game
+//function displays loss and waits to exit game //TODO
 void Frupal::loseGame(){
 }
 
-//function displays win and waits to exit game
+//function displays win and waits to exit game //TODO
 void Frupal::winGame(){
 }
 

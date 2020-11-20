@@ -1,14 +1,16 @@
 //This file is for managing the classes of the grovniks
 
 //#include "frupal.h"
-#include <ncurses.h>
-#include <cmath>
-#include <stdio.h>
-#include <fstream>
-#include <string>
-#include <unistd.h>
+#include <cmath> //do we need this? TODO
+#include <stdio.h> //what is this being used for? TODO
+
+//i think we only need to stick to one of these
+//or remove both and stick to char arrays TODO
+#include <string> 
 #include <cstring>
-//#include "hero.h"
+
+//what is this for? TODO
+#include <unistd.h>
 
 //base class for grovniks
 class grovnik
@@ -88,7 +90,6 @@ class tool : public grovnik
 		tool(std::string item);
 		~tool();
 		void display_info();
-		char * get_name();
 		bool check_equal(std::string item);
 	protected:
 		std::string name;
