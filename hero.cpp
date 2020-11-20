@@ -14,7 +14,8 @@ Hero::Hero(int whif, int nRG){
 	energy = nRG;
         for(int i = 0; i<10; ++i){
  		inventory[i] = NULL;	
-	}
+	}	
+	//inventory[0] = new tool("ship");
 }
 
 bool Hero::modEner(int nRG)
@@ -39,28 +40,24 @@ bool Hero::modWhif(int whif)
 }
 
 //checks inventory for a certain item
-bool Hero::checkInventory(const char * item){
-	if(item == NULL) return false;   //empty string return false
-        char * temp;
-	temp = new char[strlen(item)+1];
-	strcpy(temp,item);
+bool Hero::checkInventory(std::string item){
+	if(item.empty()) return false;   //empty string return false
 
 	for(int i=0; i<INVSIZE; ++i){
-		if(inventory[i]->check_equal(temp) == true){
-			delete [] temp;
-			temp = NULL;
+		if(inventory[i] == NULL) {}
+		else{
+			if(inventory[i]->check_equal(item) == true)
 			return true;
 		}
 	}
-	delete [] temp;
-	temp = NULL;
 
 	return false;
 }
 		
 Hero::~Hero(){
 	for(int i =0; i < INVSIZE; ++i){
-		delete inventory[i];
+		if(inventory[i] != NULL) delete inventory[i];
+		else{}
 	}
 }
 

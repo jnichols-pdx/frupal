@@ -130,38 +130,35 @@ int obstacle::get_b_energy()
 
 //-------------------------------------------------------------------
 
-tool::tool() : name(NULL)
+tool::tool()
 {
-	
+	name = "";
 }
 
 //constructor with args
-tool::tool(char * name)
+tool::tool(std:: string item)
 {
-	this->name = new char[strlen(name)+1];
-	strcpy(this->name,name);
+	name = item;
 }
 
-tool::~tool()
-{
-	delete [] name;
-}
+tool::~tool() {}
 
 void tool::display_info()
 {
 	
 }
-
+/*
 char * tool::get_name()
 {
 	return name;
 }
+*/
 
-bool tool::check_equal(const char * item)
+bool tool::check_equal(std::string item)
 {
-	if(item == NULL) return false;
-	if(this->name == NULL) return false;	
-	if(strcmp(this->name,item) == 0) return true;
+	if(item.empty()) return false;
+	if(name.empty()) return false;	
+	if(item == name) return true;
 	else return false;
 }
 

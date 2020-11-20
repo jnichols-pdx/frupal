@@ -85,13 +85,13 @@ class tool : public grovnik
 {
 	public:
 		tool();
-		tool(char * name);
+		tool(std::string item);
 		~tool();
 		void display_info();
 		char * get_name();
-		bool check_equal(const char * item);
+		bool check_equal(std::string item);
 	protected:
-		char * name;
+		std::string name;
 	
 	private:	
 };
