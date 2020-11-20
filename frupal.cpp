@@ -54,10 +54,15 @@ bool Frupal::loadMap(char * mapFileName)
   if(elemName.compare("Frupal_Kingdom:") != 0)
     return false;
 
+  int x,y;
 
   //Read all elements from the map file
   while(!mapFile.eof())
   {
+
+    if(mapFile.fail())
+      return false;
+
     mapFile >> elemName;
 
     if(elemName.length() == 0) //blank lines
@@ -94,29 +99,33 @@ bool Frupal::loadMap(char * mapFileName)
 
     if(elemName.compare("diamonds:") == 0)
     {
-      //TODO: implement
+      mapFile >> x >> y;
+      itemMap[y][x] = new royal_diamond();
       mapFile.ignore(1000, '\n');
       continue;
     }
 
     if(elemName.compare("treasure:") == 0)
     {
-      //TODO: implement
-      mapFile.ignore(1000, '\n');
+      treasure_chest * newTreasure= new treasure_chest();
+      mapFile >> x >> y >> *newTreasure;
+      itemMap[y][x] = newTreasure;
       continue;
     }
 
     if(elemName.compare("food:") == 0)
     {
-      //TODO: implement
-      mapFile.ignore(1000, '\n');
+      food * newFood = new food();
+      mapFile >> x >> y >> *newFood;
+      itemMap[y][x] = newFood;
       continue;
     }
 
     if(elemName.compare("clue:") == 0)
     {
-      //TODO: implement
-      mapFile.ignore(1000, '\n');
+      clue * newClue = new clue();
+      mapFile >> x >> y >> *newClue;
+      itemMap[y][x] = newClue;
       continue;
     }
 
@@ -136,15 +145,17 @@ bool Frupal::loadMap(char * mapFileName)
 
     if(elemName.compare("obstacle:") == 0)
     {
-      //TODO: implement
-      mapFile.ignore(1000, '\n');
+      obstacle * newObstacle = new obstacle();
+      mapFile >> x >> y >> *newObstacle;
+      itemMap[y][x] = newObstacle;
       continue;
     }
 
     if(elemName.compare("tool:") == 0)
     {
-      //TODO: implement
-      mapFile.ignore(1000, '\n');
+      tool* newTool= new tool();
+      mapFile >> x >> y >> *newTool;
+      itemMap[y][x] = newTool;
       continue;
     }
 
@@ -357,6 +368,8 @@ void Frupal::updateVisitMap(){
 void Frupal::showMap()
 {
 	updateVisitMap();
+  char grovnikIcon = ' ';
+  grovnik * currentGrovnik;
 
 	//updates map
 	for(int y = 0; y < yMax; y++){
@@ -365,8 +378,21 @@ void Frupal::showMap()
 			//discovered areas
 			if(visitMap[y][x] == true){
 				int color = terrainInfo.get_color(terrainMap[y][x]);//gets color
+
+        //Display item grovniks
+        currentGrovnik = itemMap[y][x];
+        if(currentGrovnik){
+          grovnikIcon = currentGrovnik->get_character();
+          if(grovnikIcon == '%') { //special case the royal diamonds
+            color = COLOR_PAIR(7); // white on cyan
+            grovnikIcon = '$';
+          }
+        } else {
+          grovnikIcon = ' '; //No item, show just the terrain.
+        }
+
 				wattron(curWin, color);//turn on color pair
-				mvwaddch(curWin, y, x, ' ');//write space to map
+				mvwaddch(curWin, y, x, grovnikIcon);//write space to map
 				wattroff(curWin, color);//turn off color pair
 
 			//undiscovered areas

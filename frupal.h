@@ -41,6 +41,7 @@ class Frupal
     Hero mainGuy;
   	bool visitMap[128][128]; //map to track discovered places
 		char terrainMap[128][128]; //map that holds terrain
+    grovnik * itemMap[128][128]; //map that holds items such as clues, food, tools etc.
 		terrain terrainInfo; //terrain info object
     bool loadFinished;
 };
