@@ -296,7 +296,8 @@ bool Frupal::validMove(int y, int x){
 
 	//checks for water
 	}else if(terrainMap[y][x] == '~'){
-		if(mainGuy.checkInventory("ship")){
+		char ship[5] = "ship";
+		if(mainGuy.checkInventory(ship)){
 			return true;
 		}
 		return false;

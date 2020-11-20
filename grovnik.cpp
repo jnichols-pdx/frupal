@@ -190,9 +190,7 @@ void obstacle::read(istream & source)
 //-------------------------------------------------------------------
 
 tool::tool() : grovnik('T'), name(NULL), description(NULL), cost(0), divisor(1)
-{
-	name = "";
-}
+{}
 
 //constructor with args
 tool::tool(char * name, char * description, int cost, int divisor) : grovnik('T')
@@ -208,18 +206,24 @@ tool::tool(char * name, char * description, int cost, int divisor) : grovnik('T'
   this->divisor = divisor;
 }
 
-tool::~tool() {}
+tool::~tool(){
+	delete [] name;	
+	name = NULL;
+
+	delete [] description;	
+	name = NULL;
+}
 
 void tool::display_info()
 {
 	
 }
 
-bool tool::check_equal(std::string item)
+bool tool::check_equal(char * item)
 {
-	if(item.empty()) return false;
-	if(name.empty()) return false;	
-	if(item == name) return true;
+	if(item == NULL) return false;
+	if(this->name == NULL) return false;	
+	if(strcmp(this->name, name) == 0) return true;
 	else return false;
 }
 
@@ -300,9 +304,7 @@ void food::read(istream & source)
 
 //default constructor
 clue::clue() : grovnik('?'), clueText(NULL)
-{
-	
-}
+{}
 
 //constructor with args
 clue::clue(char * clue) : grovnik('?')
@@ -315,6 +317,7 @@ clue::clue(char * clue) : grovnik('?')
 clue::~clue()
 {
 	delete [] clueText;
+	clueText = NULL;
 }
 
 void clue::display_info()

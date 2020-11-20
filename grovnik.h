@@ -1,5 +1,9 @@
 //This file is for managing the classes of the grovniks
 
+#ifndef GROVNIK_H
+#define GROVNIK_H
+
+
 #include <cmath> //do we need this? TODO
 #include <stdio.h> //what is this being used for? TODO
 
@@ -7,6 +11,7 @@
 //or remove both and stick to char arrays TODO
 #include <string> 
 #include <cstring>
+#include <sstream>
 
 //what is this for? TODO
 #include <unistd.h>
@@ -99,6 +104,7 @@ class tool : public grovnik
 		void display_info();
 		char * get_name();
 		int get_cost();
+		bool check_equal(char * item);
 	protected:
 		char * name;
     char * description;
@@ -134,7 +140,6 @@ class clue : public grovnik
 		clue();
 		~clue();
 		clue(char * clue);
-		~clue();
 		char * get_clue();
 		void display_info();
 	protected:
@@ -143,3 +148,5 @@ class clue : public grovnik
 	
 	private:	
 };
+
+#endif
