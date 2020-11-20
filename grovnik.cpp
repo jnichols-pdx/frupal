@@ -38,7 +38,7 @@ void grovnik::read(istream & source)
 }
 
 //Friend function to allow reading grovnik and derived grovnik classes from streams
-istream& operator>> (istream& source, grovnik& destination)
+istream& operator >> (istream& source, grovnik& destination)
 {
   destination.read(source);
   return source;

@@ -54,116 +54,114 @@ bool Frupal::loadMap(char * mapFileName)
   if(elemName.compare("Frupal_Kingdom:") != 0)
     return false;
 
-  int x,y;
+  if(mapFile.fail())
+    return false;
 
-  //Read all elements from the map file
-  while(!mapFile.eof())
-  {
+  bool foundTerrain = false;
+  bool foundStart= false;
+  bool foundDiamonds= false;
+  bool lastParseOK = true;
 
-    if(mapFile.fail())
+
+  // Attempts to use mapFile.fail(), .bad(), and .eof() to detect read / parse failures weren't working.
+  // Most tests passed OK, however using getline() to read the end of the last line of text in the mapfile
+  // would set the fail() bit, even if there was a newline (or several newlines) following the last element
+  // description. It worked OK if there was another element that didn't have arbitrary length text at it's
+  // end (like ship or diamonds) on the final line, as those elements use >> instead of getline() for their
+  // last read operation.
+  //
+  // Researching  >> and getline() lead me to:
+  // https://gehrcke.de/2011/06/reading-files-in-c-using-ifstream-dealing-correctly-with-badbit-failbit-eofbit-and-perror/
+  // I'm going to try the 'get a line and parse it' pattern they suggest instead, with adaptations for 
+  // handling the multiline terrain: element and other frupal specific sanity checks. -- JTN
+  string sourceLine;
+  while(getline(mapFile,sourceLine) && lastParseOK) {
+    lastParseOK = parseLine(sourceLine, mapFile, foundTerrain, foundStart, foundDiamonds);  
+  }
+
+  return (foundTerrain && foundStart && foundDiamonds && lastParseOK);
+}
+
+//Parse single line elements from a single line string
+//Takes mapFile to read the multiline terrain: element
+bool Frupal::parseLine(string line, ifstream & mapFile, bool & terrain, bool & start, bool & diamonds)
+{
+  int x, y;
+  string elemName;
+  grovnik* newItem = NULL;
+
+  if(line.length() == 0) //blank lines
+    return true;
+  if(line.length() == 1 && line[0] == '\r')
+    return true;
+
+  if(line[0] == '#') //Comments
+    return true;
+
+  stringstream lineStream(line);
+
+  lineStream >> elemName;
+
+  if(elemName.compare("terrain:") == 0) {
+    lineStream >> xMax >> yMax;
+    if(xMax < 1 || xMax > 128 || yMax < 1 || yMax > 128)
       return false;
 
-    mapFile >> elemName;
+    //Adjusted for static map size
+    for(int i = 0; i < yMax; ++i){
+      for(int j = 0; j < xMax; ++j){
 
-    if(elemName.length() == 0) //blank lines
-      continue;
-
-    if(elemName[0] == '#') //Comments
-    {
-      mapFile.ignore(1000, '\n');
-      continue;
-    }
-
-    if(elemName.compare("terrain:") == 0)
-    {
-      mapFile >> xMax >> yMax;
-      mapFile.ignore(1000, '\n');
-//Adjusted for static map size
-      for(int i = 0; i < yMax; ++i){
-        for(int j = 0; j < xMax; ++j){
-
-          terrainMap[i][j] = mapFile.get();
-          visitMap[i][j] = false;
-        }
-        mapFile.ignore(1000, '\n');
+        terrainMap[i][j] = mapFile.get();
+        visitMap[i][j] = false;
       }
-      continue;
-    }
-
-    if(elemName.compare("start:") == 0)
-    {
-      mapFile >> xHero >> yHero;
       mapFile.ignore(1000, '\n');
-      continue;
     }
+    terrain = true;
+  }
+  else if(elemName.compare("start:") == 0) {
+    lineStream >> xHero >> yHero;
+    if(xHero < 0 || xHero >= xMax || yHero < 0 || yHero >= yMax) 
+      return false;
+    start = true;
+  }
+  else if (elemName.compare("diamonds:") == 0) {
+    newItem = new royal_diamond();
+    diamonds = true;
+  }
+  else if(elemName.compare("treasure:") == 0) {
+    newItem = new treasure_chest();
+  }
+  else if(elemName.compare("food:") == 0) {
+    newItem = new food();
+  }
+  else if(elemName.compare("clue:") == 0) {
+    newItem = new clue();
+  }
+  else if(elemName.compare("ship:") == 0) {
+    //TODO: implement
+  }
+  else if(elemName.compare("binoculars:") == 0) {
+    //TODO: implement
+  }
+  else if(elemName.compare("obstacle:") == 0) {
+    newItem = new obstacle();
+  }
+  else if(elemName.compare("tool:") == 0) {
+    newItem = new tool();
+  }
 
-    if(elemName.compare("diamonds:") == 0)
-    {
-      mapFile >> x >> y;
-      itemMap[y][x] = new royal_diamond();
-      mapFile.ignore(1000, '\n');
-      continue;
-    }
 
-    if(elemName.compare("treasure:") == 0)
-    {
-      treasure_chest * newTreasure= new treasure_chest();
-      mapFile >> x >> y >> *newTreasure;
-      itemMap[y][x] = newTreasure;
-      continue;
-    }
-
-    if(elemName.compare("food:") == 0)
-    {
-      food * newFood = new food();
-      mapFile >> x >> y >> *newFood;
-      itemMap[y][x] = newFood;
-      continue;
-    }
-
-    if(elemName.compare("clue:") == 0)
-    {
-      clue * newClue = new clue();
-      mapFile >> x >> y >> *newClue;
-      itemMap[y][x] = newClue;
-      continue;
-    }
-
-    if(elemName.compare("ship:") == 0)
-    {
-      //TODO: implement
-      mapFile.ignore(1000, '\n');
-      continue;
-    }
-
-    if(elemName.compare("binoculars:") == 0)
-    {
-      //TODO: implement
-      mapFile.ignore(1000, '\n');
-      continue;
-    }
-
-    if(elemName.compare("obstacle:") == 0)
-    {
-      obstacle * newObstacle = new obstacle();
-      mapFile >> x >> y >> *newObstacle;
-      itemMap[y][x] = newObstacle;
-      continue;
-    }
-
-    if(elemName.compare("tool:") == 0)
-    {
-      tool* newTool= new tool();
-      mapFile >> x >> y >> *newTool;
-      itemMap[y][x] = newTool;
-      continue;
-    }
-
-    //Fail if we see unexpected input
-    return false;
+  if(newItem)
+  {
+    lineStream >> x >> y;
+    if(x <0 || x >= xMax || y < 0 || y >= yMax)
+      return false;
+    lineStream >> *newItem;
+    itemMap[y][x] = newItem;
   }
 
   return true;
+
 }
 
 bool Frupal::mapLoaded() { return loadFinished; }
