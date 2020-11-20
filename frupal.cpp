@@ -82,8 +82,10 @@ bool Frupal::loadMap(char * mapFileName)
   return (foundTerrain && foundStart && foundDiamonds && lastParseOK);
 }
 
-//Parse single line elements from a single line string
-//Takes mapFile to read the multiline terrain: element
+//Parse most elements from a single line string
+//Takes a reference to the mapFile stream so the terrain: element may read multiple lines
+//Sets terrain, start, and diamonds booleans to true when those elements are found so that 
+//the calling function can verify that these Required elements have been loaded.
 bool Frupal::parseLine(string line, ifstream & mapFile, bool & terrain, bool & start, bool & diamonds)
 {
   int x, y;
