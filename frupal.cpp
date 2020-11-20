@@ -54,105 +54,116 @@ bool Frupal::loadMap(char * mapFileName)
   if(elemName.compare("Frupal_Kingdom:") != 0)
     return false;
 
-
-  //Read all elements from the map file
-  while(!mapFile.eof())
-  {
-    mapFile >> elemName;
-
-    if(elemName.length() == 0) //blank lines
-      continue;
-
-    if(elemName[0] == '#') //Comments
-    {
-      mapFile.ignore(1000, '\n');
-      continue;
-    }
-
-    if(elemName.compare("terrain:") == 0)
-    {
-      mapFile >> xMax >> yMax;
-      mapFile.ignore(1000, '\n');
-//Adjusted for static map size
-      for(int i = 0; i < yMax; ++i){
-        for(int j = 0; j < xMax; ++j){
-
-          terrainMap[i][j] = mapFile.get();
-          visitMap[i][j] = false;
-        }
-        mapFile.ignore(1000, '\n');
-      }
-      continue;
-    }
-
-    if(elemName.compare("start:") == 0)
-    {
-      mapFile >> xHero >> yHero;
-      mapFile.ignore(1000, '\n');
-      continue;
-    }
-
-    if(elemName.compare("diamonds:") == 0)
-    {
-      //TODO: implement
-      mapFile.ignore(1000, '\n');
-      continue;
-    }
-
-    if(elemName.compare("treasure:") == 0)
-    {
-      //TODO: implement
-      mapFile.ignore(1000, '\n');
-      continue;
-    }
-
-    if(elemName.compare("food:") == 0)
-    {
-      //TODO: implement
-      mapFile.ignore(1000, '\n');
-      continue;
-    }
-
-    if(elemName.compare("clue:") == 0)
-    {
-      //TODO: implement
-      mapFile.ignore(1000, '\n');
-      continue;
-    }
-
-    if(elemName.compare("ship:") == 0)
-    {
-      //TODO: implement
-      mapFile.ignore(1000, '\n');
-      continue;
-    }
-
-    if(elemName.compare("binoculars:") == 0)
-    {
-      //TODO: implement
-      mapFile.ignore(1000, '\n');
-      continue;
-    }
-
-    if(elemName.compare("obstacle:") == 0)
-    {
-      //TODO: implement
-      mapFile.ignore(1000, '\n');
-      continue;
-    }
-
-    if(elemName.compare("tool:") == 0)
-    {
-      //TODO: implement
-      mapFile.ignore(1000, '\n');
-      continue;
-    }
-
-    //Fail if we see unexpected input
+  if(mapFile.fail())
     return false;
+
+  bool foundTerrain = false;
+  bool foundStart= false;
+  bool foundDiamonds= false;
+  bool lastParseOK = true;
+
+
+  // Attempts to use mapFile.fail(), .bad(), and .eof() to detect read / parse failures weren't working.
+  // Most tests passed OK, however using getline() to read the end of the last line of text in the mapfile
+  // would set the fail() bit, even if there was a newline (or several newlines) following the last element
+  // description. It worked OK if there was another element that didn't have arbitrary length text at it's
+  // end (like ship or diamonds) on the final line, as those elements use >> instead of getline() for their
+  // last read operation.
+  //
+  // Researching  >> and getline() lead me to:
+  // https://gehrcke.de/2011/06/reading-files-in-c-using-ifstream-dealing-correctly-with-badbit-failbit-eofbit-and-perror/
+  // I'm going to try the 'get a line and parse it' pattern they suggest instead, with adaptations for 
+  // handling the multiline terrain: element and other frupal specific sanity checks. -- JTN
+  string sourceLine;
+  while(getline(mapFile,sourceLine) && lastParseOK) {
+    lastParseOK = parseLine(sourceLine, mapFile, foundTerrain, foundStart, foundDiamonds);  
+  }
+
+  return (foundTerrain && foundStart && foundDiamonds && lastParseOK);
+}
+
+//Parse most elements from a single line string
+//Takes a reference to the mapFile stream so the terrain: element may read multiple lines
+//Sets terrain, start, and diamonds booleans to true when those elements are found so that 
+//the calling function can verify that these Required elements have been loaded.
+bool Frupal::parseLine(string line, ifstream & mapFile, bool & terrain, bool & start, bool & diamonds)
+{
+  int x, y;
+  string elemName;
+  grovnik* newItem = NULL;
+
+  if(line.length() == 0) //blank lines
+    return true;
+  if(line.length() == 1 && line[0] == '\r')
+    return true;
+
+  if(line[0] == '#') //Comments
+    return true;
+
+  stringstream lineStream(line);
+
+  lineStream >> elemName;
+
+  if(elemName.compare("terrain:") == 0) {
+    lineStream >> xMax >> yMax;
+    if(xMax < 1 || xMax > 128 || yMax < 1 || yMax > 128)
+      return false;
+
+    //Adjusted for static map size
+    for(int i = 0; i < yMax; ++i){
+      for(int j = 0; j < xMax; ++j){
+
+        terrainMap[i][j] = mapFile.get();
+        visitMap[i][j] = false;
+      }
+      mapFile.ignore(1000, '\n');
+    }
+    terrain = true;
+  }
+  else if(elemName.compare("start:") == 0) {
+    lineStream >> xHero >> yHero;
+    if(xHero < 0 || xHero >= xMax || yHero < 0 || yHero >= yMax) 
+      return false;
+    start = true;
+  }
+  else if (elemName.compare("diamonds:") == 0) {
+    newItem = new royal_diamond();
+    diamonds = true;
+  }
+  else if(elemName.compare("treasure:") == 0) {
+    newItem = new treasure_chest();
+  }
+  else if(elemName.compare("food:") == 0) {
+    newItem = new food();
+  }
+  else if(elemName.compare("clue:") == 0) {
+    newItem = new clue();
+  }
+  else if(elemName.compare("ship:") == 0) {
+    //TODO: implement
+  }
+  else if(elemName.compare("binoculars:") == 0) {
+    //TODO: implement
+  }
+  else if(elemName.compare("obstacle:") == 0) {
+    newItem = new obstacle();
+  }
+  else if(elemName.compare("tool:") == 0) {
+    newItem = new tool();
+  }
+
+
+  if(newItem)
+  {
+    lineStream >> x >> y;
+    if(x <0 || x >= xMax || y < 0 || y >= yMax)
+      return false;
+    lineStream >> *newItem;
+    itemMap[y][x] = newItem;
   }
 
   return true;
+
 }
 
 bool Frupal::mapLoaded() { return loadFinished; }
@@ -357,6 +368,8 @@ void Frupal::updateVisitMap(){
 void Frupal::showMap()
 {
 	updateVisitMap();
+  char grovnikIcon = ' ';
+  grovnik * currentGrovnik;
 
 	//updates map
 	for(int y = 0; y < yMax; y++){
@@ -365,8 +378,21 @@ void Frupal::showMap()
 			//discovered areas
 			if(visitMap[y][x] == true){
 				int color = terrainInfo.get_color(terrainMap[y][x]);//gets color
+
+        //Display item grovniks
+        currentGrovnik = itemMap[y][x];
+        if(currentGrovnik){
+          grovnikIcon = currentGrovnik->get_character();
+          if(grovnikIcon == '%') { //special case the royal diamonds
+            color = COLOR_PAIR(7); // white on cyan
+            grovnikIcon = '$';
+          }
+        } else {
+          grovnikIcon = ' '; //No item, show just the terrain.
+        }
+
 				wattron(curWin, color);//turn on color pair
-				mvwaddch(curWin, y, x, ' ');//write space to map
+				mvwaddch(curWin, y, x, grovnikIcon);//write space to map
 				wattroff(curWin, color);//turn off color pair
 
 			//undiscovered areas

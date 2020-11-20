@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <fstream>
 #include <string>
+#include <sstream>
 #include <unistd.h>
 #include "hero.h"
 #include "grovnik.h"
@@ -34,6 +35,8 @@ class Frupal
 		void loseGame(); //called when player runs out of energy
 		void winGame(); //called when player gets royal diamond
     bool loadMap(char * mapFileName); //loads map from a filename
+    //Parse one line/element
+    bool parseLine(string line, ifstream & mapFile, bool & terrain, bool & start, bool & diamonds);
 
     int xCur, yCur, xMax, yMax; //current, current, maximum, maximum
 		int xHero, yHero; //hero location
@@ -41,6 +44,7 @@ class Frupal
     Hero mainGuy;
   	bool visitMap[128][128]; //map to track discovered places
 		char terrainMap[128][128]; //map that holds terrain
+    grovnik * itemMap[128][128]; //map that holds items such as clues, food, tools etc.
 		terrain terrainInfo; //terrain info object
     bool loadFinished;
 };
