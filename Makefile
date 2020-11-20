@@ -17,6 +17,7 @@ grovnik.o: grovnik.h grovnik.cpp
 
 terrain.o: terrain.h terrain.cpp
 	g++ $(CPPFLAGS) -c terrain.cpp
+
 clean:
 	rm *.o frupal
 

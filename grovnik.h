@@ -1,6 +1,5 @@
 //This file is for managing the classes of the grovniks
 
-//#include "frupal.h"
 #include <cmath> //do we need this? TODO
 #include <stdio.h> //what is this being used for? TODO
 
@@ -23,8 +22,10 @@ class grovnik
 		//virtual functions
 		virtual ~grovnik();
 		virtual void display_info() = 0;   //displays information of the grovnik
+    friend std::istream& operator>> (std::istream& source, grovnik& destination);
 		
 	protected:
+    virtual void read(std::istream & source);
 		char character;
 
 	private:
@@ -45,10 +46,15 @@ class treasure_chest : public grovnik
 {
 	public:
 		treasure_chest();
-		treasure_chest(int amount);
+		treasure_chest(char * name, int amount);
 		~treasure_chest();
+		int get_amount();
+    char * get_name();
 		void display_info();
 	protected:
+    char * name;
+		int amount;
+    virtual void read(std::istream & source);
 	
 	private:	
 };
@@ -68,8 +74,8 @@ class obstacle : public grovnik
 {
 	public:
 		obstacle();
-		~obstacle();
-		obstacle(char* name, char *name_b, int b_energy);
+		obstacle(char * name, char * name_b, int b_energy);
+    ~obstacle();
 		void display_info();
 		char * get_name();
 		char * get_name_b();
@@ -79,6 +85,7 @@ class obstacle : public grovnik
 		char * name; //name of obstacle
 		char * name_b; //name of tool that can break it
 		int b_energy; //amount of energy that is required to break it
+    virtual void read(std::istream & source);
 	
 	private:	
 };
@@ -87,12 +94,17 @@ class tool : public grovnik
 {
 	public:
 		tool();
-		tool(std::string item);
+		tool(char * name, char * description, int cost, int divisor);
 		~tool();
 		void display_info();
-		bool check_equal(std::string item);
+		char * get_name();
+		int get_cost();
 	protected:
-		std::string name;
+		char * name;
+    char * description;
+		int cost;
+    int divisor;
+    virtual void read(std::istream & source);
 	
 	private:	
 };
@@ -111,6 +123,7 @@ class food : public grovnik
 		char * name; //food name
 		int cost; //food cost
 		int energy; //food energy
+    virtual void read(std::istream & source);
 	
 	private:	
 };
@@ -120,8 +133,13 @@ class clue : public grovnik
 	public:
 		clue();
 		~clue();
+		clue(char * clue);
+		~clue();
+		char * get_clue();
 		void display_info();
 	protected:
+		char * clueText; //clue string
+    virtual void read(std::istream & source);
 	
 	private:	
 };

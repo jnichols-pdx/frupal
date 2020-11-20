@@ -46,7 +46,7 @@ terrain: *<x dimension\>* *<y dimension\>*
 *...*  
 *<last row of terrain characters\>*  
 
-Defines the dimensions of and the kind of terrain grovnik at every location on the map.
+Defines the dimensions of and the kind of terrain grovnik at every location on the map.  
 The only element allowed before `terrain:` in the map file is `Frupal_Kingdom:`.  
 Each row of terrain characters **must** have the same number of characters as *<x dimension\>*.  
 There **must** be as many rows of terrain characters as *<y dimension\>*.  
