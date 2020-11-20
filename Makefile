@@ -1,7 +1,7 @@
 CPPFLAGS = -g -Wall -Werror
 
 frupal: terrain.o frupal.o hero.o main.o grovnik.o
-	g++ $(CPPFLAGS) main.o frupal.o terrain.o hero.o -o frupal -lncurses
+	g++ $(CPPFLAGS) main.o frupal.o terrain.o hero.o grovnik.o -o frupal -lncurses
   
 main.o: main.cpp
 	g++ $(CPPFLAGS) -c main.cpp
