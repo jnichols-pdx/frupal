@@ -1,10 +1,10 @@
 #include <ncurses.h>
-#include <cmath>
-#include <stdio.h>
 #include <fstream>
-#include <string>
-#include <sstream>
-#include <unistd.h>
+
+// is this needed? TODO #include <string> 
+// is this needed? TODO #include <sstream>
+// is this needed? TODO #include <unistd.h>
+
 #include "hero.h"
 #include "grovnik.h"
 #include "terrain.h"

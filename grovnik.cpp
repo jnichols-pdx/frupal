@@ -1,6 +1,5 @@
 //grovnik class functions
 
-
 #include "grovnik.h"
 
 using namespace::std;
@@ -45,6 +44,7 @@ istream& operator >> (istream& source, grovnik& destination)
 }
 
 //-------------------------------------------------------------------
+//TODO
 
 binocular::binocular() : grovnik('B')
 {
@@ -62,6 +62,7 @@ void binocular::display_info()
 }
 
 //-------------------------------------------------------------------
+//TODO
 
 treasure_chest::treasure_chest() : grovnik('$'), name(NULL), amount(0)
 {
@@ -107,6 +108,7 @@ void treasure_chest::read(istream & source)
 }
 
 //-------------------------------------------------------------------
+//TODO
 
 royal_diamond::royal_diamond() : grovnik('%') //$ is already in use for treasure_chest
 {
@@ -147,7 +149,9 @@ obstacle::obstacle(char * name, char * name_b, int b_energy) : grovnik('!')
 obstacle::~obstacle()
 {
 	delete [] name;
+	name = NULL;
 	delete [] name_b;
+	name_b = NULL;
 }
 
 void obstacle::display_info()
@@ -186,9 +190,7 @@ void obstacle::read(istream & source)
 //-------------------------------------------------------------------
 
 tool::tool() : grovnik('T'), name(NULL), description(NULL), cost(0), divisor(1)
-{
-	
-}
+{}
 
 //constructor with args
 tool::tool(char * name, char * description, int cost, int divisor) : grovnik('T')
@@ -202,12 +204,14 @@ tool::tool(char * name, char * description, int cost, int divisor) : grovnik('T'
 	this->cost = cost;
 
   this->divisor = divisor;
-	
 }
 
-tool::~tool()
-{
-	delete [] name;
+tool::~tool(){
+	delete [] name;	
+	name = NULL;
+
+	delete [] description;	
+	name = NULL;
 }
 
 void tool::display_info()
@@ -215,9 +219,12 @@ void tool::display_info()
 	
 }
 
-char * tool::get_name()
+bool tool::check_equal(char * item)
 {
-	return name;
+	if(item == NULL) return false;
+	if(this->name == NULL) return false;	
+	if(strcmp(this->name, name) == 0) return true;
+	else return false;
 }
 
 int tool::get_cost()
@@ -260,6 +267,7 @@ food::food(char * name, int cost, int energy) : grovnik('F')
 food::~food()
 {
 	delete [] name;
+	name = NULL;
 }
 
 void food::display_info()
@@ -296,9 +304,7 @@ void food::read(istream & source)
 
 //default constructor
 clue::clue() : grovnik('?'), clueText(NULL)
-{
-	
-}
+{}
 
 //constructor with args
 clue::clue(char * clue) : grovnik('?')
@@ -311,6 +317,7 @@ clue::clue(char * clue) : grovnik('?')
 clue::~clue()
 {
 	delete [] clueText;
+	clueText = NULL;
 }
 
 void clue::display_info()

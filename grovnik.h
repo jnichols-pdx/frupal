@@ -1,7 +1,20 @@
 //This file is for managing the classes of the grovniks
 
-#include<fstream>
+#ifndef GROVNIK_H
+#define GROVNIK_H
+
+
+#include <cmath> //do we need this? TODO
+#include <stdio.h> //what is this being used for? TODO
+
+//i think we only need to stick to one of these
+//or remove both and stick to char arrays TODO
+#include <string> 
 #include <cstring>
+#include <sstream>
+
+//what is this for? TODO
+#include <unistd.h>
 
 //base class for grovniks
 class grovnik
@@ -91,6 +104,7 @@ class tool : public grovnik
 		void display_info();
 		char * get_name();
 		int get_cost();
+		bool check_equal(char * item);
 	protected:
 		char * name;
     char * description;
@@ -124,8 +138,8 @@ class clue : public grovnik
 {
 	public:
 		clue();
-		clue(char * clue);
 		~clue();
+		clue(char * clue);
 		char * get_clue();
 		void display_info();
 	protected:
@@ -134,3 +148,5 @@ class clue : public grovnik
 	
 	private:	
 };
+
+#endif
