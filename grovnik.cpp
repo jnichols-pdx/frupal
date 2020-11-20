@@ -4,7 +4,7 @@
 #include "grovnik.h"
 
 //grovnik default constructor
-grovnik::grovnik() : character(NULL)
+grovnik::grovnik() : character('\0')
 {
 	
 }
@@ -47,9 +47,14 @@ void binocular::display_info()
 
 //-------------------------------------------------------------------
 
-treasure_chest::treasure_chest()
+treasure_chest::treasure_chest() : amount(0)
 {
 
+}
+
+treasure_chest::treasure_chest(int amount)
+{
+	this->amount = amount;
 }
 
 treasure_chest::~treasure_chest()
@@ -60,6 +65,11 @@ treasure_chest::~treasure_chest()
 void treasure_chest::display_info()
 {
 	
+}
+
+int treasure_chest::get_amount()
+{
+	return amount;
 }
 
 //-------------------------------------------------------------------
@@ -128,16 +138,19 @@ int obstacle::get_b_energy()
 
 //-------------------------------------------------------------------
 
-tool::tool() : name(NULL)
+tool::tool() : name(NULL), cost(0)
 {
 	
 }
 
 //constructor with args
-tool::tool(char * name)
+tool::tool(char * name, int cost)
 {
 	this->name = new char[strlen(name)+1];
 	strcpy(this->name,name);
+	
+	this->cost = cost;
+	
 }
 
 tool::~tool()
@@ -153,6 +166,11 @@ void tool::display_info()
 char * tool::get_name()
 {
 	return name;
+}
+
+int tool::get_cost()
+{
+	return cost;
 }
 
 //-------------------------------------------------------------------
@@ -184,34 +202,48 @@ void food::display_info()
 	
 }
 
-char * food::name()
+char * food::get_name()
 {
 	return name;
 }
 
-int food::cost()
+int food::get_cost()
 {
 	return cost;
 }
 
-int food::energy()
+int food::get_energy()
 {
 	return energy;
 }
 
 //-------------------------------------------------------------------
 
-clue::clue()
+//default constructor
+clue::clue() : clue(NULL)
 {
 	
 }
 
+//constructor with args
+clue::clue(char * clue)
+{
+	this->clueText = new char[strlen(clue)+1];
+	strcpy(this->clueText,clue);
+}
+
+//destructor
 clue::~clue()
 {
-	
+	delete [] clueText;
 }
 
 void clue::display_info()
 {
 	
+}
+
+char * clue::get_clue()
+{
+	return clueText;
 }

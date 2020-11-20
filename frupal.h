@@ -5,6 +5,7 @@
 #include <string>
 #include <unistd.h>
 #include "hero.h"
+#include "grovnik.h"
 #include "terrain.h"
 
 using namespace std;
