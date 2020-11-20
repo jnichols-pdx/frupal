@@ -296,8 +296,7 @@ bool Frupal::validMove(int y, int x){
 
 	//checks for water
 	}else if(terrainMap[y][x] == '~'){
-		char ship[5] = "ship";
-		if(mainGuy.checkInventory(ship)){
+		if(mainGuy.checkInventory("ship")){
 			return true;
 		}
 		return false;
@@ -378,8 +377,8 @@ void Frupal::showMap()
 		for(int x = 0; x < xMax; x++){
 			
 			//discovered areas
-			if(visitMap[y][x] == true){
-				int color = terrainInfo.get_color(terrainMap[y][x]);//gets color
+				if(visitMap[y][x] == true){
+					int color = terrainInfo.get_color(terrainMap[y][x]);//gets color
 
         //Display item grovniks
         currentGrovnik = itemMap[y][x];

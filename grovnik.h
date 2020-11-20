@@ -104,7 +104,7 @@ class tool : public grovnik
 		void display_info();
 		char * get_name();
 		int get_cost();
-		bool check_equal(char * item);
+		bool check_equal(const char * item);
 	protected:
 		char * name;
     char * description;

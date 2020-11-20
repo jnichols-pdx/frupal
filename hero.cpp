@@ -41,11 +41,11 @@ bool Hero::modWhif(int whif)
 }
 
 //checks inventory for a certain item
-bool Hero::checkInventory(char * item){
+bool Hero::checkInventory(const char * item){
 	if(item == NULL) return false;   //empty string return false
 
 	for(int i=0; i<INVSIZE; ++i){
-		if(inventory[i] == NULL) {}
+		if(inventory[i] == NULL) {}	//for no seg faults
 		else{
 			if(inventory[i]->check_equal(item) == true)
 			return true;

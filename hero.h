@@ -11,7 +11,7 @@ class Hero
 		~Hero();
 		bool modEner(int nRG); //modify energy - adds by default. To lower energy, send in negative number
 		bool modWhif(int whif); //modify whiffles - adds by default. To lower number of whiffles, send in negative number
-		bool checkInventory(char * item);
+		bool checkInventory(const char * item);	//check if the hero has this in their inventory, returns false when its not in it
 	
 
   private:

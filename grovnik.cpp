@@ -219,11 +219,11 @@ void tool::display_info()
 	
 }
 
-bool tool::check_equal(char * item)
+bool tool::check_equal(const char * item)
 {
 	if(item == NULL) return false;
 	if(this->name == NULL) return false;	
-	if(strcmp(this->name, name) == 0) return true;
+	if(strcmp(this->name, item) == 0) return true;
 	else return false;
 }
 
