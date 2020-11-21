@@ -359,7 +359,8 @@ int Frupal::getmv()
 void Frupal::updateVisitMap(){
   for(int y = yHero - 1; y <= yHero + 1; y++){
     for(int x = xHero - 1; x <= xHero + 1; x++){
-			visitMap[y][x] = true;
+      if(y >= 0 && y < 128 && x >= 0 && x < 128)
+			  visitMap[y][x] = true;
 		}
 	}
 }
