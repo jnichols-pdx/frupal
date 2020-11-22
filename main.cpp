@@ -16,25 +16,24 @@ int main(int argc, char ** argv)
 	vline('#', y);
   mvwprintw(stdscr, 0, x*0.75+13, "Arrow Keys to Move Cursor"); //Print out instructions to the menu
   refresh();
-	///*		this works
+	/*		
   	Hero temp;
   	char tem[] = "Dynamite";
   	char des[] = "Destroys everything";
   	tool tempo(tem, des,300,10);
-  	temp.addTool(&tempo);
-	//*/
+  	temp.addTool(&tempo);		how to call addTool function for Hero
 
-        ///*
 	char var[] = "Hammer";	
 	char desc[] = "weak";
 	tool temporary(var,desc,15,2);
 	temp.addTool(&temporary);
-	//*/
 	
 	tool * copy;
 	copy = NULL;
-  	if(temp.selectTool(copy) == false){}
-  	if(temp.selectTool(copy) == false){}
+  	if(temp.selectTool(copy) == false){}	how to call selectTool function for hero, copy becomes what was selected
+						this allows for things like heroOBJ->modEner(-((obstacleOBJ.get_b_energy)/selectedTool.getDivisor))
+						when breaking obstacles
+	*/
 
   Frupal * g;
   bool goodMapFile = false;

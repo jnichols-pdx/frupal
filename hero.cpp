@@ -102,6 +102,8 @@ bool Hero::selectTool(tool * & item){	//selects a tool and copies it into the it
 		item = NULL;	
 	}
 	if(items == 0) return false;  //empty inventory
+
+	keypad(stdscr, true);
 	
 	int y = 10;	//where the inventory starts in the menu
 	int arrPos = 0; //array position
@@ -123,11 +125,13 @@ bool Hero::selectTool(tool * & item){	//selects a tool and copies it into the it
 					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, " ");	//clear current one	//the > display and moving does not work
 					arrPos = items -1; //go to last element
 					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">");	//highlight new position
+					refresh();
 				}
 				else{
 					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, " ");
 					--arrPos;
 					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">"); 
+					refresh();
 				}
 				break;
 	
@@ -136,11 +140,13 @@ bool Hero::selectTool(tool * & item){	//selects a tool and copies it into the it
 					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, " ");	//clear current one
 					arrPos = 0; //go to first element
 					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">");	//highlight new position
+					refresh();
 				}
 				else{
 					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, " ");
 					++arrPos;
 					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">"); 
+					refresh();
 				}
 				break;
 			default: break;	
