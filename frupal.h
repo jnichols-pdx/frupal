@@ -1,4 +1,3 @@
-#include <ncurses.h>
 #include <fstream>
 
 // is this needed? TODO #include <string> 

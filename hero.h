@@ -1,4 +1,3 @@
-#include <string>
 #include "grovnik.h"
 
 const int INVSIZE = 10;
@@ -15,10 +14,14 @@ class Hero
 		int getWhif();
 		void displayStats();
 		bool checkInventory(char * item);
-	
+		bool checkInventory(const char * item);	//check if the hero has this in their inventory, returns false when its not in it
+		bool addTool(tool * item);  //returns false if inventory is full, unless a ship is being added it will add the ship
+		bool selectTool(tool * & item);	//selects a tool and copies it into the item argument, returns false if inventory is empty
+						//or if the hero selects the ship. The hero can not remove the ship from their inventory
 
   private:
   	int whiffles; //hero whiffles
   	int energy; //hero energy
-		tool *inventory[INVSIZE+1];	//10 inventory items
+    int items; //items in the inventory
+    tool *inventory[INVSIZE+1];	//10 inventory items
 };
