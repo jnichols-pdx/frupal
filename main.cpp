@@ -12,17 +12,12 @@ int main(int argc, char ** argv)
   
   WINDOW * mapwin = newwin(y, x*0.75, 0, 0); //Create a new window y lines high, and 75% of x value as described by the standard screen (terminal window size)
 
-	move(0, x*.75);
-	vline('#', y);
-  mvwprintw(stdscr, 0, x*0.75+13, "Arrow Keys to Move Cursor"); //Print out instructions to the menu
-  refresh();
-
   Frupal * g;
   bool goodMapFile = false;
   //Attempt to load the map from a file if one was provided as a command line argument.
   if(argc > 1)
   {
-    g = new Frupal(mapwin,argv[1]);
+    g = new Frupal(mapwin,argv[1],x,y);
     goodMapFile = g->mapLoaded();
     if(!goodMapFile)
       delete g;
@@ -30,7 +25,7 @@ int main(int argc, char ** argv)
   //If we were not given a map file, or the map file wasn't correct, load the default map.
   if(!goodMapFile)
   {
-    g = new Frupal(mapwin,5,5);
+    g = new Frupal(mapwin,5,5,x,y);
   }
   start_color();//star ncurses color
 

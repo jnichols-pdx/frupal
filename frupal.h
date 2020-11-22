@@ -1,5 +1,6 @@
 #include <ncurses.h>
 #include <fstream>
+#include <panel.h>
 
 // is this needed? TODO #include <string> 
 // is this needed? TODO #include <sstream>
@@ -14,8 +15,8 @@ using namespace std;
 class Frupal
 {
   public:
-    Frupal(WINDOW * win, int y, int x);
-    Frupal(WINDOW * win, char * mapFileName);
+    Frupal(WINDOW * win, int y, int x, int stdX, int stdY);
+    Frupal(WINDOW * win, char * mapFileName, int stdX, int stdY);
 		~Frupal();
     int  getmv(); //move cursor
     bool mapLoaded();	
@@ -38,9 +39,10 @@ class Frupal
     //Parse one line/element
     bool parseLine(string line, ifstream & mapFile, bool & terrain, bool & start, bool & diamonds);
 
-    int xCur, yCur, xMax, yMax; //current, current, maximum, maximum
+    int xCur, yCur, xMax, yMax, mapxMax, mapyMax; //current, current, maximum, maximum
 		int xHero, yHero; //hero location
-    WINDOW * curWin; //ncurses window
+    WINDOW * curWin; //map window
+    WINDOW * menuWin; //menu window
     Hero mainGuy;
   	bool visitMap[128][128]; //map to track discovered places
 		char terrainMap[128][128]; //map that holds terrain

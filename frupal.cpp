@@ -1,8 +1,11 @@
 #include "frupal.h"
 
-Frupal::Frupal(WINDOW * win, int y, int x)
+Frupal::Frupal(WINDOW * win, int y, int x, int stdX, int stdY)
 {
   curWin = win;
+  menuWin = newwin(stdY, stdX*0.25,0,stdX*0.75);
+  wborder(menuWin, '#','#', '#', '#', '#', '#', '#', '#');
+  wrefresh(menuWin);
 
 	xHero = x;
 	yHero = y;
@@ -28,9 +31,13 @@ Frupal::Frupal(WINDOW * win, int y, int x)
 }
 
 //constructor with file
-Frupal::Frupal(WINDOW * win, char * mapFileName): xHero(5), yHero(5)//remove
+Frupal::Frupal(WINDOW * win, char * mapFileName, int stdX, int stdY): xHero(5), yHero(5)//remove
 {
   curWin = win;
+  getmaxyx(curWin,mapyMax,mapxMax);
+  menuWin = newwin(stdY, stdX*0.25,0,stdX*0.75);
+  wborder(menuWin, '#',' ', ' ', ' ', '#', ' ', '#', ' ');
+  wrefresh(menuWin);
   keypad(curWin, true);
   mainGuy = Hero(1000, 100);
 
@@ -352,6 +359,7 @@ int Frupal::getmv()
       ch = getmv();
       break;
   }
+    wrefresh(menuWin);
     wrefresh(curWin);//refresh the window
   return ch;
 }
