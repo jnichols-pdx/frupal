@@ -8,11 +8,13 @@ Hero::Hero(){
         for(int i = 0; i<INVSIZE; ++i){
  		inventory[i] = NULL;	
 	}
+	items = 0;
 }
 
 Hero::Hero(int whif, int nRG){
 	whiffles = whif;
 	energy = nRG;
+	items = 0;
         for(int i = 0; i<10; ++i){
  		inventory[i] = NULL;	
 	}	
@@ -62,3 +64,112 @@ Hero::~Hero(){
 	}
 }
 
+bool Hero::addTool(tool * item){  //returns false if inventory is full, unless a ship is being added it will add the ship
+	if(item == NULL) return false;
+	if(item->check_equal("ship") ==  true){		//if we are adding the ship
+		for(int i=0; i<INVSIZE; ++i){		//first check if theres space available
+			if(inventory[i] == NULL) {
+				inventory[i] = new tool(*item);		//copy item into inventory
+				whiffles = whiffles - item->get_cost();
+				++items;
+				return true;
+			}
+		}
+		delete inventory[0];			//there wasn't space, free space and add. 
+							//element 0 is just a placeholder
+							//we can discuss where we want to place the ship
+		inventory[0] = new tool(*item);		
+		whiffles = whiffles - item->get_cost();
+		return true;
+	}
+	else{
+		for(int i=0; i<INVSIZE; ++i){
+			if(inventory[i] == NULL) {		//theres space add here
+				inventory[i] = new tool(*item);		
+				whiffles = whiffles - item->get_cost();
+				++items;
+				return true;
+			}
+		}
+	}
+	
+	return false;	//inventory was full
+}
+		
+bool Hero::selectTool(tool * & item){	//selects a tool and copies it into the item argument, returns false if inventory is empty
+	if(item != NULL){
+		delete item;
+		item = NULL;	
+	}
+	if(items == 0) return false;  //empty inventory
+	
+	int y = 10;	//where the inventory starts in the menu
+	int arrPos = 0; //array position
+	int userInput = 0;
+	mvwprintw(stdscr, y+items, COLS*0.75+3, "Select tool by pressing RETURN");
+	mvwprintw(stdscr, y+items+1, COLS*0.75+3, "The tool 'ship' is unselectable");
+
+	for(int i=0; i<items;++i){//display everything in inventory
+		if(inventory[i] != NULL) inventory[i]->display_name(i+y);		
+	}
+	refresh();
+	if(items ==1){
+		mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">");
+		refresh();
+		}
+	else{
+	do{	
+		userInput = getch();
+		switch(userInput){
+			case KEY_UP:
+				if(arrPos == 0){		//if at first element
+					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, " ");	//clear current one
+					arrPos = items -1; //go to last element
+					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">");	//highlight new position
+				}
+				else{
+					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, " ");
+					--arrPos;
+					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">"); 
+				}
+				break;
+	
+			case KEY_DOWN:
+				if(arrPos == items -1){ 	//if at last element
+					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, " ");	//clear current one
+					arrPos = 0; //go to first element
+					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">");	//highlight new position
+				}
+				else{
+					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, " ");
+					++arrPos;
+					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">"); 
+				}
+				break;
+			default: break;	
+		}
+		refresh();
+	}while(userInput != char(10));
+	}
+
+	if(inventory[arrPos]->check_equal("ship") == true) return false; //can't remove the ship
+
+	for(int i = 0; i< INVSIZE+2;++i){		//clear inventory in menu
+		mvwprintw(stdscr, y+i, COLS*0.75+2, "                                         ");
+	}
+	refresh();
+
+	item = new tool(*inventory[arrPos]);	//copy tool item with copy constructor
+	delete inventory[arrPos];		//deallocate memory
+	
+	for(int i = arrPos; i <items; ++i){	//shift everything up
+		if(i == items -1){		//if at last element
+			inventory[i] = NULL;
+			--items;
+			return true;
+		}
+		inventory[i] = inventory[i+1];
+	}
+
+	return false;
+}

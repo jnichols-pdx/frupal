@@ -17,6 +17,22 @@ int main(int argc, char ** argv)
   mvwprintw(stdscr, 0, x*0.75+13, "Arrow Keys to Move Cursor"); //Print out instructions to the menu
   refresh();
 
+  	Hero temp;
+  	char tem[] = "Dynamite";
+  	char des[] = "Destroys everything";
+  	tool tempo(tem, des,300,10);
+  	temp.addTool(&tempo);
+
+        /*char var[] = "Hammer";	
+	char desc[] = "weak";
+	tool temporary(var,desc,15,2);
+	temp.addTool(&temporary);*/
+	
+	tool * copy;
+	copy = NULL;
+  	if(temp.selectTool(copy) == false){}
+  	//if(temp.selectTool(copy) == false){}
+
   Frupal * g;
   bool goodMapFile = false;
   //Attempt to load the map from a file if one was provided as a command line argument.

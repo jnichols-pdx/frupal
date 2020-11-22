@@ -207,16 +207,34 @@ tool::tool(char * name, char * description, int cost, int divisor) : grovnik('T'
 }
 
 tool::~tool(){
-	delete [] name;	
-	name = NULL;
+	if(name != NULL){
+		delete [] name;	
+		name = NULL;
+	}
 
-	delete [] description;	
-	name = NULL;
+	if(description != NULL){
+		 delete [] description;	
+		name = NULL;
+	}
+}
+		
+tool::tool(tool & to_copy){
+	name = new char[strlen(to_copy.name)+1];
+	strcpy(name,to_copy.name);
+	description = new char[strlen(to_copy.description)+1];
+	strcpy(description,to_copy.description);
+	cost = to_copy.cost;
+	divisor = to_copy.divisor;
 }
 
 void tool::display_info()
 {
 	
+}
+
+void tool::display_name(int y){	//displays tool name in the menu 
+	if(name == NULL) return;
+	mvwprintw(stdscr, y, COLS*0.75+3, "%s", name);
 }
 
 bool tool::check_equal(const char * item)
