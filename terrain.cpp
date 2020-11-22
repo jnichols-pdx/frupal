@@ -39,13 +39,13 @@ int terrain::get_travel_cost(char terType){
 			travel_cost = 0;
 			break;
 		case '=': //wall
-			travel_cost = 1;
+			travel_cost = -1;
 			break;
 		case '.': //meadow
-			travel_cost = 1;
+			travel_cost = -1;
 			break;
 		case '"': //swamp
-			travel_cost = 2;
+			travel_cost = -2;
 			break;
 		default:	
 			break;

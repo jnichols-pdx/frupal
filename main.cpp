@@ -12,9 +12,12 @@ int main(int argc, char ** argv)
   
   WINDOW * mapwin = newwin(y, x*0.75, 0, 0); //Create a new window y lines high, and 75% of x value as described by the standard screen (terminal window size)
 
+	//vertical line seperating menu and map
 	move(0, x*.75);
 	vline('#', y);
-  mvwprintw(stdscr, 0, x*0.75+13, "Arrow Keys to Move Cursor"); //Print out instructions to the menu
+
+	mvwprintw(stdscr, 0, x*0.75+13, "Arrow Keys to Move Cursor"); //Print out instructions to the menu
+  mvwprintw(stdscr, 1, x*0.75+13, "WASD Keys to Move Cursor"); //Print out instructions to the menu
   refresh();
 	/*		
   	Hero temp;
