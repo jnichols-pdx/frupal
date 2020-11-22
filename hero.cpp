@@ -106,24 +106,21 @@ bool Hero::selectTool(tool * & item){	//selects a tool and copies it into the it
 	int y = 10;	//where the inventory starts in the menu
 	int arrPos = 0; //array position
 	int userInput = 0;
-	mvwprintw(stdscr, y+items, COLS*0.75+3, "Select tool by pressing RETURN");
-	mvwprintw(stdscr, y+items+1, COLS*0.75+3, "The tool 'ship' is unselectable");
+	mvwprintw(stdscr, y+items+1, COLS*0.75+3, "Select tool by pressing RETURN");	//not sure why this doesn't work
+	mvwprintw(stdscr, y+items+2, COLS*0.75+3, "The tool 'ship' is unselectable");
 
 	for(int i=0; i<items;++i){//display everything in inventory
-		if(inventory[i] != NULL) inventory[i]->display_name(i+y);		
+		inventory[i]->display_name(i+y);		
 	}
 	refresh();
-	if(items ==1){
-		mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">");
-		refresh();
-		}
-	else{
 	do{	
+		mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">");	//highlight new position
+		refresh();
 		userInput = getch();
 		switch(userInput){
 			case KEY_UP:
 				if(arrPos == 0){		//if at first element
-					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, " ");	//clear current one
+					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, " ");	//clear current one	//the > display and moving does not work
 					arrPos = items -1; //go to last element
 					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">");	//highlight new position
 				}
@@ -150,11 +147,10 @@ bool Hero::selectTool(tool * & item){	//selects a tool and copies it into the it
 		}
 		refresh();
 	}while(userInput != char(10));
-	}
 
 	if(inventory[arrPos]->check_equal("ship") == true) return false; //can't remove the ship
 
-	for(int i = 0; i< INVSIZE+2;++i){		//clear inventory in menu
+	for(int i = 0; i< INVSIZE+2;++i){		//clear inventory in menu				//this works
 		mvwprintw(stdscr, y+i, COLS*0.75+2, "                                         ");
 	}
 	refresh();

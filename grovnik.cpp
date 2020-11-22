@@ -235,6 +235,7 @@ void tool::display_info()
 void tool::display_name(int y){	//displays tool name in the menu 
 	if(name == NULL) return;
 	mvwprintw(stdscr, y, COLS*0.75+3, "%s", name);
+	refresh();
 }
 
 bool tool::check_equal(const char * item)
