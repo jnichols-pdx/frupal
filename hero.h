@@ -12,8 +12,7 @@ class Hero
 		bool modWhif(int whif); //modify whiffles - adds by default. To lower number of whiffles, send in negative number
 		int getEner();
 		int getWhif();
-		void displayStats();
-		bool checkInventory(char * item);
+
 		bool checkInventory(const char * item);	//check if the hero has this in their inventory, returns false when its not in it
 		bool addTool(tool * item);  //returns false if inventory is full, unless a ship is being added it will add the ship
 		bool selectTool(tool * & item);	//selects a tool and copies it into the item argument, returns false if inventory is empty
