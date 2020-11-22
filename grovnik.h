@@ -2,6 +2,7 @@
 
 #ifndef GROVNIK_H
 #define GROVNIK_H
+#include <ncurses.h>
 
 
 #include <cmath> //do we need this? TODO
@@ -100,11 +101,13 @@ class tool : public grovnik
 	public:
 		tool();
 		tool(char * name, char * description, int cost, int divisor);
+		tool(tool & to_copy);	//copy constructor
 		~tool();
-		void display_info();
+		void display_info();			//displays tool description in the menu
+		void display_name(int y);	//displays tool name in the menu at specific y coordinate
 		char * get_name();
 		int get_cost();
-		bool check_equal(char * item);
+		bool check_equal(const char * item);
 	protected:
 		char * name;
     char * description;
