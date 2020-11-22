@@ -217,6 +217,7 @@ void Frupal::mvup(){
 
 		yHero -= 1;
 		showMap();//update map
+		showHeroInfo();
 
 		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
 			loseGame();
@@ -234,6 +235,8 @@ void Frupal::mvdn(){
 
 		yHero += 1;
 		showMap();//update map
+		showHeroInfo();
+
 		
 		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
 			loseGame();
@@ -251,6 +254,7 @@ void Frupal::mvlt(){
 
 		xHero -= 1;
 		showMap();//update map
+		showHeroInfo();
 
 		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
 			loseGame();
@@ -269,6 +273,7 @@ void Frupal::mvrt(){
 
 		xHero += 1;
 		showMap();//update map
+		showHeroInfo();
 
 		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
 			loseGame();
@@ -411,4 +416,34 @@ void Frupal::showMap()
 	wattron(curWin, COLOR_PAIR(1));//turn on color RED
 	mvwaddch(curWin, yHero,xHero,'@');//write @ to map for hero
 	wattroff(curWin, COLOR_PAIR(1));//turn off color RED
+}
+
+//shows information on current cursor coordinate
+void Frupal::showCurInfo(){
+//	currentGrovnik = itemMap[yCur][xCur];
+
+}
+
+void::Frupal::showHeroInfo(){
+	int y = 0;
+	int x = 0;
+
+	char energy[5]; //game can supoort 9999 energy
+	char whiffles[10]; //game can support 999,999,999 whiffles
+
+	getmaxyx(stdscr, y, x);
+
+	mvprintw(y - 5, x * 0.75 + 8, "Energy: ");
+	getyx(stdscr, y, x);
+	sprintf(energy, "%d", mainGuy.getEner());
+	mvprintw(y, x, energy);
+
+	getmaxyx(stdscr, y, x);
+
+	mvprintw(y - 4, x * 0.75 + 8, "Whiffles: ");
+	getyx(stdscr, y, x);
+	sprintf(whiffles, "%d", mainGuy.getWhif());
+	mvprintw(y, x, whiffles);
+
+	refresh();
 }

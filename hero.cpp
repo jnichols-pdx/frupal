@@ -40,6 +40,14 @@ bool Hero::modWhif(int whif)
 	return true;
 }
 
+int Hero::getEner(){
+	return energy;
+}
+
+int Hero::getWhif(){
+	return whiffles;
+}
+
 //checks inventory for a certain item
 bool Hero::checkInventory(char * item){
 	if(item == NULL) return false;   //empty string return false
@@ -61,4 +69,3 @@ Hero::~Hero(){
 		else{}
 	}
 }
-

@@ -5,6 +5,9 @@
 // is this needed? TODO #include <sstream>
 // is this needed? TODO #include <unistd.h>
 
+
+#include <stdio.h>
+#include <ncurses.h>
 #include "hero.h"
 #include "grovnik.h"
 #include "terrain.h"
@@ -20,6 +23,8 @@ class Frupal
     int  getmv(); //move cursor
     bool mapLoaded();	
     void showMap();
+		void showCurInfo();
+		void showHeroInfo();
   private:
 
     void lkup();  //move cursor up
