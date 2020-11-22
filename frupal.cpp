@@ -33,6 +33,7 @@ Frupal::Frupal(WINDOW * win, char * mapFileName): xHero(5), yHero(5)//remove
   curWin = win;
   keypad(curWin, true);
   mainGuy = Hero(1000, 100);
+	showHeroInfo();
 
 	wbkgd(win, COLOR_PAIR(6));
 
@@ -217,11 +218,12 @@ void Frupal::mvup(){
 
 		yHero -= 1;
 		showMap();//update map
-		showHeroInfo();
 
 		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
 			loseGame();
 		}
+		showHeroInfo();
+
     //moving our hero now updates the cursor location to him
     yCur = yHero;
     xCur = xHero;
@@ -235,12 +237,12 @@ void Frupal::mvdn(){
 
 		yHero += 1;
 		showMap();//update map
-		showHeroInfo();
-
-		
+				
 		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
 			loseGame();
 		}
+		showHeroInfo();
+
     //moving our hero now updates the cursor location to him
     yCur = yHero;
     xCur = xHero;
@@ -254,11 +256,12 @@ void Frupal::mvlt(){
 
 		xHero -= 1;
 		showMap();//update map
-		showHeroInfo();
 
 		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
 			loseGame();
 		}
+		showHeroInfo();
+
     //moving our hero now updates the cursor location to him
     yCur = yHero;
     xCur = xHero;
@@ -273,11 +276,12 @@ void Frupal::mvrt(){
 
 		xHero += 1;
 		showMap();//update map
-		showHeroInfo();
 
 		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
 			loseGame();
 		}
+		showHeroInfo();
+
     //moving our hero now updates the cursor location to him
     yCur = yHero;
     xCur = xHero;
@@ -426,10 +430,13 @@ void Frupal::showCurInfo(){
 void::Frupal::showHeroInfo(){
 	int y = 0;
 	int x = 0;
+	char energy[5] = {0}; //game can support 9999 energy
+	char whiffles[10] = {0}; //game can support 999,999,999 whiffles
 
-	char energy[5]; //game can supoort 9999 energy
-	char whiffles[10]; //game can support 999,999,999 whiffles
+	getmaxyx(stdscr, y, x);
 
+	move(y - 5, x);
+	clrtoeol(); 
 	getmaxyx(stdscr, y, x);
 
 	mvprintw(y - 5, x * 0.75 + 8, "Energy: ");
@@ -437,6 +444,10 @@ void::Frupal::showHeroInfo(){
 	sprintf(energy, "%d", mainGuy.getEner());
 	mvprintw(y, x, energy);
 
+	getmaxyx(stdscr, y, x);
+
+	move(y - 4, x);
+	clrtoeol(); 
 	getmaxyx(stdscr, y, x);
 
 	mvprintw(y - 4, x * 0.75 + 8, "Whiffles: ");
