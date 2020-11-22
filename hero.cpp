@@ -21,6 +21,13 @@ Hero::Hero(int whif, int nRG){
 	//inventory[0] = new tool("ship");
 }
 
+Hero::~Hero(){
+	for(int i =0; i < INVSIZE; ++i){
+		if(inventory[i] != NULL) delete inventory[i];
+		else{}
+	}
+}
+
 bool Hero::modEner(int nRG)
 {
   energy += nRG;
@@ -64,15 +71,6 @@ bool Hero::checkInventory(const char * item){
 
 	return false;
 }
-		
-Hero::~Hero(){
-	for(int i =0; i < INVSIZE; ++i){
-		if(inventory[i] != NULL) delete inventory[i];
-		else{}
-	}
-}
-<<<<<<< HEAD
-=======
 
 bool Hero::addTool(tool * item){  //returns false if inventory is full, unless a ship is being added it will add the ship
 	if(item == NULL) return false;
@@ -185,4 +183,3 @@ bool Hero::selectTool(tool * & item){	//selects a tool and copies it into the it
 
 	return false;
 }
->>>>>>> 259dde2c1c347c1e4107afa0faf1ffa17c19c585
