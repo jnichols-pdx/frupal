@@ -47,6 +47,38 @@ void binocular::display_info()
 
 //-------------------------------------------------------------------
 
+//default constructor
+ship::ship() : cost(0)
+{
+	
+}
+
+//constructor with args
+ship::ship(int cost)
+{
+	this->cost = cost;
+}
+
+//destructor
+ship::~ship()
+{
+	
+}
+
+//virtual function
+void ship::display_info()
+{
+	
+}
+
+//returns the ship cost
+int ship::get_cost()
+{
+	return cost;
+}
+
+//-------------------------------------------------------------------
+
 treasure_chest::treasure_chest() : amount(0)
 {
 
