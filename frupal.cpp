@@ -379,14 +379,14 @@ void Frupal::updateVisitMap(){
 
 void Frupal::updateCur()
 {
-  if(yHero > winYMax*(multy+1))
+  if(yHero >= winYMax*(multy+1))
   {
     ++multy;
-  }else if(yHero <= winYMax*(multy) && (multy-1) >= 0) {
+  }else if(yHero < winYMax*(multy) && (multy-1) >= 0) {
     --multy;
-  }else if(xHero > winXMax*(multx+1)) {
+  }else if(xHero >= winXMax*(multx+1)) {
     ++multx;
-  } else if(xHero <= winXMax*(multx) && (multx-1) >= 0) {
+  } else if(xHero < winXMax*(multx) && (multx-1) >= 0) {
     --multx;
   }
 }
