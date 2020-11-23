@@ -4,10 +4,14 @@ Frupal::Frupal(WINDOW * win, int y, int x)
 {
   curWin = win;
 
+  getmaxyx(curWin, winYMax, winXMax);
+  curMinX = curMinY = 0;
+  curMaxX = winXMax;
+  curMaxY = winYMax;
 	xHero = x;
 	yHero = y;
 	mvwaddch(curWin, yHero, xHero, '@');
-
+  multy = multx = 0;
   xCur = x;
   yCur = y;
   xMax = yMax = 128;
@@ -31,9 +35,15 @@ Frupal::Frupal(WINDOW * win, int y, int x)
 Frupal::Frupal(WINDOW * win, char * mapFileName): xHero(5), yHero(5)//remove
 {
   curWin = win;
+
+  getmaxyx(curWin, winYMax, winXMax);
+  curMinX = curMinY = 0;
+  curMaxX = winXMax;
+  curMaxY = winYMax;
   keypad(curWin, true);
   mainGuy = Hero(1000, 100);
 	showHeroInfo();
+  multy = multx = 0;
 
 	wbkgd(win, COLOR_PAIR(6));
 
@@ -373,6 +383,42 @@ void Frupal::updateVisitMap(){
 	}
 }
 
+void Frupal::updateCur()
+{
+  if(yHero >= curMaxY && ((winYMax + curMaxY) < yMax))
+  {
+    curMinY += winYMax;
+    curMaxY += winYMax;
+    ++multy;
+  } else if(yHero <= curMinY && ((curMinY - winYMax) >= 0)) {
+    curMinY -= winYMax;
+    curMaxY -= winYMax;
+    --multy;
+  } else if(xHero >= curMaxX && ((winXMax + curMaxX) < xMax)) {
+    curMinX += winXMax;
+    curMaxX += winXMax;
+    ++multx;
+  } else if(xHero <= curMinX && ((curMinX - winXMax) >= 0)) {
+    curMinX -= winXMax;
+    curMinX -= winXMax;
+    --multx;
+  }
+}
+
+int Frupal::getYmax()
+{
+  if(yMax <= winYMax)
+    return yMax;
+  return curMaxY;
+} 
+
+int Frupal::getXmax()
+{
+  if(xMax <= winXMax)
+    return xMax;
+  return curMaxX;
+}
+
 //new show map function handles the color display, and updates
 //the heros location when he moves, rather than having that
 //occur in four separate functions
@@ -382,9 +428,13 @@ void Frupal::showMap()
   char grovnikIcon = ' ';
   grovnik * currentGrovnik;
 
+  werase(curWin);
+
+  updateCur();
+
 	//updates map
-	for(int y = 0; y < yMax; y++){
-		for(int x = 0; x < xMax; x++){
+	for(int y = curMinY; y < getYmax(); y++){
+		for(int x = curMinX; x < getXmax(); x++){
 			
 			//discovered areas
 				if(visitMap[y][x] == true){
@@ -403,13 +453,13 @@ void Frupal::showMap()
         }
 
 				wattron(curWin, color);//turn on color pair
-				mvwaddch(curWin, y, x, grovnikIcon);//write space to map
+				mvwaddch(curWin, y-(winYMax*(multy)), x-(winXMax*(multx)), grovnikIcon);//write space to map
 				wattroff(curWin, color);//turn off color pair
 
 			//undiscovered areas
 			}else{ 
 				wattron(curWin, COLOR_PAIR(6));//turn on color BLACK
-				mvwaddch(curWin, y, x, ' ');//write space to map
+				mvwaddch(curWin, y-(winYMax*(multy)),x-(winXMax*(multx)), ' ');//write space to map
 				wattroff(curWin, COLOR_PAIR(6));//turn off color BLACK
 			}
 		}
@@ -417,7 +467,7 @@ void Frupal::showMap()
 
 	//shows hero on screen
 	wattron(curWin, COLOR_PAIR(1));//turn on color RED
-	mvwaddch(curWin, yHero,xHero,'@');//write @ to map for hero
+	mvwaddch(curWin, yHero-(winYMax*(multy)),xHero-(winXMax*(multx)),'@');//write @ to map for hero
 	wattroff(curWin, COLOR_PAIR(1));//turn off color RED
 }
 
