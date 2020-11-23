@@ -5,9 +5,6 @@ Frupal::Frupal(WINDOW * win, int y, int x)
   curWin = win;
 
   getmaxyx(curWin, winYMax, winXMax);
-  curMinX = curMinY = 0;
-  curMaxX = winXMax;
-  curMaxY = winYMax;
 	xHero = x;
 	yHero = y;
 	mvwaddch(curWin, yHero, xHero, '@');
@@ -37,9 +34,6 @@ Frupal::Frupal(WINDOW * win, char * mapFileName): xHero(5), yHero(5)//remove
   curWin = win;
 
   getmaxyx(curWin, winYMax, winXMax);
-  curMinX = curMinY = 0;
-  curMaxX = winXMax;
-  curMaxY = winYMax;
   keypad(curWin, true);
   mainGuy = Hero(1000, 100);
 	showHeroInfo();
@@ -385,38 +379,16 @@ void Frupal::updateVisitMap(){
 
 void Frupal::updateCur()
 {
-  if(yHero >= curMaxY && ((winYMax + curMaxY) < yMax))
+  if(yHero >= winYMax*(multy+1))
   {
-    curMinY += winYMax;
-    curMaxY += winYMax;
     ++multy;
-  } else if(yHero <= curMinY && ((curMinY - winYMax) >= 0)) {
-    curMinY -= winYMax;
-    curMaxY -= winYMax;
+  }else if(yHero < winYMax*(multy) && (multy-1) >= 0) {
     --multy;
-  } else if(xHero >= curMaxX && ((winXMax + curMaxX) < xMax)) {
-    curMinX += winXMax;
-    curMaxX += winXMax;
+  }else if(xHero >= winXMax*(multx+1)) {
     ++multx;
-  } else if(xHero <= curMinX && ((curMinX - winXMax) >= 0)) {
-    curMinX -= winXMax;
-    curMinX -= winXMax;
+  } else if(xHero < winXMax*(multx) && (multx-1) >= 0) {
     --multx;
   }
-}
-
-int Frupal::getYmax()
-{
-  if(yMax <= winYMax)
-    return yMax;
-  return curMaxY;
-} 
-
-int Frupal::getXmax()
-{
-  if(xMax <= winXMax)
-    return xMax;
-  return curMaxX;
 }
 
 //new show map function handles the color display, and updates
@@ -432,9 +404,23 @@ void Frupal::showMap()
 
   updateCur();
 
+  int smolY = winYMax*multy;
+  int smolX = winXMax*multx;
+  int bigY, bigX;
+  
+  if(winYMax * (multy+1) > yMax)
+    bigY = yMax;
+  else
+    bigY = winYMax*(multy+1);
+  
+  if(winXMax * (multx+1) > xMax)
+    bigX = xMax;
+  else
+    bigX = winXMax*(multx+1);
+
 	//updates map
-	for(int y = curMinY; y < getYmax(); y++){
-		for(int x = curMinX; x < getXmax(); x++){
+	for(int y = smolY; y < bigY; y++){
+		for(int x = smolX; x < bigX; x++){
 			
 			//discovered areas
 				if(visitMap[y][x] == true){

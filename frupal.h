@@ -39,14 +39,12 @@ class Frupal
 		void loseGame(); //called when player runs out of energy
 		void winGame(); //called when player gets royal diamond
     void updateCur();//updates curMin and curMax series ints based on hero location - for map scroll
-    int  getXmax(); //returns valid maximum X based on whether our window X maxis smaller than our map X max
-    int  getYmax(); //returns valid maximum y based on whether our window Y max is smaller than our map Y max
     bool loadMap(char * mapFileName); //loads map from a filename
     //Parse one line/element
     bool parseLine(string line, ifstream & mapFile, bool & terrain, bool & start, bool & diamonds);
 
     int xCur, yCur, xMax, yMax; //current map location for x and y, maximum map size x and y
-    int winYMax, winXMax, curMinX, curMaxX, curMinY, curMaxY, multx, multy; 
+    int winYMax, winXMax, multx, multy; 
     //Above integers are: maximum size of window x and y, current minimum value for x and y 
     //based on hero location, current maximum value for x and y based on current hero location
 		int xHero, yHero; //hero location
