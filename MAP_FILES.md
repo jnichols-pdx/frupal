@@ -88,6 +88,7 @@ Example: `start: 1 1`
 
 diamonds: *<x location\>* *<y location\>*
 
+Displayed in game as a white **$** on cyan background.
 Specifies the location of the Royal Diamonds.  
 This element may only be specified **once**.  
 The following example places the diamonds in the northeast region of a 128x128 map:
@@ -99,6 +100,7 @@ Example: `diamonds: 100 24`
 
 treasure: *<x location\>* *<y location\>* *<value\>* *<description\>*
 
+Displayed in game as a black **$**.
 Specifies one of many treasure items on the map, including location, value in whiffles to be added to the player's bank account, and a name.  
 The following example places a gold bar worth 4000 whiffles in the southwest region of a 128x128 map:  
 
@@ -109,6 +111,7 @@ Example: `treasure: 10 127 4000 A medium sized gold bar.`
 
 food: *<x location\>* *<y location\>* *<cost\>* *<energy\>* *<description\>*
 
+Displayed in game as a black **F**.
 Specifies one of many food items on a map.  
 *<cost\>* is the price in whiffles to purchase this food item.  
 *<energy\>* is the number units of energy buying and eating this food will give to the player.  
@@ -121,6 +124,7 @@ Example: `food: 60 77 2 10 Hotdog with relish and mustard.`
 
 clue: *<x location\>* *<y location\>* *<text\>*
 
+Displayed in game as a black **?**.
 Specifies one of many clue items on a map.  
 *<text\>* Is the information shown to the player when they discover this clue.  
 Clues are either 100% correct, or 100% false.  
@@ -134,6 +138,7 @@ Example: `clue: 1 0 You are 10 grovniks west of water. There is a treasure 40 gr
 
 ship: *<x location\>* *<y location\>* *<cost\>*
 
+Displayed in game as a black **S**.
 Specifies the location of the Ship on the map, which allows a player to travel on water grovniks.  
 *<cost\>* is the price in whiffles to purchase the ship.  
 This element may only be specified **once**.  
@@ -146,6 +151,7 @@ Example: `ship: 128 64 10000`
 
 binoculars: *<x location\>* *<y location\>* *<cost\>*
 
+Displayed in game as a black **B**.
 Specifies the location of the Binoculars on the map.  
 The Binoculars allow a player to see two grovniks around themselves, instead of one.  
 *<cost\>* is the price in whiffles to purchase the Binoculars.  
@@ -159,6 +165,7 @@ Example: `binoculars: 70 128 500`
 
 obstacle: *<x location\>* *<y location\>* *<kind\>* *<energy cost\>* *<description\>*
 
+Displayed in game as a black **!**.
 Specifies one of many obstacles on a map, which cost energy to remove.  
 *<kind\>* is a string that defines what type of obstacle this is, and thus what tools affect this obstacle. (Should match a tool's *<target\>*)  
 *<kind\>* may not contain whitespace, and is not visible to the player.  
@@ -173,6 +180,7 @@ Example: `obstacle: 0 44 boulder 15 Someone or something has driven a pillar of 
 
 tool: *<x location\>* *<y location\>* *<target\>* *<divisor\>* *<cost\>* *<description\>*
 
+Displayed in game as a black **T**.
 Specifies one of many tools on a map, which can lower the energy cost of removing obstacles.  
 *<target\>* is a string that defines what type of obstacle this tool helps to remove. (Should match an obstacle's *<kind\>*)  
 *<target\>* may not contain whitespace, and is not visible to the player.  
