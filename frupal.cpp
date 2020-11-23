@@ -189,14 +189,7 @@ void Frupal::lkup()
     yCur = ((multy + 1) * winYMax) -1;
   if(yCur >= yMax)
     yCur = yMax -1;
-  //XXX DEBUG
-  int y,x;
-	getmaxyx(stdscr, y, x);
-	mvprintw(y - 6, x * 0.75 + 5, "Cursor: %d,%d",xCur,yCur);
-  refresh();
-  //XXX DEBUG END
-  //And show the cursor
-  curs_set(1);
+  curs_set(1); //Display cursor when it moves
 	wmove(curWin, yCur % winYMax, xCur % winXMax);
 }
 
@@ -206,14 +199,7 @@ void Frupal::lkdn()
   yCur -= -1; //yes, I am aware that this is...non-standard. lol
   if(yCur >= ((multy+1)*winYMax) || yCur >= yMax)
     yCur = (multy * winYMax);
-  //XXX DEBUG
-  int y,x;
-	getmaxyx(stdscr, y, x);
-	mvprintw(y - 6, x * 0.75 + 5, "Cursor: %d,%d",xCur,yCur);
-  refresh();
-  //XXX DEBUG END
-  //And show the cursor
-  curs_set(1);
+  curs_set(1); //Display cursor when it moves
 	wmove(curWin, yCur % winYMax, xCur % winXMax);
 }
 
@@ -225,14 +211,7 @@ void Frupal::lklt()
     xCur = ((multx + 1) * winXMax) -1;
   if(xCur >= xMax)
     xCur = xMax -1;
-  //XXX DEBUG
-  int y,x;
-	getmaxyx(stdscr, y, x);
-	mvprintw(y - 6, x * 0.75 + 5, "Cursor: %d,%d",xCur,yCur);
-  refresh();
-  //XXX DEBUG END
-  //And show the cursor
-  curs_set(1);
+  curs_set(1); //Display cursor when it moves
 	wmove(curWin, yCur % winYMax, xCur % winXMax);
 }
 
@@ -242,14 +221,7 @@ void Frupal::lkrt()
   xCur -= -1;
   if(xCur >= ((multx+1)*winXMax) ||xCur >= xMax)
     xCur = (multx * winXMax);
-  //XXX DEBUG
-  int y,x;
-	getmaxyx(stdscr, y, x);
-	mvprintw(y - 6, x * 0.75 + 5, "Cursor: %d,%d",xCur,yCur);
-  refresh();
-  //XXX DEBUG END
-  //And show the cursor
-  curs_set(1);
+  curs_set(1); //Display cursor when it moves
 	wmove(curWin, yCur % winYMax, xCur % winXMax);
 }
 
@@ -270,7 +242,7 @@ void Frupal::mvup(){
     yCur = yHero;
     xCur = xHero;
 
-    //And hide the cursor
+    //And hides the cursor
     curs_set(0);
 	}
 }
@@ -291,7 +263,8 @@ void Frupal::mvdn(){
     //moving our hero now updates the cursor location to him
     yCur = yHero;
     xCur = xHero;
-    //And hide the cursor
+
+    //And hides the cursor
     curs_set(0);
 	}
 }
@@ -312,7 +285,8 @@ void Frupal::mvlt(){
     //moving our hero now updates the cursor location to him
     yCur = yHero;
     xCur = xHero;
-    //And hide the cursor
+
+    //And hides the cursor
     curs_set(0);
 
 	}
@@ -334,7 +308,8 @@ void Frupal::mvrt(){
     //moving our hero now updates the cursor location to him
     yCur = yHero;
     xCur = xHero;
-    //And hide the cursor
+
+    //And hides the cursor
     curs_set(0);
 	}
 }

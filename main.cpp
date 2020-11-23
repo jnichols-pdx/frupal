@@ -68,8 +68,7 @@ int main(int argc, char ** argv)
 	refresh();
   g->showMap();
   wrefresh(mapwin);
-    //And hide the cursor
-    curs_set(0);
+  curs_set(0);
   while(g->getmv()!='q')
   {
     //Handle the Menu In Here Probably
