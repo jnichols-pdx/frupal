@@ -29,6 +29,11 @@ char grovnik::get_character() const
 	return character;
 }
 
+char * grovnik::itos(int num, char * numStr){
+	sprintf(numStr, "%d", num);
+	return numStr;
+}
+
 //grovnik read from stream function
 //this function is virtual
 void grovnik::read(istream & source)
@@ -78,7 +83,9 @@ treasure_chest::treasure_chest(char * name, int amount) : grovnik('$')
 
 treasure_chest::~treasure_chest()
 {
-  delete [] name;
+	if(name){
+  	delete [] name;
+	}
 
 }
 
@@ -148,10 +155,15 @@ obstacle::obstacle(char * name, char * name_b, int b_energy) : grovnik('!')
 //destructor
 obstacle::~obstacle()
 {
-	delete [] name;
-	name = NULL;
-	delete [] name_b;
-	name_b = NULL;
+	if(name){
+		delete [] name;
+		name = NULL;
+	}
+
+	if(name_b){
+		delete [] name_b;
+		name_b = NULL;
+	}
 }
 
 void obstacle::display_info()
@@ -229,6 +241,31 @@ tool::tool(tool & to_copy){
 
 void tool::display_info()
 {
+	char costStr[5] = {0};
+	char divisorStr[3] = {0};
+	int y, x, yMax, xMax = 0;
+	getmaxyx(stdscr, yMax, xMax);
+	xMax = xMax * .75 + 3;
+
+	mvprintw(4, xMax, "Cursor Grovnick Info: ");
+
+	mvprintw(5, xMax, "Tool: ");	
+	getyx(stdscr, y, x);
+	mvprintw(5, x, name);
+
+	mvprintw(6, xMax, "Description: ");
+	getyx(stdscr, y, x);
+	mvprintw(6, x, name);
+
+	mvprintw(7, xMax, "Cost: ");
+	getyx(stdscr, y, x);
+	mvprintw(7, x, itos(cost, costStr));
+
+	mvprintw(8, xMax, "Energy Divisor: ");
+	getyx(stdscr, y, x);
+	mvprintw(8, x, itos(divisor, divisorStr));	
+
+	refresh();
 	
 }
 
@@ -267,10 +304,7 @@ void tool::read(istream & source)
 //-------------------------------------------------------------------
 
 //default constructor
-food::food() : grovnik('F'), name(NULL), cost(0), energy(0)
-{
-	
-}
+food::food() : grovnik('F'), name(NULL), cost(0), energy(0){}
 
 //constructor with args
 food::food(char * name, int cost, int energy) : grovnik('F')
@@ -285,13 +319,36 @@ food::food(char * name, int cost, int energy) : grovnik('F')
 
 food::~food()
 {
-	delete [] name;
-	name = NULL;
+	if(name){
+		delete [] name;
+		name = NULL;
+	}
 }
 
 void food::display_info()
 {
-	
+	char costStr[5] = {0};
+	char energyStr[4] = {0};
+	int y, x, yMax, xMax = 0;
+	getmaxyx(stdscr, yMax, xMax);
+	xMax = xMax * .75 + 3;
+
+
+	mvprintw(4, xMax, "Cursor Grovnick Info: ");
+
+	mvprintw(5, xMax, "Food: ");
+	getyx(stdscr, y, x);
+	mvprintw(y, x, name);
+
+	mvprintw(6, xMax, "Cost: ");
+	getyx(stdscr, y, x);
+	mvprintw(6, x, itos(cost, costStr));
+
+	mvprintw(7, xMax, "Energy: +");
+	getyx(stdscr, y, x);
+	mvprintw(7, x, itos(energy, energyStr));	
+
+	refresh();
 }
 
 char * food::get_name()
@@ -335,13 +392,22 @@ clue::clue(char * clue) : grovnik('?')
 //destructor
 clue::~clue()
 {
-	delete [] clueText;
-	clueText = NULL;
+	if(clueText){
+		delete [] clueText;
+		clueText = NULL;
+	}
 }
 
 void clue::display_info()
-{
-	
+{	
+	int y, x = 0;
+	getmaxyx(stdscr, y, x);
+	x = x * .75 + 3;
+
+	mvprintw(4, x, "Cursor Grovnick Info: ");
+	mvprintw(5, x, clueText);
+
+	refresh();
 }
 
 char * clue::get_clue()

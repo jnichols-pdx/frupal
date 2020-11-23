@@ -6,7 +6,7 @@
 
 
 #include <cmath> //do we need this? TODO
-#include <stdio.h> //what is this being used for? TODO
+#include <stdio.h>
 
 //i think we only need to stick to one of these
 //or remove both and stick to char arrays TODO
@@ -24,6 +24,7 @@ class grovnik
 		grovnik();
 		grovnik(char character);
 		char get_character() const;
+		char * itos(int, char*); //converts int to string for displays
 		
 		//virtual functions
 		virtual ~grovnik();

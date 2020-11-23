@@ -33,7 +33,7 @@ Frupal::Frupal(WINDOW * win, char * mapFileName): xHero(5), yHero(5)//remove
   curWin = win;
   keypad(curWin, true);
   mainGuy = Hero(1000, 100);
-	showHeroInfo();
+	mainGuy.showHeroInfo();
 
 	wbkgd(win, COLOR_PAIR(6));
 
@@ -222,7 +222,6 @@ void Frupal::mvup(){
 		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
 			loseGame();
 		}
-		showHeroInfo();
 
     //moving our hero now updates the cursor location to him
     yCur = yHero;
@@ -241,7 +240,6 @@ void Frupal::mvdn(){
 		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
 			loseGame();
 		}
-		showHeroInfo();
 
     //moving our hero now updates the cursor location to him
     yCur = yHero;
@@ -260,7 +258,6 @@ void Frupal::mvlt(){
 		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
 			loseGame();
 		}
-		showHeroInfo();
 
     //moving our hero now updates the cursor location to him
     yCur = yHero;
@@ -280,7 +277,6 @@ void Frupal::mvrt(){
 		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
 			loseGame();
 		}
-		showHeroInfo();
 
     //moving our hero now updates the cursor location to him
     yCur = yHero;
@@ -326,33 +322,42 @@ void Frupal::winGame(){
 //If an incorrect key is received, it simply recursively calls itself and awaits input
 int Frupal::getmv()
 {
+	
   int ch = wgetch(curWin);
   wattroff(curWin, A_REVERSE);
   switch(ch)
   {
     case KEY_UP://cursor up
       lkup();
+			showCurInfo();
       break;
     case KEY_DOWN://cursor down
       lkdn();
+			showCurInfo();
       break;
     case KEY_LEFT://cursor left
       lklt();
+			showCurInfo();
       break;
     case KEY_RIGHT://cursor right
       lkrt();
+			showCurInfo();
       break;
 		case 'w'://hero up
 			mvup();
+			mainGuy.showHeroInfo();
 			break;
 		case 'a'://hero left
 			mvlt();
+			mainGuy.showHeroInfo();
 			break;
 		case 's': //hero down
 			mvdn();
+			mainGuy.showHeroInfo();
 			break;
 		case 'd'://hero right
 			mvrt();
+			mainGuy.showHeroInfo();
 			break;
     case 'q':
       break;
@@ -423,37 +428,8 @@ void Frupal::showMap()
 
 //shows information on current cursor coordinate
 void Frupal::showCurInfo(){
-//	currentGrovnik = itemMap[yCur][xCur];
-
-}
-
-void::Frupal::showHeroInfo(){
-	int y = 0;
-	int x = 0;
-	char energy[5] = {0}; //game can support 9999 energy
-	char whiffles[10] = {0}; //game can support 999,999,999 whiffles
-
-	getmaxyx(stdscr, y, x);
-
-	move(y - 5, x);
-	clrtoeol(); 
-	getmaxyx(stdscr, y, x);
-
-	mvprintw(y - 5, x * 0.75 + 8, "Energy: ");
-	getyx(stdscr, y, x);
-	sprintf(energy, "%d", mainGuy.getEner());
-	mvprintw(y, x, energy);
-
-	getmaxyx(stdscr, y, x);
-
-	move(y - 4, x);
-	clrtoeol(); 
-	getmaxyx(stdscr, y, x);
-
-	mvprintw(y - 4, x * 0.75 + 8, "Whiffles: ");
-	getyx(stdscr, y, x);
-	sprintf(whiffles, "%d", mainGuy.getWhif());
-	mvprintw(y, x, whiffles);
-
-	refresh();
+	grovnik * currentGrovnik = itemMap[yCur][xCur];
+	if(currentGrovnik && visitMap[yCur][xCur]){
+		currentGrovnik->display_info();
+	}
 }
