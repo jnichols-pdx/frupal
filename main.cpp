@@ -66,7 +66,8 @@ int main(int argc, char ** argv)
 
 	bkgd(COLOR_PAIR(6));
 	refresh();
-
+  g->showMap();
+  wrefresh(mapwin);
   while(g->getmv()!='q')
   {
     //Handle the Menu In Here Probably
