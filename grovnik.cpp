@@ -542,9 +542,15 @@ void clue::display_info()
 	displayStat(row, "Clue: ");
 	if(discovered){
 		displayStat(row, clueText, 4);
+
+    //Prevent mangling the vertical line of # characters when the
+    //last displayStat() call prints text all the way to the right
+    //edge of the window
+    displayStat(row," ");
 	}else{	
 		displayStat(row, "???", 4);
 	}
+
 
 	refresh();
 }
