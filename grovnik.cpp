@@ -42,10 +42,12 @@ void grovnik::displayStat(int & row, const char * text, int offset){
 	getmaxyx(stdscr, y, x);
 	char data[50];
 	
+	//calculates menu dimensions and lines needed for text display
 	int menu_width = (x - (x * .75)) - 1;
 	int lines = strlen(text) / (menu_width - offset);
 	int lastLine = lines + row;
 	
+	//wraps text around back to menu on next line
 	while(row <= lastLine){	
 		int index = (menu_width - offset) * (row - lastLine + lines);
 		strncpy(data, text + index, menu_width - offset);
@@ -56,6 +58,7 @@ void grovnik::displayStat(int & row, const char * text, int offset){
 
 }
 
+//clears data on menu from start to end rows
 void grovnik::clearLines(int start, int end){
 	if(start == end){return;}
 	if(start > end){return;}

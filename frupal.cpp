@@ -429,15 +429,20 @@ void Frupal::showMap()
 //shows information on current cursor coordinate
 void Frupal::showCurInfo(){
 	grovnik * currentGrovnik = itemMap[yCur][xCur];
-	if(currentGrovnik && visitMap[yCur][xCur]){
-		currentGrovnik->display_info();
-	}else{
-		if(visitMap[yCur][xCur]){
-			terrainInfo.display_info(terrainMap[yCur][xCur]);
+
+	//displays cursor info if on discovered tile
+	if(visitMap[yCur][xCur]){
+		if(currentGrovnik){
+			currentGrovnik->display_info(); //if theres a grovnik, display info
 		}else{
-			terrainInfo.display_info('0');
-			mvprintw(4, COLS*.75 + 4, "Darkness rules these parts");
-			refresh();
+			//otherwise it displays terrain info
+			terrainInfo.display_info(terrainMap[yCur][xCur]);
 		}
+
+	}else{ //display if tile not discovered
+		terrainInfo.display_info('0');
+		mvprintw(4, COLS*.75 + 4, "Darkness rules these parts");
+		refresh();
+	}
 	}
 }
