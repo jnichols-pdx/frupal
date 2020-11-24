@@ -258,16 +258,15 @@ void obstacle::display_info()
 	int row = 4;
 	clearLines(row);
 
-	displayStat(row, "Cursor Grovnik Info: ");
+	displayStat(row, "Grovnik Info: ");
 	displayStat(row, "Obstacle: ");
 	displayStat(row, name, 4); //offset of 7
 
-	displayStat(row, "Breakable with: ");
+	displayStat(row, "Break w/ ");
 	displayStat(row, name_b, 4);
 
-	displayStat(row, "Energy to break: ");
-	--row;
-	displayStat(row, itos(b_energy, energyStr), 18);	
+	displayStat(row, "Energy: ");
+	displayStat(row, itos(b_energy, energyStr), 4);	
 
 	refresh();
 	
