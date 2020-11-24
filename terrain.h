@@ -11,4 +11,5 @@ class terrain   	//base class for terrains
 		int get_travel_cost(char);	//returns cost to travel
 		int get_color(char);	//returns color of terrain
 	private:
+		void clearLines(int start, int end = 8);
 };

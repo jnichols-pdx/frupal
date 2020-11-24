@@ -29,9 +29,43 @@ char grovnik::get_character() const
 	return character;
 }
 
+//converts int to string and returns the char * passed in
 char * grovnik::itos(int num, char * numStr){
 	sprintf(numStr, "%d", num);
 	return numStr;
+}
+
+void grovnik::displayStat(int & row, const char * text, int offset){
+	if(!text){return;}
+	
+	int y, x = 0;	
+	getmaxyx(stdscr, y, x);
+	char data[50];
+	
+	int menu_width = (x - (x * .75)) - 1;
+	int lines = strlen(text) / (menu_width - offset);
+	int lastLine = lines + row;
+	
+	while(row <= lastLine){	
+		int index = (menu_width - offset) * (row - lastLine + lines);
+		strncpy(data, text + index, menu_width - offset);
+		data[index + menu_width] = '\0';
+		mvprintw(row, x - menu_width + offset, data);
+		++row;
+	}
+
+}
+
+void grovnik::clearLines(int start, int end){
+	if(start == end){return;}
+	if(start > end){return;}
+
+	int y, x = 0;
+	getmaxyx(stdscr, y, x);
+	move(start, x * .75 + 1);
+
+	clrtoeol();
+	clearLines(++start, end);	
 }
 
 //grovnik read from stream function
@@ -243,27 +277,25 @@ void tool::display_info()
 {
 	char costStr[5] = {0};
 	char divisorStr[3] = {0};
-	int y, x, yMax, xMax = 0;
-	getmaxyx(stdscr, yMax, xMax);
-	xMax = xMax * .75 + 3;
 
-	mvprintw(4, xMax, "Cursor Grovnick Info: ");
+	int row = 4;
+	clearLines(row);
 
-	mvprintw(5, xMax, "Tool: ");	
-	getyx(stdscr, y, x);
-	mvprintw(5, x, name);
+	displayStat(row, "Cursor Grovnik Info: ");
+	displayStat(row, "Tool: ");
+	--row;
+	displayStat(row, name, 7); //offset of 7
 
-	mvprintw(6, xMax, "Description: ");
-	getyx(stdscr, y, x);
-	mvprintw(6, x, name);
+	displayStat(row, "Description: ");
+	displayStat(row, description, 4);
 
-	mvprintw(7, xMax, "Cost: ");
-	getyx(stdscr, y, x);
-	mvprintw(7, x, itos(cost, costStr));
+	displayStat(row, "Cost: ");
+	--row;
+	displayStat(row, itos(cost, costStr), 7);
 
-	mvprintw(8, xMax, "Energy Divisor: ");
-	getyx(stdscr, y, x);
-	mvprintw(8, x, itos(divisor, divisorStr));	
+	displayStat(row, "Energy Divisor: ");
+	--row;
+	displayStat(row, itos(divisor, divisorStr), 7);	
 
 	refresh();
 	
@@ -329,24 +361,23 @@ void food::display_info()
 {
 	char costStr[5] = {0};
 	char energyStr[4] = {0};
-	int y, x, yMax, xMax = 0;
-	getmaxyx(stdscr, yMax, xMax);
-	xMax = xMax * .75 + 3;
+
+	int row = 4;
+	clearLines(row);
 
 
-	mvprintw(4, xMax, "Cursor Grovnick Info: ");
+	displayStat(row, "Cursor Grovnick Info: ");
+	displayStat(row, "Food: ");
+	--row;
+	displayStat(row, name, 7);
 
-	mvprintw(5, xMax, "Food: ");
-	getyx(stdscr, y, x);
-	mvprintw(y, x, name);
+	displayStat(row, "Cost: ");
+	--row;
+	displayStat(row, itos(cost, costStr), 7);
 
-	mvprintw(6, xMax, "Cost: ");
-	getyx(stdscr, y, x);
-	mvprintw(6, x, itos(cost, costStr));
-
-	mvprintw(7, xMax, "Energy: +");
-	getyx(stdscr, y, x);
-	mvprintw(7, x, itos(energy, energyStr));	
+	displayStat(row, "Energy: +");
+	--row;
+	displayStat(row, itos(energy, energyStr), 9);	
 
 	refresh();
 }
@@ -400,12 +431,11 @@ clue::~clue()
 
 void clue::display_info()
 {	
-	int y, x = 0;
-	getmaxyx(stdscr, y, x);
-	x = x * .75 + 3;
+	int row = 4;
+	clearLines(row);
 
-	mvprintw(4, x, "Cursor Grovnick Info: ");
-	mvprintw(5, x, clueText);
+	displayStat(row, "Clue: ");
+	displayStat(row, clueText, 4);
 
 	refresh();
 }

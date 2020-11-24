@@ -50,8 +50,7 @@ bool Hero::modWhif(int whif)
 }
 
 void Hero::showHeroInfo(){
-	int y = 0;
-	int x = 0;
+	int y, x = 0;
 	char energyStr[5] = {0}; //game can support 9999 energy
 	char whiffStr[10] = {0}; //game can support 999,999,999 whiffles
 

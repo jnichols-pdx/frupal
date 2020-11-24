@@ -56,32 +56,45 @@ int terrain::get_travel_cost(char terType){
 //displays information about certain terrain type in menu section of screen
 //terrain type passed in as character representation
 bool terrain::display_info(char terType){
-	int y = 28;   	//change this variable to move the position of the text up or down
-	int x = 3;    //change this to move it right or left
+	int y = 4;   	//change this variable to move the position of the text up or down
+	int x = 5;    //change this to move it right or left
+
+	clearLines(y);
 
 	switch(terType){
 		case '~': //water
-			mvwprintw(stdscr, y, COLS*0.75+x, "Water    ");
+			mvwprintw(stdscr, y, COLS*0.75+x, "Water: ");
 			mvwprintw(stdscr, y+1, COLS*0.75+x, "Cost to move through is 0 energy");
 			mvwprintw(stdscr, y+2, COLS*0.75+x, "A Boat is required to move through      ");
 			break;
 		case '=': //wall
-			mvwprintw(stdscr, y, COLS*0.75+x, "Wall         ");
+			mvwprintw(stdscr, y, COLS*0.75+x, "Wall: ");
 			mvwprintw(stdscr, y+1, COLS*0.75+x, "You can't pass through                ");
 			mvwprintw(stdscr, y+2, COLS*0.75+x, "An attempt to do so will cost 1 energy");
 			break;
 		case '.': //meadow
-			mvwprintw(stdscr, y, COLS*0.75+x, "Meadow");
+			mvwprintw(stdscr, y, COLS*0.75+x, "Meadow: ");
 			mvwprintw(stdscr, y+1, COLS*0.75+x, "Cost to move through is 1 energy");
-			mvwprintw(stdscr, y+2, COLS*0.75+x, "                                          ");
 			break;
 		case '"': //swamp
-			mvwprintw(stdscr, y, COLS*0.75+x, "Swamp   ");
+			mvwprintw(stdscr, y, COLS*0.75+x, "Swamp: ");
 			mvwprintw(stdscr, y+1, COLS*0.75+x, "Cost to move through is 2 energy");
-			mvwprintw(stdscr, y+2, COLS*0.75+x, "                                         ");
 			break;
 		default:
 			return false;
 	}
+	refresh();
 	return true;
+}
+
+void terrain::clearLines(int start, int end){
+	if(start == end){return;}
+	if(start > end){return;}
+
+	int y, x = 0;
+	getmaxyx(stdscr, y, x);
+	move(start, x * .75 + 1);
+
+	clrtoeol();
+	clearLines(++start, end);	
 }

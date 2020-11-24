@@ -431,5 +431,7 @@ void Frupal::showCurInfo(){
 	grovnik * currentGrovnik = itemMap[yCur][xCur];
 	if(currentGrovnik && visitMap[yCur][xCur]){
 		currentGrovnik->display_info();
+	}else{
+		terrainInfo.display_info(terrainMap[yCur][xCur]);
 	}
 }

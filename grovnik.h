@@ -25,7 +25,9 @@ class grovnik
 		grovnik(char character);
 		char get_character() const;
 		char * itos(int, char*); //converts int to string for displays
-		
+		void displayStat(int & row, const char * text, int offset = 1);	
+		void clearLines(int start, int end = 10);
+
 		//virtual functions
 		virtual ~grovnik();
 		virtual void display_info() = 0;   //displays information of the grovnik
