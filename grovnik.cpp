@@ -58,7 +58,7 @@ void grovnik::displayStat(int & row, const char * text, int offset){
 
 }
 
-//clears data on menu from start to end rows
+//clears data on menu from start to end lines
 void grovnik::clearLines(int start, int end){
 	if(start == end){return;}
 	if(start > end){return;}
