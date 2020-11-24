@@ -147,10 +147,10 @@ bool Frupal::parseLine(string line, ifstream & mapFile, bool & terrain, bool & s
     newItem = new clue();
   }
   else if(elemName.compare("ship:") == 0) {
-    //TODO: implement
+    newItem = new ship();
   }
   else if(elemName.compare("binoculars:") == 0) {
-    //TODO: implement
+    newItem = new binocular();
   }
   else if(elemName.compare("obstacle:") == 0) {
     newItem = new obstacle();

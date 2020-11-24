@@ -46,9 +46,15 @@ istream& operator >> (istream& source, grovnik& destination)
 //-------------------------------------------------------------------
 //TODO
 
-binocular::binocular() : grovnik('B')
+binocular::binocular() : grovnik('B'), cost(0)
 {
 	
+}
+
+//constructor with args
+binocular::binocular(int cost) : grovnik('B')
+{
+	this->cost = cost;
 }
 
 binocular::~binocular()
@@ -59,6 +65,18 @@ binocular::~binocular()
 void binocular::display_info()
 {
 	
+}
+
+//returns the ship cost
+int binocular::get_cost()
+{
+	return cost;
+}
+
+//virtual helper to allow istream  >> binocularObject
+void binocular::read(istream & source)
+{
+  source >> cost;
 }
 
 //-------------------------------------------------------------------
@@ -92,6 +110,12 @@ void ship::display_info()
 int ship::get_cost()
 {
 	return cost;
+}
+
+//virtual helper to allow istream  >> shipObject
+void ship::read(istream & source)
+{
+  source >> cost;
 }
 
 //-------------------------------------------------------------------

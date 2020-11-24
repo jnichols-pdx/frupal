@@ -41,9 +41,13 @@ class binocular : public grovnik
 {
 	public:
 		binocular();
+		binocular(int cost);
 		~binocular();
 		void display_info();
+    int get_cost();
 	protected:
+    virtual void read(std::istream & source);
+		int cost;
 	
 	private:
 };
@@ -57,6 +61,7 @@ class ship : public grovnik
 		void display_info();
 		int get_cost();
 	protected:
+    virtual void read(std::istream & source);
 		int cost;
 	
 	private:	
