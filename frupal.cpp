@@ -235,7 +235,6 @@ char Frupal::mvup(){
 		showMap();//update map
 
 		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
-		  showHeroInfo();
 			return loseGame();
 		}
 
@@ -258,7 +257,6 @@ char Frupal::mvdn(){
 		showMap();//update map
 				
 		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
-  		showHeroInfo();
 			return loseGame();
 		}
 
@@ -281,7 +279,6 @@ char Frupal::mvlt(){
 		showMap();//update map
 
 		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
-      showHeroInfo();
 			return loseGame();
 		}
 
@@ -305,7 +302,6 @@ char Frupal::mvrt(){
 		showMap();//update map
 
 		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
-      showHeroInfo();
 			return loseGame();
 		}
 
