@@ -502,5 +502,4 @@ void Frupal::showCurInfo(){
 		mvprintw(4, COLS*.75 + 4, "Darkness rules these parts");
 		refresh();
 	}
-	}
 }
