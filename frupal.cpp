@@ -372,7 +372,7 @@ char Frupal::loseGame(){
     usleep(175000);
   }
   nodelay(curWin, false);
-  if(ch == 'n' || ch == 'N')
+  if(ch == 'n' || ch == 'N' || ch == 'q' || ch == 'Q')
   {
     return 'q';
   }
@@ -401,7 +401,7 @@ char Frupal::winGame(){
     usleep(175000);
   }
   nodelay(curWin, false);
-  if(ch == 'n' || ch == 'N')
+  if(ch == 'n' || ch == 'N' || ch  == 'q' || ch == 'Q')
   {
     return 'q';
   }
