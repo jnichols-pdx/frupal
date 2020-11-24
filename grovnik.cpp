@@ -296,7 +296,7 @@ char * obstacle::get_name_b()
 
 int obstacle::get_b_energy()
 {
-	return b_energy;
+	return (-b_energy);
 }
 
 //virtual helper to allow istream >> obstacleObject
