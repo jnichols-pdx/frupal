@@ -81,7 +81,7 @@ bool terrain::display_info(char terType){
 			mvwprintw(stdscr, y+1, COLS*0.75+x, "Cost to move through is 2 energy");
 			break;
 		default:
-			return false;
+			break;
 	}
 	refresh();
 	return true;

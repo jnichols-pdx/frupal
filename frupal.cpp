@@ -432,6 +432,12 @@ void Frupal::showCurInfo(){
 	if(currentGrovnik && visitMap[yCur][xCur]){
 		currentGrovnik->display_info();
 	}else{
-		terrainInfo.display_info(terrainMap[yCur][xCur]);
+		if(visitMap[yCur][xCur]){
+			terrainInfo.display_info(terrainMap[yCur][xCur]);
+		}else{
+			terrainInfo.display_info('0');
+			mvprintw(4, COLS*.75 + 4, "Darkness rules these parts");
+			refresh();
+		}
 	}
 }

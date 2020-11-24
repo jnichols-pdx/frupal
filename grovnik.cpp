@@ -96,7 +96,7 @@ binocular::~binocular()
 }
 
 void binocular::display_info()
-{
+{//TODO
 	
 }
 
@@ -125,6 +125,15 @@ treasure_chest::~treasure_chest()
 
 void treasure_chest::display_info()
 {
+	int row = 4;
+	clearLines(row);
+
+	displayStat(row, "Cursor Grovnik Info: ");
+	displayStat(row, "Treasure: ");
+	--row;
+	displayStat(row, name, 11); //offset of 7
+
+	refresh();
 	
 }
 
@@ -163,6 +172,13 @@ royal_diamond::~royal_diamond()
 
 void royal_diamond::display_info()
 {
+	int row = 4;
+	clearLines(row);
+
+	displayStat(row, "Cursor Grovnik Info: ");
+	displayStat(row, "Royal Diamond!");
+	displayStat(row, "Grab to win!");
+	refresh();
 	
 }
 
@@ -202,6 +218,23 @@ obstacle::~obstacle()
 
 void obstacle::display_info()
 {
+	char energyStr[5] = {0};
+
+	int row = 4;
+	clearLines(row);
+
+	displayStat(row, "Cursor Grovnik Info: ");
+	displayStat(row, "Obstacle: ");
+	displayStat(row, name, 4); //offset of 7
+
+	displayStat(row, "Breakable with: ");
+	displayStat(row, name_b, 4);
+
+	displayStat(row, "Energy to break: ");
+	--row;
+	displayStat(row, itos(b_energy, energyStr), 18);	
+
+	refresh();
 	
 }
 
@@ -295,7 +328,7 @@ void tool::display_info()
 
 	displayStat(row, "Energy Divisor: ");
 	--row;
-	displayStat(row, itos(divisor, divisorStr), 7);	
+	displayStat(row, itos(divisor, divisorStr), 16);	
 
 	refresh();
 	
