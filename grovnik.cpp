@@ -479,11 +479,10 @@ void food::read(istream & source)
 //-------------------------------------------------------------------
 
 //default constructor
-clue::clue() : grovnik('?'), clueText(NULL)
-{}
+clue::clue() : grovnik('?'), discovered(false), clueText(NULL){}
 
 //constructor with args
-clue::clue(char * clue) : grovnik('?')
+clue::clue(char * clue) : grovnik('?'), discovered(false)
 {
 	this->clueText = new char[strlen(clue)+1];
 	strcpy(this->clueText,clue);
@@ -504,7 +503,11 @@ void clue::display_info()
 	clearLines(row);
 
 	displayStat(row, "Clue: ");
-	displayStat(row, clueText, 4);
+	if(discovered){
+		displayStat(row, clueText, 4);
+	}else{	
+		displayStat(row, "???", 4);
+	}
 
 	refresh();
 }
@@ -512,6 +515,10 @@ void clue::display_info()
 char * clue::get_clue()
 {
 	return clueText;
+}
+
+void clue::discover(){
+	discovered = true;
 }
 
 //virtual helper to allow istream  >> clueObject

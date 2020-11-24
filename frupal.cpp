@@ -271,6 +271,27 @@ bool Frupal::validMove(int y, int x){
 			return true;
 		}
 		return false;
+
+	}else if(itemMap[y][x]){
+		food * foodptr = dynamic_cast<food*>(itemMap[y][x]);
+		if(foodptr){
+			//TODO purchase
+			return true;
+		}
+
+		clue * clueptr = dynamic_cast<clue*>(itemMap[y][x]);
+		if(clueptr){
+			clueptr->discover();
+			clueptr->display_info();
+			return true;
+		}
+
+		obstacle * obstacleptr = dynamic_cast<obstacle*>(itemMap[y][x]);
+		if(obstacleptr){
+			//TODO select Tool, return false if none that work 
+			return false;
+		}
+
 	}
 
 	return true;

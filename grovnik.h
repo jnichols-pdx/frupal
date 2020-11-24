@@ -162,11 +162,12 @@ class clue : public grovnik
 		clue(char * clue);
 		char * get_clue();
 		void display_info();
+		void discover();
 	protected:
+		bool discovered; 
 		char * clueText; //clue string
     virtual void read(std::istream & source);
 	
-	private:	
 };
 
 #endif
