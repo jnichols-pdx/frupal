@@ -1,4 +1,5 @@
 #include "frupal.h"
+#include <unistd.h>
 
 Frupal::Frupal(WINDOW * win, int y, int x)
 {
@@ -364,6 +365,7 @@ char Frupal::loseGame(){
     wattroff(curWin, COLOR_PAIR(8-pretty));
     ch = wgetch(curWin);
     ++pretty;
+    usleep(175000);
   }
   nodelay(curWin, false);
   if(ch == 'n' || ch == 'N')
@@ -392,6 +394,7 @@ char Frupal::winGame(){
     wattroff(curWin, COLOR_PAIR(8-pretty));
     ch = wgetch(curWin);
     ++pretty;
+    usleep(175000);
   }
   nodelay(curWin, false);
   if(ch == 'n' || ch == 'N')
