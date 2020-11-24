@@ -4,10 +4,11 @@ Frupal::Frupal(WINDOW * win, int y, int x)
 {
   curWin = win;
 
+  getmaxyx(curWin, winYMax, winXMax);
 	xHero = x;
 	yHero = y;
 	mvwaddch(curWin, yHero, xHero, '@');
-
+  multy = multx = 0;
   xCur = x;
   yCur = y;
   xMax = yMax = 128;
@@ -31,9 +32,12 @@ Frupal::Frupal(WINDOW * win, int y, int x)
 Frupal::Frupal(WINDOW * win, char * mapFileName): xHero(5), yHero(5)//remove
 {
   curWin = win;
+
+  getmaxyx(curWin, winYMax, winXMax);
   keypad(curWin, true);
   mainGuy = Hero(1000, 100);
 	mainGuy.showHeroInfo();
+  multy = multx = 0;
 
 	wbkgd(win, COLOR_PAIR(6));
 
@@ -125,6 +129,8 @@ bool Frupal::parseLine(string line, ifstream & mapFile, bool & terrain, bool & s
     lineStream >> xHero >> yHero;
     if(xHero < 0 || xHero >= xMax || yHero < 0 || yHero >= yMax) 
       return false;
+    yCur = yHero;
+    xCur = xHero;
     start = true;
   }
   else if (elemName.compare("diamonds:") == 0) {
@@ -179,36 +185,44 @@ Frupal::~Frupal()
 void Frupal::lkup()
 {
   yCur -= 1;
-  if(yCur < 1)
-    yCur = yMax;
-	wmove(curWin, yCur, xCur);
+  if(yCur < (0 + (winYMax * multy)))
+    yCur = ((multy + 1) * winYMax) -1;
+  if(yCur >= yMax)
+    yCur = yMax -1;
+  curs_set(1); //Display cursor when it moves
+	wmove(curWin, yCur % winYMax, xCur % winXMax);
 }
 
 //lkdn updates cursor location downwards
 void Frupal::lkdn()
 {
   yCur -= -1; //yes, I am aware that this is...non-standard. lol
-  if(yCur > yMax)
-    yCur = 1;
-	wmove(curWin, yCur, xCur);
+  if(yCur >= ((multy+1)*winYMax) || yCur >= yMax)
+    yCur = (multy * winYMax);
+  curs_set(1); //Display cursor when it moves
+	wmove(curWin, yCur % winYMax, xCur % winXMax);
 }
 
 //lklt updates cursor location to left
 void Frupal::lklt()
 {
   xCur -= 1;
-  if(xCur < 1)
-    xCur = xMax;
-	wmove(curWin, yCur, xCur);
+  if(xCur < (0 + (winXMax * multx)))
+    xCur = ((multx + 1) * winXMax) -1;
+  if(xCur >= xMax)
+    xCur = xMax -1;
+  curs_set(1); //Display cursor when it moves
+	wmove(curWin, yCur % winYMax, xCur % winXMax);
 }
 
 //lkrt updates cursor location to the right
 void Frupal::lkrt()
 {
   xCur -= -1;
-  if(xCur > xMax)
-    xCur = 1;
-	wmove(curWin, yCur, xCur);
+  if(xCur >= ((multx+1)*winXMax) ||xCur >= xMax)
+    xCur = (multx * winXMax);
+  curs_set(1); //Display cursor when it moves
+	wmove(curWin, yCur % winYMax, xCur % winXMax);
 }
 
 //mvup moves cahracter up
@@ -226,6 +240,9 @@ void Frupal::mvup(){
     //moving our hero now updates the cursor location to him
     yCur = yHero;
     xCur = xHero;
+
+    //And hides the cursor
+    curs_set(0);
 	}
 }
 
@@ -244,6 +261,9 @@ void Frupal::mvdn(){
     //moving our hero now updates the cursor location to him
     yCur = yHero;
     xCur = xHero;
+
+    //And hides the cursor
+    curs_set(0);
 	}
 }
 
@@ -263,6 +283,9 @@ void Frupal::mvlt(){
     yCur = yHero;
     xCur = xHero;
 
+    //And hides the cursor
+    curs_set(0);
+
 	}
 }
 
@@ -281,6 +304,9 @@ void Frupal::mvrt(){
     //moving our hero now updates the cursor location to him
     yCur = yHero;
     xCur = xHero;
+
+    //And hides the cursor
+    curs_set(0);
 	}
 }
 
@@ -378,6 +404,20 @@ void Frupal::updateVisitMap(){
 	}
 }
 
+void Frupal::updateCur()
+{
+  if(yHero >= winYMax*(multy+1))
+  {
+    ++multy;
+  }else if(yHero < winYMax*(multy) && (multy-1) >= 0) {
+    --multy;
+  }else if(xHero >= winXMax*(multx+1)) {
+    ++multx;
+  } else if(xHero < winXMax*(multx) && (multx-1) >= 0) {
+    --multx;
+  }
+}
+
 //new show map function handles the color display, and updates
 //the heros location when he moves, rather than having that
 //occur in four separate functions
@@ -387,9 +427,27 @@ void Frupal::showMap()
   char grovnikIcon = ' ';
   grovnik * currentGrovnik;
 
+  werase(curWin);
+
+  updateCur();
+
+  int smolY = winYMax*multy;
+  int smolX = winXMax*multx;
+  int bigY, bigX;
+  
+  if(winYMax * (multy+1) > yMax)
+    bigY = yMax;
+  else
+    bigY = winYMax*(multy+1);
+  
+  if(winXMax * (multx+1) > xMax)
+    bigX = xMax;
+  else
+    bigX = winXMax*(multx+1);
+
 	//updates map
-	for(int y = 0; y < yMax; y++){
-		for(int x = 0; x < xMax; x++){
+	for(int y = smolY; y < bigY; y++){
+		for(int x = smolX; x < bigX; x++){
 			
 			//discovered areas
 				if(visitMap[y][x] == true){
@@ -408,13 +466,13 @@ void Frupal::showMap()
         }
 
 				wattron(curWin, color);//turn on color pair
-				mvwaddch(curWin, y, x, grovnikIcon);//write space to map
+				mvwaddch(curWin, y-(winYMax*(multy)), x-(winXMax*(multx)), grovnikIcon);//write space to map
 				wattroff(curWin, color);//turn off color pair
 
 			//undiscovered areas
 			}else{ 
 				wattron(curWin, COLOR_PAIR(6));//turn on color BLACK
-				mvwaddch(curWin, y, x, ' ');//write space to map
+				mvwaddch(curWin, y-(winYMax*(multy)),x-(winXMax*(multx)), ' ');//write space to map
 				wattroff(curWin, COLOR_PAIR(6));//turn off color BLACK
 			}
 		}
@@ -422,7 +480,7 @@ void Frupal::showMap()
 
 	//shows hero on screen
 	wattron(curWin, COLOR_PAIR(1));//turn on color RED
-	mvwaddch(curWin, yHero,xHero,'@');//write @ to map for hero
+	mvwaddch(curWin, yHero-(winYMax*(multy)),xHero-(winXMax*(multx)),'@');//write @ to map for hero
 	wattroff(curWin, COLOR_PAIR(1));//turn off color RED
 }
 

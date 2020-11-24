@@ -106,6 +106,39 @@ void binocular::display_info()
 //-------------------------------------------------------------------
 //TODO
 
+//default constructor
+ship::ship() : grovnik('S'), cost(0)
+{
+	
+}
+
+//constructor with args
+ship::ship(int cost) : grovnik('S')
+{
+	this->cost = cost;
+}
+
+//destructor
+ship::~ship()
+{
+	
+}
+
+//virtual function
+void ship::display_info()
+{
+	
+}
+
+//returns the ship cost
+int ship::get_cost()
+{
+	return cost;
+}
+
+//-------------------------------------------------------------------
+
+
 treasure_chest::treasure_chest() : grovnik('$'), name(NULL), amount(0)
 {
 
