@@ -178,6 +178,13 @@ bool Frupal::mapLoaded() { return loadFinished; }
 
 Frupal::~Frupal()
 {
+	for(int y = 0; y < 128; y++){
+		for(int x = 0; x < 128; x++){
+			if(itemMap[y][x]){
+				delete itemMap[y][x];
+			}
+		}
+	}
 }
 
 //lk series updates cursors location coordinates for the map window, which will get updated in the disp() function
