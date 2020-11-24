@@ -56,6 +56,7 @@ void grovnik::displayStat(int & row, const char * text, int offset){
 		mvprintw(row, x - menu_width + offset, data);
 		++row;
 	}
+  delete [] data;
 
 }
 
