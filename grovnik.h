@@ -48,6 +48,20 @@ class binocular : public grovnik
 	private:
 };
 
+class ship : public grovnik
+{
+	public:
+		ship();
+		ship(int cost);
+		~ship();
+		void display_info();
+		int get_cost();
+	protected:
+		int cost;
+	
+	private:	
+};
+
 class treasure_chest : public grovnik
 {
 	public:
