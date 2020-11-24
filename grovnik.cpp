@@ -38,7 +38,8 @@ char * grovnik::itos(int num, char * numStr){
 void grovnik::displayStat(int & row, const char * text, int offset){
 	if(!text){return;}
 	
-	int y, x = 0;	
+	int y = 0;
+	int x = 0;
 	getmaxyx(stdscr, y, x);
 	char data[50];
 	
@@ -63,7 +64,9 @@ void grovnik::clearLines(int start, int end){
 	if(start == end){return;}
 	if(start > end){return;}
 
-	int y, x = 0;
+	int y = 0;
+	int x = 0;
+	
 	getmaxyx(stdscr, y, x);
 	move(start, x * .75 + 1);
 
