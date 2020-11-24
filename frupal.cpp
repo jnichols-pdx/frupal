@@ -355,7 +355,7 @@ char Frupal::loseGame(){
   char ch = ' ';
   int pretty = 1;
   nodelay(curWin,  true);
-  while(ch != 'y' && ch != 'Y' && ch != 'n' && ch != 'N' && ch != 'q' || ch != 'Q')
+  while(ch != 'y' && ch != 'Y' && ch != 'n' && ch != 'N' && ch != 'q' && ch != 'Q')
   {
     if(pretty >= 8)
       pretty = 1;
@@ -384,7 +384,7 @@ char Frupal::winGame(){
   char ch = ' ';
   int pretty = 0;
   nodelay(curWin,  true);
-  while(ch != 'y' && ch != 'Y' && ch != 'n' && ch != 'N' && ch != 'q' || ch != 'Q')
+  while(ch != 'y' && ch != 'Y' && ch != 'n' && ch != 'N' && ch != 'q' && ch != 'Q')
   {
     if(pretty >= 2)
       pretty = 0;
