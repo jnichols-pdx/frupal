@@ -407,6 +407,11 @@ int tool::get_cost()
 {
 	return cost;
 }
+		
+int tool::get_divisor() 		//returns divisor
+{
+	return divisor;
+}
 
 //virtual helper to allow istream >>toolObject 
 void tool::read(istream & source)

@@ -124,6 +124,7 @@ class tool : public grovnik
 		void display_name(int y);	//displays tool name in the menu at specific y coordinate
 		char * get_name();
 		int get_cost();
+		int get_divisor(); 		//returns divisor
 		bool check_equal(const char * item);
 	protected:
 		char * name;

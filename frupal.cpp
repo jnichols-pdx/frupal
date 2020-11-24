@@ -303,7 +303,13 @@ bool Frupal::validMove(int y, int x){
 					 itemMap[y][x] = NULL;
 				}
 			}
-		
+			else{						//tool selected
+				if(!mainGuy.modEner(obstacleptr->get_b_energy()/copy->get_divisor())) loseGame();
+				else{
+					 delete itemMap[y][x];
+					 itemMap[y][x] = NULL;
+				}
+			}
 			if(copy != NULL){	//deallocate the copy
 				delete copy;
 				copy = NULL;	
