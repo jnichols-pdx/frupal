@@ -35,11 +35,15 @@ class Frupal
 		bool validMove(int y, int x); //validates move
 		void loseGame(); //called when player runs out of energy
 		void winGame(); //called when player gets royal diamond
+    void updateCur();//updates curMin and curMax series ints based on hero location - for map scroll
     bool loadMap(char * mapFileName); //loads map from a filename
     //Parse one line/element
     bool parseLine(string line, ifstream & mapFile, bool & terrain, bool & start, bool & diamonds);
 
-    int xCur, yCur, xMax, yMax; //current, current, maximum, maximum
+    int xCur, yCur, xMax, yMax; //current map location for x and y, maximum map size x and y
+    int winYMax, winXMax, multx, multy; 
+    //Above integers are: maximum size of window x and y, current minimum value for x and y 
+    //based on hero location, current maximum value for x and y based on current hero location
 		int xHero, yHero; //hero location
     WINDOW * curWin; //ncurses window
     Hero mainGuy;

@@ -38,8 +38,7 @@ char * grovnik::itos(int num, char * numStr){
 void grovnik::displayStat(int & row, const char * text, int offset){
 	if(!text){return;}
 	
-	int y, x = 0;	
-	getmaxyx(stdscr, y, x);
+	int x = getmaxx(stdscr);
 	char data[50];
 	
 	//calculates menu dimensions and lines needed for text display
@@ -62,9 +61,9 @@ void grovnik::displayStat(int & row, const char * text, int offset){
 void grovnik::clearLines(int start, int end){
 	if(start == end){return;}
 	if(start > end){return;}
-
-	int y, x = 0;
-	getmaxyx(stdscr, y, x);
+	
+	int x = getmaxx(stdscr);
+	
 	move(start, x * .75 + 1);
 
 	clrtoeol();
@@ -105,6 +104,39 @@ void binocular::display_info()
 
 //-------------------------------------------------------------------
 //TODO
+
+//default constructor
+ship::ship() : grovnik('S'), cost(0)
+{
+	
+}
+
+//constructor with args
+ship::ship(int cost) : grovnik('S')
+{
+	this->cost = cost;
+}
+
+//destructor
+ship::~ship()
+{
+	
+}
+
+//virtual function
+void ship::display_info()
+{
+	
+}
+
+//returns the ship cost
+int ship::get_cost()
+{
+	return cost;
+}
+
+//-------------------------------------------------------------------
+
 
 treasure_chest::treasure_chest() : grovnik('$'), name(NULL), amount(0)
 {
