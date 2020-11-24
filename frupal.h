@@ -19,6 +19,7 @@ class Frupal
 		~Frupal();
     int  getmv(); //move cursor
     bool mapLoaded();	
+    void showMap();
   private:
 
 		void lkup(); //cursor moves up
@@ -31,7 +32,6 @@ class Frupal
 		bool validMove(int y, int x); //validates move
 
 		void updateVisitMap(); //updates visible areas
-    void showMap();
 		void showCurInfo();
 
 		char loseGame(); //called when player runs out of energy
