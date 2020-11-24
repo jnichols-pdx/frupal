@@ -1,4 +1,5 @@
 #include "frupal.h"
+#include <unistd.h>
 
 Frupal::Frupal(WINDOW * win, int y, int x)
 {
@@ -226,7 +227,7 @@ void Frupal::lkrt()
 }
 
 //mvup moves cahracter up
-void Frupal::mvup(){
+char Frupal::mvup(){
 	if(validMove(yHero - 1, xHero)){
 		mvwdelch(curWin, yHero, xHero);
 
@@ -234,7 +235,8 @@ void Frupal::mvup(){
 		showMap();//update map
 
 		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
-			loseGame();
+		  showHeroInfo();
+			return loseGame();
 		}
 		showHeroInfo();
 
@@ -245,10 +247,11 @@ void Frupal::mvup(){
     //And hides the cursor
     curs_set(0);
 	}
+  return ' ';
 }
 
 //mvdn moves cahracter down
-void Frupal::mvdn(){
+char Frupal::mvdn(){
 	if(validMove(yHero + 1, xHero)){
 		mvwdelch(curWin, yHero, xHero);
 
@@ -256,7 +259,8 @@ void Frupal::mvdn(){
 		showMap();//update map
 				
 		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
-			loseGame();
+  		showHeroInfo();
+			return loseGame();
 		}
 		showHeroInfo();
 
@@ -267,10 +271,11 @@ void Frupal::mvdn(){
     //And hides the cursor
     curs_set(0);
 	}
+  return ' ';
 }
 
 //mvlt moves cahracter left
-void Frupal::mvlt(){
+char Frupal::mvlt(){
 	if(validMove(yHero, xHero - 1)){
 		mvwdelch(curWin, yHero, xHero);
 
@@ -278,7 +283,8 @@ void Frupal::mvlt(){
 		showMap();//update map
 
 		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
-			loseGame();
+      showHeroInfo();
+			return loseGame();
 		}
 		showHeroInfo();
 
@@ -290,10 +296,11 @@ void Frupal::mvlt(){
     curs_set(0);
 
 	}
+  return ' ';
 }
 
 //mvrt moves cahracter right
-void Frupal::mvrt(){
+char Frupal::mvrt(){
 	if(validMove(yHero, xHero + 1)){
 		mvwdelch(curWin, yHero, xHero);
 
@@ -301,7 +308,8 @@ void Frupal::mvrt(){
 		showMap();//update map
 
 		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
-			loseGame();
+      showHeroInfo();
+			return loseGame();
 		}
 		showHeroInfo();
 
@@ -312,6 +320,7 @@ void Frupal::mvrt(){
     //And hides the cursor
     curs_set(0);
 	}
+  return ' ';
 }
 
 //checks if a move is valid
@@ -341,11 +350,62 @@ bool Frupal::validMove(int y, int x){
 }
 
 //function displays loss and waits to exit game //TODO
-void Frupal::loseGame(){
+char Frupal::loseGame(){
+  
+  char ch = ' ';
+  int pretty = 1;
+  nodelay(curWin,  true);
+  while(ch != 'y' && ch != 'Y' && ch != 'n' && ch != 'N' && ch != 'q' && ch != 'Q')
+  {
+    if(pretty >= 8)
+      pretty = 1;
+
+    werase(curWin);
+    wattron(curWin, COLOR_PAIR(pretty));
+    mvwaddstr(curWin, winYMax/2, (winXMax/2)-5, "GAME OVER!");
+    wattroff(curWin, COLOR_PAIR(pretty));
+    wattron(curWin, COLOR_PAIR(8-pretty));
+    mvwaddstr(curWin, winYMax/2+1, (winXMax/2)-8, "Play Again (Y/N)");
+    wattroff(curWin, COLOR_PAIR(8-pretty));
+    ch = wgetch(curWin);
+    ++pretty;
+    usleep(175000);
+  }
+  nodelay(curWin, false);
+  if(ch == 'n' || ch == 'N' || ch == 'q' || ch == 'Q')
+  {
+    return 'q';
+  }
+  return 'a';
 }
 
 //function displays win and waits to exit game //TODO
-void Frupal::winGame(){
+char Frupal::winGame(){
+  char ch = ' ';
+  int pretty = 0;
+  nodelay(curWin,  true);
+  while(ch != 'y' && ch != 'Y' && ch != 'n' && ch != 'N' && ch != 'q' && ch != 'Q')
+  {
+    if(pretty >= 2)
+      pretty = 0;
+
+    werase(curWin);
+    wattron(curWin, COLOR_PAIR(7+pretty));
+    mvwaddstr(curWin, winYMax/2, (winXMax/2)-8, "A WINNER IS YOU!");
+    wattroff(curWin, COLOR_PAIR(7+pretty));
+    wattron(curWin, COLOR_PAIR(8-pretty));
+    mvwaddstr(curWin, winYMax/2+1, (winXMax/2)-8, "Play Again (Y/N)");
+    wattroff(curWin, COLOR_PAIR(8-pretty));
+    ch = wgetch(curWin);
+    ++pretty;
+    usleep(175000);
+  }
+  nodelay(curWin, false);
+  if(ch == 'n' || ch == 'N' || ch  == 'q' || ch == 'Q')
+  {
+    return 'q';
+  }
+  return 'a';
 }
 
 //gets input from the user - currently only allows movement of cursor and character, and quitting. 
@@ -369,16 +429,16 @@ int Frupal::getmv()
       lkrt();
       break;
 		case 'w'://hero up
-			mvup();
+			ch = mvup();
 			break;
 		case 'a'://hero left
-			mvlt();
+			ch = mvlt();
 			break;
 		case 's': //hero down
-			mvdn();
+			ch = mvdn();
 			break;
 		case 'd'://hero right
-			mvrt();
+			ch = mvrt();
 			break;
     case 'q':
       break;

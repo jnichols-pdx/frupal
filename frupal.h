@@ -30,14 +30,14 @@ class Frupal
     void lkdn();  //move cursor down
     void lklt();  //move cursor left
     void lkrt();  //move cursor right
-		void mvup(); //move hero up
-		void mvdn(); //move hero down
-		void mvlt(); //move hero left
-		void mvrt(); //move hero right
+		char mvup(); //move hero up
+		char mvdn(); //move hero down
+		char mvlt(); //move hero left
+		char mvrt(); //move hero right
 		void updateVisitMap();
 		bool validMove(int y, int x); //validates move
-		void loseGame(); //called when player runs out of energy
-		void winGame(); //called when player gets royal diamond
+		char loseGame(); //called when player runs out of energy
+		char winGame(); //called when player gets royal diamond
     void updateCur();//updates curMin and curMax series ints based on hero location - for map scroll
     bool loadMap(char * mapFileName); //loads map from a filename
     //Parse one line/element
