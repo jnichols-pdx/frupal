@@ -189,8 +189,17 @@ int treasure_chest::get_amount()
 void treasure_chest::read(istream & source)
 {
   source >> amount;
+
+  //strip leading whitespace before using getline()
+  source >> ws;
+
   string temp;
   getline(source, temp);
+
+  //Strip any trailing '\r' characters from input.
+  if(temp[temp.length() -1] == '\r')
+    temp.erase(temp.length() -1);
+
   name = new char[temp.length() + 1];
   strcpy(name,temp.c_str());
 }
@@ -298,7 +307,16 @@ void obstacle::read(istream & source)
   name_b = new char[temp.length() + 1];
   strcpy(name_b,temp.c_str());
   source >> b_energy;
+
+  //strip leading whitespace before using getline()
+  source >> ws;
+
   getline(source, temp);
+
+  //Strip any trailing '\r' characters from input.
+  if(temp[temp.length() -1] == '\r')
+    temp.erase(temp.length() -1);
+
   name = new char[temp.length() + 1];
   strcpy(name,temp.c_str());
 }
@@ -398,7 +416,16 @@ void tool::read(istream & source)
   name = new char[temp.length() + 1];
   strcpy(name,temp.c_str());
   source >> divisor >> cost;
+
+  //strip leading whitespace before using getline()
+  source >> ws;
+
   getline(source, temp);
+
+  //Strip any trailing '\r' characters from input.
+  if(temp[temp.length() -1] == '\r')
+    temp.erase(temp.length() -1);
+
   description= new char[temp.length() + 1];
   strcpy(description,temp.c_str());
 }
@@ -471,8 +498,17 @@ int food::get_energy()
 void food::read(istream & source)
 {
   source >> cost >> energy;
+
+  //strip leading whitespace before using getline()
+  source >> ws;
+
   string temp;
   getline(source, temp);
+
+  //Strip any trailing '\r' characters from input.
+  if(temp[temp.length() -1] == '\r')
+    temp.erase(temp.length() -1);
+
   name = new char[temp.length() + 1];
   strcpy(name,temp.c_str());
 }
@@ -525,8 +561,16 @@ void clue::discover(){
 //virtual helper to allow istream  >> clueObject
 void clue::read(istream & source)
 {
+  //strip leading whitespace before using getline()
+  source >> ws;
+
   string temp;
   getline(source, temp);
+
+  //Strip any trailing '\r' characters from input.
+  if(temp[temp.length() -1] == '\r')
+    temp.erase(temp.length() -1);
+
   clueText = new char[temp.length() + 1];
   strcpy(clueText,temp.c_str());
 }
