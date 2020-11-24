@@ -43,13 +43,13 @@ void grovnik::displayStat(int & row, const char * text, int offset){
 	
 	//calculates menu dimensions and lines needed for text display
 	int menu_width = (x - (x * .75)) - 1;
-	int lines = (strlen(text) + offset) / menu_width;
-	int lastLine = lines + row;
   int chunkWidth = menu_width - offset;
+	int lines = ceil(((float)strlen(text))/ ((float)chunkWidth));
+	int lastLine = lines + row;
   data = new char[chunkWidth + 1];
 	
 	//wraps text around back to menu on next line
-	while(row <= lastLine){	
+	while(row < lastLine){
 		int index = (menu_width - offset) * (row - lastLine + lines);
 		strncpy(data, text + index, chunkWidth);
 		data[chunkWidth + 1] = '\0';
