@@ -216,7 +216,6 @@ void Frupal::lklt()
 	wmove(curWin, yCur % winYMax, xCur % winXMax);
 }
 
-//lkrt updates cursor location to the right
 void Frupal::lkrt()
 {
   xCur -= -1;
@@ -226,12 +225,13 @@ void Frupal::lkrt()
 	wmove(curWin, yCur % winYMax, xCur % winXMax);
 }
 
-//mvup moves cahracter up
-char Frupal::mvup(){
-	if(validMove(yHero - 1, xHero)){
+//moves character by offsets passed in
+char Frupal::heroMove(int yOffset, int xOffset){
+	if(validMove(yHero + yOffset, xHero + xOffset)){
 		mvwdelch(curWin, yHero, xHero);
 
-		yHero -= 1;
+		yHero += yOffset;
+		xHero += xOffset;
 		showMap();//update map
 
 		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
@@ -245,73 +245,8 @@ char Frupal::mvup(){
     //And hides the cursor
     curs_set(0);
 	}
-  return ' ';
-}
 
-//mvdn moves cahracter down
-char Frupal::mvdn(){
-	if(validMove(yHero + 1, xHero)){
-		mvwdelch(curWin, yHero, xHero);
-
-		yHero += 1;
-		showMap();//update map
-				
-		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
-			return loseGame();
-		}
-
-    //moving our hero now updates the cursor location to him
-    yCur = yHero;
-    xCur = xHero;
-
-    //And hides the cursor
-    curs_set(0);
-	}
-  return ' ';
-}
-
-//mvlt moves cahracter left
-char Frupal::mvlt(){
-	if(validMove(yHero, xHero - 1)){
-		mvwdelch(curWin, yHero, xHero);
-
-		xHero -= 1;
-		showMap();//update map
-
-		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
-			return loseGame();
-		}
-
-    //moving our hero now updates the cursor location to him
-    yCur = yHero;
-    xCur = xHero;
-
-    //And hides the cursor
-    curs_set(0);
-
-	}
-  return ' ';
-}
-
-//mvrt moves cahracter right
-char Frupal::mvrt(){
-	if(validMove(yHero, xHero + 1)){
-		mvwdelch(curWin, yHero, xHero);
-
-		xHero += 1;
-		showMap();//update map
-
-		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
-			return loseGame();
-		}
-
-    //moving our hero now updates the cursor location to him
-    yCur = yHero;
-    xCur = xHero;
-
-    //And hides the cursor
-    curs_set(0);
-	}
+	mainGuy.showHeroInfo();
   return ' ';
 }
 
@@ -410,36 +345,32 @@ int Frupal::getmv()
   switch(ch)
   {
     case KEY_UP://cursor up
-      lkup();
+			lkup();
 			showCurInfo();
       break;
     case KEY_DOWN://cursor down
-      lkdn();
+			lkdn();
 			showCurInfo();
       break;
     case KEY_LEFT://cursor left
-      lklt();
+			lklt();
 			showCurInfo();
       break;
     case KEY_RIGHT://cursor right
-      lkrt();
+			lkrt();
 			showCurInfo();
       break;
 		case 'w'://hero up
-			ch = mvup();
-			mainGuy.showHeroInfo();
+			ch = heroMove(-1, 0);
 			break;
 		case 'a'://hero left
-			ch = mvlt();
-			mainGuy.showHeroInfo();
+			ch = heroMove(0, -1);
 			break;
 		case 's': //hero down
-			ch = mvdn();
-			mainGuy.showHeroInfo();
+			ch = heroMove(1, 0);
 			break;
 		case 'd'://hero right
-			ch = mvrt();
-			mainGuy.showHeroInfo();
+			ch = heroMove(0, 1);
 			break;
     case 'q':
       break;
