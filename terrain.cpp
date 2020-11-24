@@ -91,8 +91,7 @@ void terrain::clearLines(int start, int end){
 	if(start == end){return;}
 	if(start > end){return;}
 
-	int y, x = 0;
-	getmaxyx(stdscr, y, x);
+	int x = getmaxx(stdscr);
 	move(start, x * .75 + 1);
 
 	clrtoeol();
