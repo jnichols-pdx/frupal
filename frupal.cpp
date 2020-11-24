@@ -499,7 +499,7 @@ void Frupal::showCurInfo(){
 
 	}else{ //display if tile not discovered
 		terrainInfo.display_info('0');
-		mvprintw(4, COLS*.75 + 4, "Darkness rules these parts");
+		mvprintw(4, COLS*.75 + 4, "Darkness rules here");
 		refresh();
 	}
 }

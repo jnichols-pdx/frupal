@@ -64,21 +64,21 @@ bool terrain::display_info(char terType){
 	switch(terType){
 		case '~': //water
 			mvwprintw(stdscr, y, COLS*0.75+x, "Water: ");
-			mvwprintw(stdscr, y+1, COLS*0.75+x, "Cost to move through is 0 energy");
-			mvwprintw(stdscr, y+2, COLS*0.75+x, "A Boat is required to move through      ");
+			mvwprintw(stdscr, y+1, COLS*0.75+x, "Cost: 0 energy");
+			mvwprintw(stdscr, y+2, COLS*0.75+x, "A Boat is required");
 			break;
 		case '=': //wall
 			mvwprintw(stdscr, y, COLS*0.75+x, "Wall: ");
-			mvwprintw(stdscr, y+1, COLS*0.75+x, "You can't pass through                ");
-			mvwprintw(stdscr, y+2, COLS*0.75+x, "An attempt to do so will cost 1 energy");
+			mvwprintw(stdscr, y+1, COLS*0.75+x, "Cost: -1 energy");
+			mvwprintw(stdscr, y+2, COLS*0.75+x, "Impassable");
 			break;
 		case '.': //meadow
 			mvwprintw(stdscr, y, COLS*0.75+x, "Meadow: ");
-			mvwprintw(stdscr, y+1, COLS*0.75+x, "Cost to move through is 1 energy");
+			mvwprintw(stdscr, y+1, COLS*0.75+x, "Cost: -1 energy");
 			break;
 		case '"': //swamp
 			mvwprintw(stdscr, y, COLS*0.75+x, "Swamp: ");
-			mvwprintw(stdscr, y+1, COLS*0.75+x, "Cost to move through is 2 energy");
+			mvwprintw(stdscr, y+1, COLS*0.75+x, "Cost: -2 energy");
 			break;
 		default:
 			break;
