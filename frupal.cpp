@@ -426,19 +426,19 @@ int Frupal::getmv()
 			showCurInfo();
       break;
 		case 'w'://hero up
-			mvup();
+			ch = mvup();
 			mainGuy.showHeroInfo();
 			break;
 		case 'a'://hero left
-			mvlt();
+			ch = mvlt();
 			mainGuy.showHeroInfo();
 			break;
 		case 's': //hero down
-			mvdn();
+			ch = mvdn();
 			mainGuy.showHeroInfo();
 			break;
 		case 'd'://hero right
-			mvrt();
+			ch = mvrt();
 			mainGuy.showHeroInfo();
 			break;
     case 'q':
