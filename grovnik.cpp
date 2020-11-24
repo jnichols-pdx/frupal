@@ -185,20 +185,19 @@ void royal_diamond::display_info()
 //-------------------------------------------------------------------
 
 //default constructor
-obstacle::obstacle() : grovnik('!'), name(NULL), name_b(NULL), b_energy(0)
+obstacle::obstacle() : grovnik('!'), name(NULL), obstacle_type(0), b_energy(0)
 {
 
 }
 
 //constructor with args
-obstacle::obstacle(char * name, char * name_b, int b_energy) : grovnik('!')
+obstacle::obstacle(char * name, int obstacle_type, int b_energy) : grovnik('!')
 {
 	this->name = new char[strlen(name)+1];
 	strcpy(this->name,name);
 	
-	this->name_b = new char[strlen(name_b)+1];
-	strcpy(this->name_b,name_b);
-	
+	this->obstacle_type = obstacle_type;
+
 	this->b_energy = b_energy;
 }
 
@@ -207,8 +206,6 @@ obstacle::~obstacle()
 {
 	delete [] name;
 	name = NULL;
-	delete [] name_b;
-	name_b = NULL;
 }
 
 void obstacle::display_info()
@@ -221,9 +218,9 @@ char * obstacle::get_name()
 	return name;
 }
 
-char * obstacle::get_name_b()
+int obstacle::get_type()
 {
-	return name_b;
+  return obstacle_type;
 }
 
 int obstacle::get_b_energy()
@@ -235,10 +232,7 @@ int obstacle::get_b_energy()
 void obstacle::read(istream & source)
 {
   string temp;
-  source >> temp;
-  name_b = new char[temp.length() + 1];
-  strcpy(name_b,temp.c_str());
-  source >> b_energy;
+  source >>obstacle_type >> b_energy;
   getline(source, temp);
   name = new char[temp.length() + 1];
   strcpy(name,temp.c_str());
@@ -246,17 +240,16 @@ void obstacle::read(istream & source)
 
 //-------------------------------------------------------------------
 
-tool::tool() : grovnik('T'), name(NULL), description(NULL), cost(0), divisor(1)
+tool::tool() : grovnik('T'), name(NULL), target_type(0), cost(0), divisor(1)
 {}
 
 //constructor with args
-tool::tool(char * name, char * description, int cost, int divisor) : grovnik('T')
+tool::tool(char * name, int target_type, int cost, int divisor) : grovnik('T')
 {
 	this->name = new char[strlen(name)+1];
 	strcpy(this->name,name);
 	
-	this->description = new char[strlen(description)+1];
-	strcpy(this->description,description);
+  this->target_type = target_type;
 
 	this->cost = cost;
 
@@ -269,17 +262,12 @@ tool::~tool(){
 		name = NULL;
 	}
 
-	if(description != NULL){
-		 delete [] description;	
-		name = NULL;
-	}
 }
 		
 tool::tool(tool & to_copy){
 	name = new char[strlen(to_copy.name)+1];
 	strcpy(name,to_copy.name);
-	description = new char[strlen(to_copy.description)+1];
-	strcpy(description,to_copy.description);
+  target_type = to_copy.target_type;
 	cost = to_copy.cost;
 	divisor = to_copy.divisor;
 }
@@ -308,17 +296,19 @@ int tool::get_cost()
 	return cost;
 }
 
+int tool::get_target()
+{
+	return target_type;
+}
+
 //virtual helper to allow istream >>toolObject 
 void tool::read(istream & source)
 {
   string temp;
-  source >> temp;
-  name = new char[temp.length() + 1];
-  strcpy(name,temp.c_str());
-  source >> divisor >> cost;
+  source >> target_type >> divisor >> cost;
   getline(source, temp);
-  description= new char[temp.length() + 1];
-  strcpy(description,temp.c_str());
+  name = new char[temp.length() + 1];
+  strcpy(name ,temp.c_str());
 }
 
 //-------------------------------------------------------------------

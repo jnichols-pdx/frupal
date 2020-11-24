@@ -99,16 +99,16 @@ class obstacle : public grovnik
 {
 	public:
 		obstacle();
-		obstacle(char * name, char * name_b, int b_energy);
+		obstacle(char * name, int obstacle_type, int b_energy);
     ~obstacle();
 		void display_info();
 		char * get_name();
-		char * get_name_b();
 		int get_b_energy();
+    int get_type();
 		
 	protected:
 		char * name; //name of obstacle
-		char * name_b; //name of tool that can break it
+    int obstacle_type; //Numeric ID for what kind of obstacle this is
 		int b_energy; //amount of energy that is required to break it
     virtual void read(std::istream & source);
 	
@@ -119,17 +119,18 @@ class tool : public grovnik
 {
 	public:
 		tool();
-		tool(char * name, char * description, int cost, int divisor);
+		tool(char * name, int target_type, int cost, int divisor);
 		tool(tool & to_copy);	//copy constructor
 		~tool();
 		void display_info();			//displays tool description in the menu
 		void display_name(int y);	//displays tool name in the menu at specific y coordinate
 		char * get_name();
 		int get_cost();
+    int get_target();
 		bool check_equal(const char * item);
 	protected:
 		char * name;
-    char * description;
+    int target_type; //Numeric ID for what kind of obstacle this tool helps remove
 		int cost;
     int divisor;
     virtual void read(std::istream & source);

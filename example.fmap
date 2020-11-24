@@ -24,11 +24,13 @@ food: 15 4 20 50 Loaf of Bread
 ship: 4 6 1450
 clue: 11 1 Killroy was here! He hid the Royal Diamonds right behind you!
 binoculars: 10 6 25
-obstacle: 5 4 tree 30 An overgrown Willow TREE blocks the thin path of dry ground between the lake and the marshlands.
-obstacle: 17 8 tree 100 The diamonds are trapped between sturdy Ironwood TREES.
-tool: 0 8 tree 2 100 Woodsman's axe X2
-obstacle: 19 8 tree 100 The diamonds are trapped between sturdy Ironwood TREES.
-obstacle: 18 7 tree 100 The diamonds are trapped between sturdy Ironwood TREES.
-obstacle: 18 9 tree 100 The diamonds are trapped between sturdy Ironwood TREES.
-tool: 19 0 tree 10 600 Chainsaw of Tree Felling x10
-obstacle: 18 4 boulder 15 A lone BOULDER lies half buried in the banks of the river. You could topple it into the water, but why bother?
+#obstacle type #86 = trees
+obstacle: 5 4 86 30 An overgrown Willow TREE blocks the thin path of dry ground between the lake and the marshlands.
+obstacle: 17 8 86 100 The diamonds are trapped between sturdy Ironwood TREES.
+tool: 0 8 86 2 100 Woodsman's axe X2
+obstacle: 19 8 86 100 The diamonds are trapped between sturdy Ironwood TREES.
+obstacle: 18 7 86 100 The diamonds are trapped between sturdy Ironwood TREES.
+obstacle: 18 9 86 100 The diamonds are trapped between sturdy Ironwood TREES.
+tool: 19 0 86 10 600 Chainsaw of Tree Felling x10
+#obstacle type #22 = boulders
+obstacle: 18 4 22 15 A lone BOULDER lies half buried in the banks of the river. You could topple it into the water, but why bother?

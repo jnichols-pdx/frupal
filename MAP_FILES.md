@@ -170,7 +170,7 @@ obstacle: *<x location\>* *<y location\>* *<kind\>* *<energy cost\>* *<descripti
 
 Specifies one of many obstacles on a map, which cost energy to remove.  
 Displayed in game as a black **!**.  
-*<kind\>* is a string that defines what type of obstacle this is, and thus what tools affect this obstacle. (Should match a tool's *<target\>*)  
+*<kind\>* is a number that defines what type of obstacle this is, and thus what tools affect this obstacle. (Should match a tool's *<target\>*)  
 *<kind\>* may not contain whitespace, and is not visible to the player.  
 *<energy cost\>* is the amount of energy required for a player to remove this obstacle without the appropriate tool.  
 *<description\>* Should be used for the player-visible description of an obstacle instead of *<kind\>*.  
@@ -185,8 +185,7 @@ tool: *<x location\>* *<y location\>* *<target\>* *<divisor\>* *<cost\>* *<descr
 
 Specifies one of many tools on a map, which can lower the energy cost of removing obstacles.  
 Displayed in game as a black **T**.  
-*<target\>* is a string that defines what type of obstacle this tool helps to remove. (Should match an obstacle's *<kind\>*)  
-*<target\>* may not contain whitespace, and is not visible to the player.  
+*<target\>* is a number that defines what type of obstacle this tool helps to remove. (Should match an obstacle's *<kind\>*)  
 *<divisor\>* is a number that will be used to divide the energy cost of an obstacle.  
 A tool with a divisor of `3` would make the obstacle it removes cost only 1/3 as much energy to remove.  
 *<cost\>* is the price in whiffles to purchase this tool.  
