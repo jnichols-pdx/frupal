@@ -12,10 +12,31 @@ int main(int argc, char ** argv)
   
   WINDOW * mapwin = newwin(y, x*0.75, 0, 0); //Create a new window y lines high, and 75% of x value as described by the standard screen (terminal window size)
 
+	//vertical line seperating menu and map
 	move(0, x*.75);
 	vline('#', y);
-  mvwprintw(stdscr, 0, x*0.75+13, "Arrow Keys to Move Cursor"); //Print out instructions to the menu
+
+	mvwprintw(stdscr, 0, x*0.75+13, "Arrow Keys to Move Cursor"); //Print out instructions to the menu
+  mvwprintw(stdscr, 1, x*0.75+13, "WASD Keys to Move Cursor"); //Print out instructions to the menu
   refresh();
+	/*		
+  	Hero temp;
+  	char tem[] = "Dynamite";
+  	char des[] = "Destroys everything";
+  	tool tempo(tem, des,300,10);
+  	temp.addTool(&tempo);		how to call addTool function for Hero
+
+	char var[] = "Hammer";	
+	char desc[] = "weak";
+	tool temporary(var,desc,15,2);
+	temp.addTool(&temporary);
+	
+	tool * copy;
+	copy = NULL;
+  	if(temp.selectTool(copy) == false){}	how to call selectTool function for hero, copy becomes what was selected
+						this allows for things like heroOBJ->modEner(-((obstacleOBJ.get_b_energy)/selectedTool.getDivisor))
+						when breaking obstacles
+	*/
 
   Frupal * g;
   bool goodMapFile = false;
@@ -40,8 +61,14 @@ int main(int argc, char ** argv)
   init_pair(3,COLOR_BLACK, COLOR_WHITE);
   init_pair(4,COLOR_BLACK, COLOR_GREEN);
   init_pair(5,COLOR_BLACK, COLOR_MAGENTA);
-	init_pair(6, COLOR_BLACK, COLOR_BLACK);
+	init_pair(6, COLOR_YELLOW, COLOR_BLACK);
+	init_pair(7, COLOR_WHITE, COLOR_CYAN);
 
+	bkgd(COLOR_PAIR(6));
+	refresh();
+  g->showMap();
+  wrefresh(mapwin);
+  curs_set(0);
   while(g->getmv()!='q')
   {
     //Handle the Menu In Here Probably

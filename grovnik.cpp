@@ -1,7 +1,8 @@
 //grovnik class functions
 
-
 #include "grovnik.h"
+
+using namespace::std;
 
 //grovnik default constructor
 grovnik::grovnik() : character('\0')
@@ -28,9 +29,24 @@ char grovnik::get_character() const
 	return character;
 }
 
-//-------------------------------------------------------------------
+//grovnik read from stream function
+//this function is virtual
+void grovnik::read(istream & source)
+{
 
-binocular::binocular()
+}
+
+//Friend function to allow reading grovnik and derived grovnik classes from streams
+istream& operator >> (istream& source, grovnik& destination)
+{
+  destination.read(source);
+  return source;
+}
+
+//-------------------------------------------------------------------
+//TODO
+
+binocular::binocular() : grovnik('B')
 {
 	
 }
@@ -46,15 +62,16 @@ void binocular::display_info()
 }
 
 //-------------------------------------------------------------------
+//TODO
 
 //default constructor
-ship::ship() : cost(0)
+ship::ship() : grovnik('S'), cost(0)
 {
 	
 }
 
 //constructor with args
-ship::ship(int cost)
+ship::ship(int cost) : grovnik('S')
 {
 	this->cost = cost;
 }
@@ -79,18 +96,22 @@ int ship::get_cost()
 
 //-------------------------------------------------------------------
 
-treasure_chest::treasure_chest() : amount(0)
+
+treasure_chest::treasure_chest() : grovnik('$'), name(NULL), amount(0)
 {
 
 }
 
-treasure_chest::treasure_chest(int amount)
+treasure_chest::treasure_chest(char * name, int amount) : grovnik('$')
 {
+	this->name = new char[strlen(name)+1];
+	strcpy(this->name,name);
 	this->amount = amount;
 }
 
 treasure_chest::~treasure_chest()
 {
+  delete [] name;
 
 }
 
@@ -99,14 +120,30 @@ void treasure_chest::display_info()
 	
 }
 
+char * treasure_chest::get_name()
+{
+	return name;
+}
+
 int treasure_chest::get_amount()
 {
 	return amount;
 }
 
-//-------------------------------------------------------------------
+//virtual helper to allow istream  >> treasureChestObject
+void treasure_chest::read(istream & source)
+{
+  source >> amount;
+  string temp;
+  getline(source, temp);
+  name = new char[temp.length() + 1];
+  strcpy(name,temp.c_str());
+}
 
-royal_diamond::royal_diamond()
+//-------------------------------------------------------------------
+//TODO
+
+royal_diamond::royal_diamond() : grovnik('%') //$ is already in use for treasure_chest
 {
 	
 }
@@ -124,13 +161,13 @@ void royal_diamond::display_info()
 //-------------------------------------------------------------------
 
 //default constructor
-obstacle::obstacle() : name(NULL), name_b(NULL), b_energy(0)
+obstacle::obstacle() : grovnik('!'), name(NULL), name_b(NULL), b_energy(0)
 {
 
 }
 
 //constructor with args
-obstacle::obstacle(char * name, char * name_b, int b_energy)
+obstacle::obstacle(char * name, char * name_b, int b_energy) : grovnik('!')
 {
 	this->name = new char[strlen(name)+1];
 	strcpy(this->name,name);
@@ -145,7 +182,9 @@ obstacle::obstacle(char * name, char * name_b, int b_energy)
 obstacle::~obstacle()
 {
 	delete [] name;
+	name = NULL;
 	delete [] name_b;
+	name_b = NULL;
 }
 
 void obstacle::display_info()
@@ -168,26 +207,57 @@ int obstacle::get_b_energy()
 	return b_energy;
 }
 
-//-------------------------------------------------------------------
-
-tool::tool() : name(NULL), cost(0)
+//virtual helper to allow istream >> obstacleObject
+void obstacle::read(istream & source)
 {
-	
+  string temp;
+  source >> temp;
+  name_b = new char[temp.length() + 1];
+  strcpy(name_b,temp.c_str());
+  source >> b_energy;
+  getline(source, temp);
+  name = new char[temp.length() + 1];
+  strcpy(name,temp.c_str());
 }
 
+//-------------------------------------------------------------------
+
+tool::tool() : grovnik('T'), name(NULL), description(NULL), cost(0), divisor(1)
+{}
+
 //constructor with args
-tool::tool(char * name, int cost)
+tool::tool(char * name, char * description, int cost, int divisor) : grovnik('T')
 {
 	this->name = new char[strlen(name)+1];
 	strcpy(this->name,name);
 	
+	this->description = new char[strlen(description)+1];
+	strcpy(this->description,description);
+
 	this->cost = cost;
-	
+
+  this->divisor = divisor;
 }
 
-tool::~tool()
-{
-	delete [] name;
+tool::~tool(){
+	if(name != NULL){
+		delete [] name;	
+		name = NULL;
+	}
+
+	if(description != NULL){
+		 delete [] description;	
+		name = NULL;
+	}
+}
+		
+tool::tool(tool & to_copy){
+	name = new char[strlen(to_copy.name)+1];
+	strcpy(name,to_copy.name);
+	description = new char[strlen(to_copy.description)+1];
+	strcpy(description,to_copy.description);
+	cost = to_copy.cost;
+	divisor = to_copy.divisor;
 }
 
 void tool::display_info()
@@ -195,9 +265,18 @@ void tool::display_info()
 	
 }
 
-char * tool::get_name()
+void tool::display_name(int y){	//displays tool name in the menu 
+	if(name == NULL) return;
+	mvwprintw(stdscr, y, COLS*0.75+3, "%s", name);
+	refresh();
+}
+
+bool tool::check_equal(const char * item)
 {
-	return name;
+	if(item == NULL) return false;
+	if(this->name == NULL) return false;	
+	if(strcmp(this->name, item) == 0) return true;
+	else return false;
 }
 
 int tool::get_cost()
@@ -205,16 +284,29 @@ int tool::get_cost()
 	return cost;
 }
 
+//virtual helper to allow istream >>toolObject 
+void tool::read(istream & source)
+{
+  string temp;
+  source >> temp;
+  name = new char[temp.length() + 1];
+  strcpy(name,temp.c_str());
+  source >> divisor >> cost;
+  getline(source, temp);
+  description= new char[temp.length() + 1];
+  strcpy(description,temp.c_str());
+}
+
 //-------------------------------------------------------------------
 
 //default constructor
-food::food() : name(NULL), cost(0), energy(0)
+food::food() : grovnik('F'), name(NULL), cost(0), energy(0)
 {
 	
 }
 
 //constructor with args
-food::food(char * name, int cost, int energy)
+food::food(char * name, int cost, int energy) : grovnik('F')
 {
 	this->name = new char[strlen(name)+1];
 	strcpy(this->name,name);
@@ -227,6 +319,7 @@ food::food(char * name, int cost, int energy)
 food::~food()
 {
 	delete [] name;
+	name = NULL;
 }
 
 void food::display_info()
@@ -249,16 +342,24 @@ int food::get_energy()
 	return energy;
 }
 
+//virtual helper to allow istream >> foodObject
+void food::read(istream & source)
+{
+  source >> cost >> energy;
+  string temp;
+  getline(source, temp);
+  name = new char[temp.length() + 1];
+  strcpy(name,temp.c_str());
+}
+
 //-------------------------------------------------------------------
 
 //default constructor
-clue::clue() : clue(NULL)
-{
-	
-}
+clue::clue() : grovnik('?'), clueText(NULL)
+{}
 
 //constructor with args
-clue::clue(char * clue)
+clue::clue(char * clue) : grovnik('?')
 {
 	this->clueText = new char[strlen(clue)+1];
 	strcpy(this->clueText,clue);
@@ -268,6 +369,7 @@ clue::clue(char * clue)
 clue::~clue()
 {
 	delete [] clueText;
+	clueText = NULL;
 }
 
 void clue::display_info()
@@ -278,4 +380,13 @@ void clue::display_info()
 char * clue::get_clue()
 {
 	return clueText;
+}
+
+//virtual helper to allow istream  >> clueObject
+void clue::read(istream & source)
+{
+  string temp;
+  getline(source, temp);
+  clueText = new char[temp.length() + 1];
+  strcpy(clueText,temp.c_str());
 }

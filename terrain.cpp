@@ -39,13 +39,13 @@ int terrain::get_travel_cost(char terType){
 			travel_cost = 0;
 			break;
 		case '=': //wall
-			travel_cost = 1;
+			travel_cost = -1;
 			break;
 		case '.': //meadow
-			travel_cost = 1;
+			travel_cost = -1;
 			break;
 		case '"': //swamp
-			travel_cost = 2;
+			travel_cost = -2;
 			break;
 		default:	
 			break;
@@ -56,7 +56,7 @@ int terrain::get_travel_cost(char terType){
 //displays information about certain terrain type in menu section of screen
 //terrain type passed in as character representation
 bool terrain::display_info(char terType){
-	int y = 9;   	//change this variable to move the position of the text up or down
+	int y = 28;   	//change this variable to move the position of the text up or down
 	int x = 3;    //change this to move it right or left
 
 	switch(terType){

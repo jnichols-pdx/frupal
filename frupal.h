@@ -1,9 +1,12 @@
-#include <ncurses.h>
-#include <cmath>
-#include <stdio.h>
 #include <fstream>
-#include <string>
-#include <unistd.h>
+
+// is this needed? TODO #include <string> 
+// is this needed? TODO #include <sstream>
+// is this needed? TODO #include <unistd.h>
+
+
+#include <stdio.h>
+#include <ncurses.h>
 #include "hero.h"
 #include "grovnik.h"
 #include "terrain.h"
@@ -19,6 +22,8 @@ class Frupal
     int  getmv(); //move cursor
     bool mapLoaded();	
     void showMap();
+		void showCurInfo();
+		void showHeroInfo();
   private:
 
     void lkup();  //move cursor up
@@ -33,14 +38,21 @@ class Frupal
 		bool validMove(int y, int x); //validates move
 		void loseGame(); //called when player runs out of energy
 		void winGame(); //called when player gets royal diamond
+    void updateCur();//updates curMin and curMax series ints based on hero location - for map scroll
     bool loadMap(char * mapFileName); //loads map from a filename
+    //Parse one line/element
+    bool parseLine(string line, ifstream & mapFile, bool & terrain, bool & start, bool & diamonds);
 
-    int xCur, yCur, xMax, yMax; //current, current, maximum, maximum
+    int xCur, yCur, xMax, yMax; //current map location for x and y, maximum map size x and y
+    int winYMax, winXMax, multx, multy; 
+    //Above integers are: maximum size of window x and y, current minimum value for x and y 
+    //based on hero location, current maximum value for x and y based on current hero location
 		int xHero, yHero; //hero location
     WINDOW * curWin; //ncurses window
     Hero mainGuy;
   	bool visitMap[128][128]; //map to track discovered places
 		char terrainMap[128][128]; //map that holds terrain
+    grovnik * itemMap[128][128]; //map that holds items such as clues, food, tools etc.
 		terrain terrainInfo; //terrain info object
     bool loadFinished;
 };

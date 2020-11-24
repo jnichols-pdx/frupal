@@ -4,10 +4,11 @@ Frupal::Frupal(WINDOW * win, int y, int x)
 {
   curWin = win;
 
+  getmaxyx(curWin, winYMax, winXMax);
 	xHero = x;
 	yHero = y;
 	mvwaddch(curWin, yHero, xHero, '@');
-
+  multy = multx = 0;
   xCur = x;
   yCur = y;
   xMax = yMax = 128;
@@ -31,8 +32,12 @@ Frupal::Frupal(WINDOW * win, int y, int x)
 Frupal::Frupal(WINDOW * win, char * mapFileName): xHero(5), yHero(5)//remove
 {
   curWin = win;
+
+  getmaxyx(curWin, winYMax, winXMax);
   keypad(curWin, true);
   mainGuy = Hero(1000, 100);
+	showHeroInfo();
+  multy = multx = 0;
 
 	wbkgd(win, COLOR_PAIR(6));
 
@@ -54,105 +59,118 @@ bool Frupal::loadMap(char * mapFileName)
   if(elemName.compare("Frupal_Kingdom:") != 0)
     return false;
 
-
-  //Read all elements from the map file
-  while(!mapFile.eof())
-  {
-    mapFile >> elemName;
-
-    if(elemName.length() == 0) //blank lines
-      continue;
-
-    if(elemName[0] == '#') //Comments
-    {
-      mapFile.ignore(1000, '\n');
-      continue;
-    }
-
-    if(elemName.compare("terrain:") == 0)
-    {
-      mapFile >> xMax >> yMax;
-      mapFile.ignore(1000, '\n');
-//Adjusted for static map size
-      for(int i = 0; i < yMax; ++i){
-        for(int j = 0; j < xMax; ++j){
-
-          terrainMap[i][j] = mapFile.get();
-          visitMap[i][j] = false;
-        }
-        mapFile.ignore(1000, '\n');
-      }
-      continue;
-    }
-
-    if(elemName.compare("start:") == 0)
-    {
-      mapFile >> xHero >> yHero;
-      mapFile.ignore(1000, '\n');
-      continue;
-    }
-
-    if(elemName.compare("diamonds:") == 0)
-    {
-      //TODO: implement
-      mapFile.ignore(1000, '\n');
-      continue;
-    }
-
-    if(elemName.compare("treasure:") == 0)
-    {
-      //TODO: implement
-      mapFile.ignore(1000, '\n');
-      continue;
-    }
-
-    if(elemName.compare("food:") == 0)
-    {
-      //TODO: implement
-      mapFile.ignore(1000, '\n');
-      continue;
-    }
-
-    if(elemName.compare("clue:") == 0)
-    {
-      //TODO: implement
-      mapFile.ignore(1000, '\n');
-      continue;
-    }
-
-    if(elemName.compare("ship:") == 0)
-    {
-      //TODO: implement
-      mapFile.ignore(1000, '\n');
-      continue;
-    }
-
-    if(elemName.compare("binoculars:") == 0)
-    {
-      //TODO: implement
-      mapFile.ignore(1000, '\n');
-      continue;
-    }
-
-    if(elemName.compare("obstacle:") == 0)
-    {
-      //TODO: implement
-      mapFile.ignore(1000, '\n');
-      continue;
-    }
-
-    if(elemName.compare("tool:") == 0)
-    {
-      //TODO: implement
-      mapFile.ignore(1000, '\n');
-      continue;
-    }
-
-    //Fail if we see unexpected input
+  if(mapFile.fail())
     return false;
+
+  bool foundTerrain = false;
+  bool foundStart= false;
+  bool foundDiamonds= false;
+  bool lastParseOK = true;
+
+
+  // Attempts to use mapFile.fail(), .bad(), and .eof() to detect read / parse failures weren't working.
+  // Most tests passed OK, however using getline() to read the end of the last line of text in the mapfile
+  // would set the fail() bit, even if there was a newline (or several newlines) following the last element
+  // description. It worked OK if there was another element that didn't have arbitrary length text at it's
+  // end (like ship or diamonds) on the final line, as those elements use >> instead of getline() for their
+  // last read operation.
+  //
+  // Researching  >> and getline() lead me to:
+  // https://gehrcke.de/2011/06/reading-files-in-c-using-ifstream-dealing-correctly-with-badbit-failbit-eofbit-and-perror/
+  // I'm going to try the 'get a line and parse it' pattern they suggest instead, with adaptations for 
+  // handling the multiline terrain: element and other frupal specific sanity checks. -- JTN
+  string sourceLine;
+  while(getline(mapFile,sourceLine) && lastParseOK) {
+    lastParseOK = parseLine(sourceLine, mapFile, foundTerrain, foundStart, foundDiamonds);  
+  }
+
+  return (foundTerrain && foundStart && foundDiamonds && lastParseOK);
+}
+
+//Parse most elements from a single line string
+//Takes a reference to the mapFile stream so the terrain: element may read multiple lines
+//Sets terrain, start, and diamonds booleans to true when those elements are found so that 
+//the calling function can verify that these Required elements have been loaded.
+bool Frupal::parseLine(string line, ifstream & mapFile, bool & terrain, bool & start, bool & diamonds)
+{
+  int x, y;
+  string elemName;
+  grovnik* newItem = NULL;
+
+  if(line.length() == 0) //blank lines
+    return true;
+  if(line.length() == 1 && line[0] == '\r')
+    return true;
+
+  if(line[0] == '#') //Comments
+    return true;
+
+  stringstream lineStream(line);
+
+  lineStream >> elemName;
+
+  if(elemName.compare("terrain:") == 0) {
+    lineStream >> xMax >> yMax;
+    if(xMax < 1 || xMax > 128 || yMax < 1 || yMax > 128)
+      return false;
+
+    //Adjusted for static map size
+    for(int i = 0; i < yMax; ++i){
+      for(int j = 0; j < xMax; ++j){
+
+        terrainMap[i][j] = mapFile.get();
+        visitMap[i][j] = false;
+      }
+      mapFile.ignore(1000, '\n');
+    }
+    terrain = true;
+  }
+  else if(elemName.compare("start:") == 0) {
+    lineStream >> xHero >> yHero;
+    if(xHero < 0 || xHero >= xMax || yHero < 0 || yHero >= yMax) 
+      return false;
+    yCur = yHero;
+    xCur = xHero;
+    start = true;
+  }
+  else if (elemName.compare("diamonds:") == 0) {
+    newItem = new royal_diamond();
+    diamonds = true;
+  }
+  else if(elemName.compare("treasure:") == 0) {
+    newItem = new treasure_chest();
+  }
+  else if(elemName.compare("food:") == 0) {
+    newItem = new food();
+  }
+  else if(elemName.compare("clue:") == 0) {
+    newItem = new clue();
+  }
+  else if(elemName.compare("ship:") == 0) {
+    //TODO: implement
+  }
+  else if(elemName.compare("binoculars:") == 0) {
+    //TODO: implement
+  }
+  else if(elemName.compare("obstacle:") == 0) {
+    newItem = new obstacle();
+  }
+  else if(elemName.compare("tool:") == 0) {
+    newItem = new tool();
+  }
+
+
+  if(newItem)
+  {
+    lineStream >> x >> y;
+    if(x <0 || x >= xMax || y < 0 || y >= yMax)
+      return false;
+    lineStream >> *newItem;
+    itemMap[y][x] = newItem;
   }
 
   return true;
+
 }
 
 bool Frupal::mapLoaded() { return loadFinished; }
@@ -167,36 +185,44 @@ Frupal::~Frupal()
 void Frupal::lkup()
 {
   yCur -= 1;
-  if(yCur < 1)
-    yCur = yMax;
-	wmove(curWin, yCur, xCur);
+  if(yCur < (0 + (winYMax * multy)))
+    yCur = ((multy + 1) * winYMax) -1;
+  if(yCur >= yMax)
+    yCur = yMax -1;
+  curs_set(1); //Display cursor when it moves
+	wmove(curWin, yCur % winYMax, xCur % winXMax);
 }
 
 //lkdn updates cursor location downwards
 void Frupal::lkdn()
 {
   yCur -= -1; //yes, I am aware that this is...non-standard. lol
-  if(yCur > yMax)
-    yCur = 1;
-	wmove(curWin, yCur, xCur);
+  if(yCur >= ((multy+1)*winYMax) || yCur >= yMax)
+    yCur = (multy * winYMax);
+  curs_set(1); //Display cursor when it moves
+	wmove(curWin, yCur % winYMax, xCur % winXMax);
 }
 
 //lklt updates cursor location to left
 void Frupal::lklt()
 {
   xCur -= 1;
-  if(xCur < 1)
-    xCur = xMax;
-	wmove(curWin, yCur, xCur);
+  if(xCur < (0 + (winXMax * multx)))
+    xCur = ((multx + 1) * winXMax) -1;
+  if(xCur >= xMax)
+    xCur = xMax -1;
+  curs_set(1); //Display cursor when it moves
+	wmove(curWin, yCur % winYMax, xCur % winXMax);
 }
 
 //lkrt updates cursor location to the right
 void Frupal::lkrt()
 {
   xCur -= -1;
-  if(xCur > xMax)
-    xCur = 1;
-	wmove(curWin, yCur, xCur);
+  if(xCur >= ((multx+1)*winXMax) ||xCur >= xMax)
+    xCur = (multx * winXMax);
+  curs_set(1); //Display cursor when it moves
+	wmove(curWin, yCur % winYMax, xCur % winXMax);
 }
 
 //mvup moves cahracter up
@@ -210,9 +236,14 @@ void Frupal::mvup(){
 		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
 			loseGame();
 		}
+		showHeroInfo();
+
     //moving our hero now updates the cursor location to him
     yCur = yHero;
     xCur = xHero;
+
+    //And hides the cursor
+    curs_set(0);
 	}
 }
 
@@ -223,13 +254,18 @@ void Frupal::mvdn(){
 
 		yHero += 1;
 		showMap();//update map
-		
+				
 		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
 			loseGame();
 		}
+		showHeroInfo();
+
     //moving our hero now updates the cursor location to him
     yCur = yHero;
     xCur = xHero;
+
+    //And hides the cursor
+    curs_set(0);
 	}
 }
 
@@ -244,9 +280,15 @@ void Frupal::mvlt(){
 		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
 			loseGame();
 		}
+		showHeroInfo();
+
     //moving our hero now updates the cursor location to him
     yCur = yHero;
     xCur = xHero;
+
+    //And hides the cursor
+    curs_set(0);
+
 	}
 }
 
@@ -261,9 +303,14 @@ void Frupal::mvrt(){
 		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
 			loseGame();
 		}
+		showHeroInfo();
+
     //moving our hero now updates the cursor location to him
     yCur = yHero;
     xCur = xHero;
+
+    //And hides the cursor
+    curs_set(0);
 	}
 }
 
@@ -293,11 +340,11 @@ bool Frupal::validMove(int y, int x){
 	return true;
 }
 
-//function displays loss and waits to exit game
+//function displays loss and waits to exit game //TODO
 void Frupal::loseGame(){
 }
 
-//function displays win and waits to exit game
+//function displays win and waits to exit game //TODO
 void Frupal::winGame(){
 }
 
@@ -346,9 +393,24 @@ int Frupal::getmv()
 void Frupal::updateVisitMap(){
   for(int y = yHero - 1; y <= yHero + 1; y++){
     for(int x = xHero - 1; x <= xHero + 1; x++){
-			visitMap[y][x] = true;
+      if(y >= 0 && y < 128 && x >= 0 && x < 128)
+			  visitMap[y][x] = true;
 		}
 	}
+}
+
+void Frupal::updateCur()
+{
+  if(yHero >= winYMax*(multy+1))
+  {
+    ++multy;
+  }else if(yHero < winYMax*(multy) && (multy-1) >= 0) {
+    --multy;
+  }else if(xHero >= winXMax*(multx+1)) {
+    ++multx;
+  } else if(xHero < winXMax*(multx) && (multx-1) >= 0) {
+    --multx;
+  }
 }
 
 //new show map function handles the color display, and updates
@@ -357,22 +419,55 @@ void Frupal::updateVisitMap(){
 void Frupal::showMap()
 {
 	updateVisitMap();
+  char grovnikIcon = ' ';
+  grovnik * currentGrovnik;
+
+  werase(curWin);
+
+  updateCur();
+
+  int smolY = winYMax*multy;
+  int smolX = winXMax*multx;
+  int bigY, bigX;
+  
+  if(winYMax * (multy+1) > yMax)
+    bigY = yMax;
+  else
+    bigY = winYMax*(multy+1);
+  
+  if(winXMax * (multx+1) > xMax)
+    bigX = xMax;
+  else
+    bigX = winXMax*(multx+1);
 
 	//updates map
-	for(int y = 0; y < yMax; y++){
-		for(int x = 0; x < xMax; x++){
+	for(int y = smolY; y < bigY; y++){
+		for(int x = smolX; x < bigX; x++){
 			
 			//discovered areas
-			if(visitMap[y][x] == true){
-				int color = terrainInfo.get_color(terrainMap[y][x]);//gets color
+				if(visitMap[y][x] == true){
+					int color = terrainInfo.get_color(terrainMap[y][x]);//gets color
+
+        //Display item grovniks
+        currentGrovnik = itemMap[y][x];
+        if(currentGrovnik){
+          grovnikIcon = currentGrovnik->get_character();
+          if(grovnikIcon == '%') { //special case the royal diamonds
+            color = COLOR_PAIR(7); // white on cyan
+            grovnikIcon = '$';
+          }
+        } else {
+          grovnikIcon = ' '; //No item, show just the terrain.
+        }
+
 				wattron(curWin, color);//turn on color pair
-				mvwaddch(curWin, y, x, ' ');//write space to map
+				mvwaddch(curWin, y-(winYMax*(multy)), x-(winXMax*(multx)), grovnikIcon);//write space to map
 				wattroff(curWin, color);//turn off color pair
 
 			//undiscovered areas
 			}else{ 
 				wattron(curWin, COLOR_PAIR(6));//turn on color BLACK
-				mvwaddch(curWin, y, x, ' ');//write space to map
+				mvwaddch(curWin, y-(winYMax*(multy)),x-(winXMax*(multx)), ' ');//write space to map
 				wattroff(curWin, COLOR_PAIR(6));//turn off color BLACK
 			}
 		}
@@ -380,6 +475,43 @@ void Frupal::showMap()
 
 	//shows hero on screen
 	wattron(curWin, COLOR_PAIR(1));//turn on color RED
-	mvwaddch(curWin, yHero,xHero,'@');//write @ to map for hero
+	mvwaddch(curWin, yHero-(winYMax*(multy)),xHero-(winXMax*(multx)),'@');//write @ to map for hero
 	wattroff(curWin, COLOR_PAIR(1));//turn off color RED
+}
+
+//shows information on current cursor coordinate
+void Frupal::showCurInfo(){
+//	currentGrovnik = itemMap[yCur][xCur];
+
+}
+
+void::Frupal::showHeroInfo(){
+	int y = 0;
+	int x = 0;
+	char energy[5] = {0}; //game can support 9999 energy
+	char whiffles[10] = {0}; //game can support 999,999,999 whiffles
+
+	getmaxyx(stdscr, y, x);
+
+	move(y - 5, x);
+	clrtoeol(); 
+	getmaxyx(stdscr, y, x);
+
+	mvprintw(y - 5, x * 0.75 + 8, "Energy: ");
+	getyx(stdscr, y, x);
+	sprintf(energy, "%d", mainGuy.getEner());
+	mvprintw(y, x, energy);
+
+	getmaxyx(stdscr, y, x);
+
+	move(y - 4, x);
+	clrtoeol(); 
+	getmaxyx(stdscr, y, x);
+
+	mvprintw(y - 4, x * 0.75 + 8, "Whiffles: ");
+	getyx(stdscr, y, x);
+	sprintf(whiffles, "%d", mainGuy.getWhif());
+	mvprintw(y, x, whiffles);
+
+	refresh();
 }
