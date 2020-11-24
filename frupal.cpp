@@ -368,7 +368,7 @@ char Frupal::loseGame(){
   {
     return 'q';
   }
-  return 'a';
+  return 'r';
 }
 
 //function displays win and waits to exit game //TODO
@@ -397,7 +397,7 @@ char Frupal::winGame(){
   {
     return 'q';
   }
-  return 'a';
+  return 'r';
 }
 
 //gets input from the user - currently only allows movement of cursor and character, and quitting. 

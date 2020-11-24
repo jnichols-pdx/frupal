@@ -73,11 +73,11 @@ int main(int argc, char ** argv)
     g->showMap();
     wrefresh(mapwin);
     curs_set(0);
-    while(ch !='q' && ch!= 'a')
+    while(ch !='q' && ch!= 'r')
     {
       ch = g->getmv();
     }
-    if(ch == 'a')
+    if(ch == 'r')
       ch = ' ';
 
     endwin(); //Ends ncurses / deallocates memory
