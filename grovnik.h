@@ -6,7 +6,7 @@
 
 
 #include <cmath> //do we need this? TODO
-#include <stdio.h> //what is this being used for? TODO
+#include <stdio.h>
 
 //i think we only need to stick to one of these
 //or remove both and stick to char arrays TODO
@@ -24,7 +24,10 @@ class grovnik
 		grovnik();
 		grovnik(char character);
 		char get_character() const;
-		
+		char * itos(int, char*); //converts int to string for displays
+		void displayStat(int & row, const char * text, int offset = 1);	//displays info
+		void clearLines(int start, int end = 16); //clears menu between start/end
+
 		//virtual functions
 		virtual ~grovnik();
 		virtual void display_info() = 0;   //displays information of the grovnik
@@ -159,11 +162,12 @@ class clue : public grovnik
 		clue(char * clue);
 		char * get_clue();
 		void display_info();
+		void discover();
 	protected:
+		bool discovered; 
 		char * clueText; //clue string
     virtual void read(std::istream & source);
 	
-	private:	
 };
 
 #endif

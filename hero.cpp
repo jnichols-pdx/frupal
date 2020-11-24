@@ -49,12 +49,34 @@ bool Hero::modWhif(int whif)
 	return true;
 }
 
-int Hero::getEner(){
-	return energy;
-}
+void Hero::showHeroInfo(){
+	int y, x = 0;
+	char energyStr[5] = {0}; //game can support 9999 energy
+	char whiffStr[10] = {0}; //game can support 999,999,999 whiffles
 
-int Hero::getWhif(){
-	return whiffles;
+	getmaxyx(stdscr, y, x);
+
+	move(y - 5, x);
+	clrtoeol(); 
+	getmaxyx(stdscr, y, x);
+
+	mvprintw(y - 5, x * 0.75 + 8, "Energy: ");
+	getyx(stdscr, y, x);
+	sprintf(energyStr, "%d", energy);
+	mvprintw(y, x, energyStr);
+
+	getmaxyx(stdscr, y, x);
+
+	move(y - 4, x);
+	clrtoeol(); 
+	getmaxyx(stdscr, y, x);
+
+	mvprintw(y - 4, x * 0.75 + 8, "Whiffles: ");
+	getyx(stdscr, y, x);
+	sprintf(whiffStr, "%d", whiffles);
+	mvprintw(y, x, whiffStr);
+
+	refresh();
 }
 
 //checks inventory for a certain item

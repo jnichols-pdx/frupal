@@ -29,6 +29,50 @@ char grovnik::get_character() const
 	return character;
 }
 
+//converts int to string and returns the char * passed in
+char * grovnik::itos(int num, char * numStr){
+	sprintf(numStr, "%d", num);
+	return numStr;
+}
+
+void grovnik::displayStat(int & row, const char * text, int offset){
+	if(!text){return;}
+	
+	int x = getmaxx(stdscr);
+  char * data;
+	
+	//calculates menu dimensions and lines needed for text display
+	int menu_width = (x - (x * .75)) - 1;
+  int chunkWidth = menu_width - offset;
+	int lines = ceil(((float)strlen(text))/ ((float)chunkWidth));
+	int lastLine = lines + row;
+  data = new char[chunkWidth + 1];
+	
+	//wraps text around back to menu on next line
+	while(row < lastLine){
+		int index = (menu_width - offset) * (row - lastLine + lines);
+		strncpy(data, text + index, chunkWidth);
+		data[chunkWidth + 1] = '\0';
+		mvprintw(row, x - menu_width + offset, data);
+		++row;
+	}
+  delete [] data;
+
+}
+
+//clears data on menu from start to end lines
+void grovnik::clearLines(int start, int end){
+	if(start == end){return;}
+	if(start > end){return;}
+	
+	int x = getmaxx(stdscr);
+	
+	move(start, x * .75 + 1);
+
+	clrtoeol();
+	clearLines(++start, end);	
+}
+
 //grovnik read from stream function
 //this function is virtual
 void grovnik::read(istream & source)
@@ -57,7 +101,7 @@ binocular::~binocular()
 }
 
 void binocular::display_info()
-{
+{//TODO
 	
 }
 
@@ -111,12 +155,23 @@ treasure_chest::treasure_chest(char * name, int amount) : grovnik('$')
 
 treasure_chest::~treasure_chest()
 {
-  delete [] name;
+	if(name){
+  	delete [] name;
+	}
 
 }
 
 void treasure_chest::display_info()
 {
+	int row = 4;
+	clearLines(row);
+
+	displayStat(row, "Cursor Grovnik Info: ");
+	displayStat(row, "Treasure: ");
+	--row;
+	displayStat(row, name, 11); //offset of 7
+
+	refresh();
 	
 }
 
@@ -134,8 +189,17 @@ int treasure_chest::get_amount()
 void treasure_chest::read(istream & source)
 {
   source >> amount;
+
+  //strip leading whitespace before using getline()
+  source >> ws;
+
   string temp;
   getline(source, temp);
+
+  //Strip any trailing '\r' characters from input.
+  if(temp[temp.length() -1] == '\r')
+    temp.erase(temp.length() -1);
+
   name = new char[temp.length() + 1];
   strcpy(name,temp.c_str());
 }
@@ -155,6 +219,13 @@ royal_diamond::~royal_diamond()
 
 void royal_diamond::display_info()
 {
+	int row = 4;
+	clearLines(row);
+
+	displayStat(row, "Cursor Grovnik Info: ");
+	displayStat(row, "Royal Diamond!");
+	displayStat(row, "Grab to win!");
+	refresh();
 	
 }
 
@@ -181,14 +252,35 @@ obstacle::obstacle(char * name, char * name_b, int b_energy) : grovnik('!')
 //destructor
 obstacle::~obstacle()
 {
-	delete [] name;
-	name = NULL;
-	delete [] name_b;
-	name_b = NULL;
+	if(name){
+		delete [] name;
+		name = NULL;
+	}
+
+	if(name_b){
+		delete [] name_b;
+		name_b = NULL;
+	}
 }
 
 void obstacle::display_info()
 {
+	char energyStr[5] = {0};
+
+	int row = 4;
+	clearLines(row);
+
+	displayStat(row, "Grovnik Info: ");
+	displayStat(row, "Obstacle: ");
+	displayStat(row, name, 4); //offset of 7
+
+	displayStat(row, "Break w/ ");
+	displayStat(row, name_b, 4);
+
+	displayStat(row, "Energy: ");
+	displayStat(row, itos(b_energy, energyStr), 4);	
+
+	refresh();
 	
 }
 
@@ -215,7 +307,16 @@ void obstacle::read(istream & source)
   name_b = new char[temp.length() + 1];
   strcpy(name_b,temp.c_str());
   source >> b_energy;
+
+  //strip leading whitespace before using getline()
+  source >> ws;
+
   getline(source, temp);
+
+  //Strip any trailing '\r' characters from input.
+  if(temp[temp.length() -1] == '\r')
+    temp.erase(temp.length() -1);
+
   name = new char[temp.length() + 1];
   strcpy(name,temp.c_str());
 }
@@ -262,6 +363,29 @@ tool::tool(tool & to_copy){
 
 void tool::display_info()
 {
+	char costStr[5] = {0};
+	char divisorStr[3] = {0};
+
+	int row = 4;
+	clearLines(row);
+
+	displayStat(row, "Cursor Grovnik Info: ");
+	displayStat(row, "Tool: ");
+	--row;
+	displayStat(row, name, 7); //offset of 7
+
+	displayStat(row, "Description: ");
+	displayStat(row, description, 4);
+
+	displayStat(row, "Cost: ");
+	--row;
+	displayStat(row, itos(cost, costStr), 7);
+
+	displayStat(row, "Energy Divisor: ");
+	--row;
+	displayStat(row, itos(divisor, divisorStr), 16);	
+
+	refresh();
 	
 }
 
@@ -292,7 +416,16 @@ void tool::read(istream & source)
   name = new char[temp.length() + 1];
   strcpy(name,temp.c_str());
   source >> divisor >> cost;
+
+  //strip leading whitespace before using getline()
+  source >> ws;
+
   getline(source, temp);
+
+  //Strip any trailing '\r' characters from input.
+  if(temp[temp.length() -1] == '\r')
+    temp.erase(temp.length() -1);
+
   description= new char[temp.length() + 1];
   strcpy(description,temp.c_str());
 }
@@ -300,10 +433,7 @@ void tool::read(istream & source)
 //-------------------------------------------------------------------
 
 //default constructor
-food::food() : grovnik('F'), name(NULL), cost(0), energy(0)
-{
-	
-}
+food::food() : grovnik('F'), name(NULL), cost(0), energy(0){}
 
 //constructor with args
 food::food(char * name, int cost, int energy) : grovnik('F')
@@ -318,13 +448,35 @@ food::food(char * name, int cost, int energy) : grovnik('F')
 
 food::~food()
 {
-	delete [] name;
-	name = NULL;
+	if(name){
+		delete [] name;
+		name = NULL;
+	}
 }
 
 void food::display_info()
 {
-	
+	char costStr[5] = {0};
+	char energyStr[4] = {0};
+
+	int row = 4;
+	clearLines(row);
+
+
+	displayStat(row, "Cursor Grovnick Info: ");
+	displayStat(row, "Food: ");
+	--row;
+	displayStat(row, name, 7);
+
+	displayStat(row, "Cost: ");
+	--row;
+	displayStat(row, itos(cost, costStr), 7);
+
+	displayStat(row, "Energy: +");
+	--row;
+	displayStat(row, itos(energy, energyStr), 9);	
+
+	refresh();
 }
 
 char * food::get_name()
@@ -346,8 +498,17 @@ int food::get_energy()
 void food::read(istream & source)
 {
   source >> cost >> energy;
+
+  //strip leading whitespace before using getline()
+  source >> ws;
+
   string temp;
   getline(source, temp);
+
+  //Strip any trailing '\r' characters from input.
+  if(temp[temp.length() -1] == '\r')
+    temp.erase(temp.length() -1);
+
   name = new char[temp.length() + 1];
   strcpy(name,temp.c_str());
 }
@@ -355,11 +516,10 @@ void food::read(istream & source)
 //-------------------------------------------------------------------
 
 //default constructor
-clue::clue() : grovnik('?'), clueText(NULL)
-{}
+clue::clue() : grovnik('?'), discovered(false), clueText(NULL){}
 
 //constructor with args
-clue::clue(char * clue) : grovnik('?')
+clue::clue(char * clue) : grovnik('?'), discovered(false)
 {
 	this->clueText = new char[strlen(clue)+1];
 	strcpy(this->clueText,clue);
@@ -368,13 +528,31 @@ clue::clue(char * clue) : grovnik('?')
 //destructor
 clue::~clue()
 {
-	delete [] clueText;
-	clueText = NULL;
+	if(clueText){
+		delete [] clueText;
+		clueText = NULL;
+	}
 }
 
 void clue::display_info()
-{
-	
+{	
+	int row = 4;
+	clearLines(row);
+
+	displayStat(row, "Clue: ");
+	if(discovered){
+		displayStat(row, clueText, 4);
+
+    //Prevent mangling the vertical line of # characters when the
+    //last displayStat() call prints text all the way to the right
+    //edge of the window
+    displayStat(row," ");
+	}else{	
+		displayStat(row, "???", 4);
+	}
+
+
+	refresh();
 }
 
 char * clue::get_clue()
@@ -382,11 +560,23 @@ char * clue::get_clue()
 	return clueText;
 }
 
+void clue::discover(){
+	discovered = true;
+}
+
 //virtual helper to allow istream  >> clueObject
 void clue::read(istream & source)
 {
+  //strip leading whitespace before using getline()
+  source >> ws;
+
   string temp;
   getline(source, temp);
+
+  //Strip any trailing '\r' characters from input.
+  if(temp[temp.length() -1] == '\r')
+    temp.erase(temp.length() -1);
+
   clueText = new char[temp.length() + 1];
   strcpy(clueText,temp.c_str());
 }
