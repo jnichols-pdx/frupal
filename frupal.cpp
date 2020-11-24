@@ -298,6 +298,10 @@ bool Frupal::validMove(int y, int x){
 			tool * copy = NULL;
 			if(!mainGuy.selectTool(copy)){	//no tool selected
 				if(!mainGuy.modEner(obstacleptr->get_b_energy())) loseGame();
+				else{
+					 delete itemMap[y][x];
+					 itemMap[y][x] = NULL;
+				}
 			}
 		
 			if(copy != NULL){	//deallocate the copy
