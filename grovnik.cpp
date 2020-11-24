@@ -38,9 +38,7 @@ char * grovnik::itos(int num, char * numStr){
 void grovnik::displayStat(int & row, const char * text, int offset){
 	if(!text){return;}
 	
-	int y = 0;
-	int x = 0;
-	getmaxyx(stdscr, y, x);
+	int x = getmaxx(stdscr);
 	char data[50];
 	
 	//calculates menu dimensions and lines needed for text display
@@ -63,11 +61,9 @@ void grovnik::displayStat(int & row, const char * text, int offset){
 void grovnik::clearLines(int start, int end){
 	if(start == end){return;}
 	if(start > end){return;}
-
-	int y = 0;
-	int x = 0;
 	
-	getmaxyx(stdscr, y, x);
+	int x = getmaxx(stdscr);
+	
 	move(start, x * .75 + 1);
 
 	clrtoeol();
