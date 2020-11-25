@@ -1,4 +1,5 @@
 #include "frupal.h"
+#include <unistd.h>
 
 Frupal::Frupal(WINDOW * win, int y, int x)
 {
@@ -36,7 +37,7 @@ Frupal::Frupal(WINDOW * win, char * mapFileName): xHero(5), yHero(5)//remove
   getmaxyx(curWin, winYMax, winXMax);
   keypad(curWin, true);
   mainGuy = Hero(1000, 100);
-	showHeroInfo();
+	mainGuy.showHeroInfo();
   multy = multx = 0;
 
 	wbkgd(win, COLOR_PAIR(6));
@@ -184,6 +185,13 @@ bool Frupal::mapLoaded() { return loadFinished; }
 
 Frupal::~Frupal()
 {
+	for(int y = 0; y < 128; y++){
+		for(int x = 0; x < 128; x++){
+			if(itemMap[y][x]){
+				delete itemMap[y][x];
+			}
+		}
+	}
 }
 
 //lk series updates cursors location coordinates for the map window, which will get updated in the disp() function
@@ -222,7 +230,6 @@ void Frupal::lklt()
 	wmove(curWin, yCur % winYMax, xCur % winXMax);
 }
 
-//lkrt updates cursor location to the right
 void Frupal::lkrt()
 {
   xCur -= -1;
@@ -232,18 +239,18 @@ void Frupal::lkrt()
 	wmove(curWin, yCur % winYMax, xCur % winXMax);
 }
 
-//mvup moves cahracter up
-void Frupal::mvup(){
-	if(validMove(yHero - 1, xHero)){
+//moves character by offsets passed in
+char Frupal::heroMove(int yOffset, int xOffset){
+	if(validMove(yHero + yOffset, xHero + xOffset)){
 		mvwdelch(curWin, yHero, xHero);
 
-		yHero -= 1;
+		yHero += yOffset;
+		xHero += xOffset;
 		showMap();//update map
 
 		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
-			loseGame();
+			return loseGame();
 		}
-		showHeroInfo();
 
     //moving our hero now updates the cursor location to him
     yCur = yHero;
@@ -252,73 +259,9 @@ void Frupal::mvup(){
     //And hides the cursor
     curs_set(0);
 	}
-}
 
-//mvdn moves cahracter down
-void Frupal::mvdn(){
-	if(validMove(yHero + 1, xHero)){
-		mvwdelch(curWin, yHero, xHero);
-
-		yHero += 1;
-		showMap();//update map
-				
-		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
-			loseGame();
-		}
-		showHeroInfo();
-
-    //moving our hero now updates the cursor location to him
-    yCur = yHero;
-    xCur = xHero;
-
-    //And hides the cursor
-    curs_set(0);
-	}
-}
-
-//mvlt moves cahracter left
-void Frupal::mvlt(){
-	if(validMove(yHero, xHero - 1)){
-		mvwdelch(curWin, yHero, xHero);
-
-		xHero -= 1;
-		showMap();//update map
-
-		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
-			loseGame();
-		}
-		showHeroInfo();
-
-    //moving our hero now updates the cursor location to him
-    yCur = yHero;
-    xCur = xHero;
-
-    //And hides the cursor
-    curs_set(0);
-
-	}
-}
-
-//mvrt moves cahracter right
-void Frupal::mvrt(){
-	if(validMove(yHero, xHero + 1)){
-		mvwdelch(curWin, yHero, xHero);
-
-		xHero += 1;
-		showMap();//update map
-
-		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
-			loseGame();
-		}
-		showHeroInfo();
-
-    //moving our hero now updates the cursor location to him
-    yCur = yHero;
-    xCur = xHero;
-
-    //And hides the cursor
-    curs_set(0);
-	}
+	mainGuy.showHeroInfo();
+  return ' ';
 }
 
 //checks if a move is valid
@@ -342,50 +285,127 @@ bool Frupal::validMove(int y, int x){
 			return true;
 		}
 		return false;
+
+	}else if(itemMap[y][x]){
+		food * foodptr = dynamic_cast<food*>(itemMap[y][x]);
+		if(foodptr){
+			//TODO purchase
+			return true;
+		}
+
+		clue * clueptr = dynamic_cast<clue*>(itemMap[y][x]);
+		if(clueptr){
+			clueptr->discover();
+			clueptr->display_info();
+			return true;
+		}
+
+		obstacle * obstacleptr = dynamic_cast<obstacle*>(itemMap[y][x]);
+		if(obstacleptr){
+			//TODO select Tool, return false if none that work 
+			return false;
+		}
+
 	}
 
 	return true;
 }
 
 //function displays loss and waits to exit game //TODO
-void Frupal::loseGame(){
+char Frupal::loseGame(){
+  
+  char ch = ' ';
+  int pretty = 1;
+  nodelay(curWin,  true);
+  while(ch != 'y' && ch != 'Y' && ch != 'n' && ch != 'N' && ch != 'q' && ch != 'Q')
+  {
+    if(pretty >= 8)
+      pretty = 1;
+
+    werase(curWin);
+    wattron(curWin, COLOR_PAIR(pretty));
+    mvwaddstr(curWin, winYMax/2, (winXMax/2)-5, "GAME OVER!");
+    wattroff(curWin, COLOR_PAIR(pretty));
+    wattron(curWin, COLOR_PAIR(8-pretty));
+    mvwaddstr(curWin, winYMax/2+1, (winXMax/2)-8, "Play Again (Y/N)");
+    wattroff(curWin, COLOR_PAIR(8-pretty));
+    ch = wgetch(curWin);
+    ++pretty;
+    usleep(175000);
+  }
+  nodelay(curWin, false);
+  if(ch == 'n' || ch == 'N' || ch == 'q' || ch == 'Q')
+  {
+    return 'q';
+  }
+  return 'r';
 }
 
 //function displays win and waits to exit game //TODO
-void Frupal::winGame(){
+char Frupal::winGame(){
+  char ch = ' ';
+  int pretty = 0;
+  nodelay(curWin,  true);
+  while(ch != 'y' && ch != 'Y' && ch != 'n' && ch != 'N' && ch != 'q' && ch != 'Q')
+  {
+    if(pretty >= 2)
+      pretty = 0;
+
+    werase(curWin);
+    wattron(curWin, COLOR_PAIR(7+pretty));
+    mvwaddstr(curWin, winYMax/2, (winXMax/2)-8, "A WINNER IS YOU!");
+    wattroff(curWin, COLOR_PAIR(7+pretty));
+    wattron(curWin, COLOR_PAIR(8-pretty));
+    mvwaddstr(curWin, winYMax/2+1, (winXMax/2)-8, "Play Again (Y/N)");
+    wattroff(curWin, COLOR_PAIR(8-pretty));
+    ch = wgetch(curWin);
+    ++pretty;
+    usleep(175000);
+  }
+  nodelay(curWin, false);
+  if(ch == 'n' || ch == 'N' || ch  == 'q' || ch == 'Q')
+  {
+    return 'q';
+  }
+  return 'r';
 }
 
 //gets input from the user - currently only allows movement of cursor and character, and quitting. 
 //If an incorrect key is received, it simply recursively calls itself and awaits input
 int Frupal::getmv()
 {
+	
   int ch = wgetch(curWin);
   wattroff(curWin, A_REVERSE);
   switch(ch)
   {
     case KEY_UP://cursor up
-      lkup();
+			lkup();
+			showCurInfo();
       break;
     case KEY_DOWN://cursor down
-      lkdn();
+			lkdn();
+			showCurInfo();
       break;
     case KEY_LEFT://cursor left
-      lklt();
+			lklt();
+			showCurInfo();
       break;
     case KEY_RIGHT://cursor right
-      lkrt();
+			lkrt();
+			showCurInfo();
       break;
 		case 'w'://hero up
-			mvup();
+			ch = heroMove(-1, 0);
 			break;
 		case 'a'://hero left
-			mvlt();
+			ch = heroMove(0, -1);
 			break;
 		case 's': //hero down
-			mvdn();
+			ch = heroMove(1, 0);
 			break;
 		case 'd'://hero right
-			mvrt();
+			ch = heroMove(0, 1);
 			break;
     case 'q':
       break;
@@ -488,37 +508,20 @@ void Frupal::showMap()
 
 //shows information on current cursor coordinate
 void Frupal::showCurInfo(){
-//	currentGrovnik = itemMap[yCur][xCur];
+	grovnik * currentGrovnik = itemMap[yCur][xCur];
 
-}
+	//displays cursor info if on discovered tile
+	if(visitMap[yCur][xCur]){
+		if(currentGrovnik){
+			currentGrovnik->display_info(); //if theres a grovnik, display info
+		}else{
+			//otherwise it displays terrain info
+			terrainInfo.display_info(terrainMap[yCur][xCur]);
+		}
 
-void::Frupal::showHeroInfo(){
-	int y = 0;
-	int x = 0;
-	char energy[5] = {0}; //game can support 9999 energy
-	char whiffles[10] = {0}; //game can support 999,999,999 whiffles
-
-	getmaxyx(stdscr, y, x);
-
-	move(y - 5, x);
-	clrtoeol(); 
-	getmaxyx(stdscr, y, x);
-
-	mvprintw(y - 5, x * 0.75 + 8, "Energy: ");
-	getyx(stdscr, y, x);
-	sprintf(energy, "%d", mainGuy.getEner());
-	mvprintw(y, x, energy);
-
-	getmaxyx(stdscr, y, x);
-
-	move(y - 4, x);
-	clrtoeol(); 
-	getmaxyx(stdscr, y, x);
-
-	mvprintw(y - 4, x * 0.75 + 8, "Whiffles: ");
-	getyx(stdscr, y, x);
-	sprintf(whiffles, "%d", mainGuy.getWhif());
-	mvprintw(y, x, whiffles);
-
-	refresh();
+	}else{ //display if tile not discovered
+		terrainInfo.display_info('0');
+		mvprintw(4, COLS*.75 + 4, "Darkness rules here");
+		refresh();
+	}
 }
