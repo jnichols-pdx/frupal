@@ -292,7 +292,7 @@ int toolObstacle::add_tool_typename(const string toAdd)
     return toolTypes.size()-1;
   }
   else
-    return 0;
+    return loc;
 }
 
 //appends toAdd to the obstacleTypes vector if it isn't already present
@@ -306,13 +306,17 @@ int toolObstacle::add_obstacle_typename(const string toAdd)
     return obstacleTypes.size()-1;
   }
   else
-    return 0;
+    return loc;
 }
 
 int toolObstacle::find_string(const vector<string> & vec, const char * toFind)
 {
-
-return -1;
+  for(int i = 0; i < (int) vec.size(); ++i)
+  {
+    if(vec[i].compare(toFind) == 0)
+      return i;
+  }
+  return -1;
 }
 
 //-------------------------------------------------------------------
