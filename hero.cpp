@@ -208,7 +208,20 @@ bool Hero::selectTool(tool * & item, int obstacleType){	//selects a tool and cop
 bool Hero::purchaseItem(grovnik * item){ //asks the user if they want to buy an item, checks if its food or tools
 	food * foodPtr = dynamic_cast<food*>(item);
 	if(foodPtr){	//its food, time to eat
-	
+		mvwprintw(stdscr, 10, COLS*0.75+2, "Would you like to buy %s", foodPtr->get_name());
+		mvwprintw(stdscr, 11, COLS*0.75+2, "For %d whiffles? (Y/N)", foodPtr->get_cost());
+		refresh();
+		int userInput= 0;
+		userInput = getch();
+		mvwprintw(stdscr, 10, COLS*0.75+2, "                                             ");
+		mvwprintw(stdscr, 11, COLS*0.75+2, "                      ");
+		refresh();
+		if(userInput == 'y' || userInput == 'Y'){
+			whiffles = whiffles - foodPtr->get_cost();
+			energy = energy + foodPtr->get_energy();
+			return true;
+		}
+		else return false;
 	}
 
 	tool * toolPtr = dynamic_cast<tool*>(item);
