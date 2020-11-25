@@ -50,28 +50,26 @@ bool Hero::modWhif(int whif)
 }
 
 void Hero::showHeroInfo(){
+	int xMax = 0;
+	int yMax = 0;
+	int offset = 2;
 	int y, x = 0;
 	char energyStr[5] = {0}; //game can support 9999 energy
 	char whiffStr[10] = {0}; //game can support 999,999,999 whiffles
 
-	getmaxyx(stdscr, y, x);
+	getmaxyx(stdscr, yMax, xMax);
 
-	move(y - 5, x);
+	move(yMax - 5, (xMax * .75) + offset);
 	clrtoeol(); 
-	getmaxyx(stdscr, y, x);
+	move(yMax - 4, (xMax * .75) + offset);
+	clrtoeol(); 
 
-	mvprintw(y - 5, x * 0.75 + 8, "Energy: ");
+	mvprintw(yMax - 5, (xMax * 0.75) + offset, "Energy: ");
 	getyx(stdscr, y, x);
 	sprintf(energyStr, "%d", energy);
 	mvprintw(y, x, energyStr);
 
-	getmaxyx(stdscr, y, x);
-
-	move(y - 4, x);
-	clrtoeol(); 
-	getmaxyx(stdscr, y, x);
-
-	mvprintw(y - 4, x * 0.75 + 8, "Whiffles: ");
+	mvprintw(yMax - 4, (xMax * 0.75) + offset, "Whiffles: ");
 	getyx(stdscr, y, x);
 	sprintf(whiffStr, "%d", whiffles);
 	mvprintw(y, x, whiffStr);
@@ -219,7 +217,7 @@ bool Hero::purchaseItem(grovnik * item){ //asks the user if they want to buy an 
 		if(foodPtr){	//its food, time to eat
 			
 			//modifies whiffles and checks if hero can afford
-			if(!this->modWhif(foodPtr->get_cost())){
+			if(!this->modWhif(0 - foodPtr->get_cost())){
 				item->displayStat(row, "Can't Afford It!");
 				foodPtr = NULL;
 				return false;
@@ -236,7 +234,7 @@ bool Hero::purchaseItem(grovnik * item){ //asks the user if they want to buy an 
 			if(items == INVSIZE){ return false;}		//full inventory
 
 			//modifies whiffles and checks if hero can afford
-			if(!this->modWhif(toolPtr->get_cost())){
+			if(!this->modWhif(0 - toolPtr->get_cost())){
 				item->displayStat(row, "Can't Afford It!");
 				toolPtr = NULL;
 				return false;
@@ -252,6 +250,8 @@ bool Hero::purchaseItem(grovnik * item){ //asks the user if they want to buy an 
 			return true;	
 		}
 	}
+
+	item->clearLines(4);
 
 	return false;
 }
