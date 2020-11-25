@@ -30,18 +30,18 @@ Hero::~Hero(){
 
 bool Hero::modEner(int nRG)
 {
-  energy += nRG;
 
-	if(energy <= 0){
+	if(energy + nRG <= 0){
 		return false;
 	}
 
+  energy += nRG;
 	return true;
 }
 
 bool Hero::modWhif(int whif)
 {
-	if(whiffles += whif < 0){
+	if(whiffles + whif < 0){
 		return false;
 	}
 
@@ -206,49 +206,51 @@ bool Hero::selectTool(tool * & item, int obstacleType){	//selects a tool and cop
 }
 		
 bool Hero::purchaseItem(grovnik * item){ //asks the user if they want to buy an item, checks if its food or tools
-	food * foodPtr = dynamic_cast<food*>(item);
-	if(foodPtr){	//its food, time to eat
-		mvwprintw(stdscr, 10, COLS*0.75+2, "Would you like to buy %s", foodPtr->get_name());
-		mvwprintw(stdscr, 11, COLS*0.75+2, "For %d whiffles? (Y/N)", foodPtr->get_cost());
-		refresh();
-		int userInput= 0;
-		userInput = getch();
-		mvwprintw(stdscr, 10, COLS*0.75+2, "                                             ");
-		mvwprintw(stdscr, 11, COLS*0.75+2, "                      ");
-		refresh();
-		if(userInput == 'y' || userInput == 'Y'){
-			whiffles = whiffles - foodPtr->get_cost();
-			energy = energy + foodPtr->get_energy();
+
+	int row = item->display_info() + 1;
+	item->displayStat(row, "Purchase? (y/n)", 4);
+
+	int userInput = 0;
+	userInput = getch();
+
+	//if hero purchases with 'y'
+	if(userInput == 'y' || userInput == 'Y'){
+		food * foodPtr = dynamic_cast<food*>(item);
+		if(foodPtr){	//its food, time to eat
+			
+			//modifies whiffles and checks if hero can afford
+			if(!this->modWhif(foodPtr->get_cost())){
+				item->displayStat(row, "Can't Afford It!");
+				foodPtr = NULL;
+				return false;
+			}
+
+			//adds energy
+			energy += foodPtr->get_energy();
 			foodPtr = NULL;
 			return true;
 		}
-		foodPtr = NULL;
-		return false;
-	}
 
-	tool * toolPtr = dynamic_cast<tool*>(item);
-	if(toolPtr){	//its a tool, add to inventory
-		if(items == INVSIZE)	return false;		//full inventory
-		mvwprintw(stdscr, 10, COLS*0.75+2, "Would you like to buy %s", toolPtr->get_description());
-		mvwprintw(stdscr, 11, COLS*0.75+2, "For %d whiffles? (Y/N)", toolPtr->get_cost());
-		refresh();
-		int userInput = 0;
-		userInput = getch();
-		mvwprintw(stdscr, 10, COLS*0.75+2, "                                             ");
-		mvwprintw(stdscr, 11, COLS*0.75+2, "                      ");
-		refresh();
-		if(userInput == 'y' || userInput == 'Y'){
-			whiffles = whiffles - toolPtr->get_cost();
-			if(addTool(toolPtr) == false){	//if something went wrong while adding to inventory
-				toolPtr = NULL;	
-				return false;	
+		tool * toolPtr = dynamic_cast<tool*>(item);
+		if(toolPtr){	//its a tool, add to inventory
+			if(items == INVSIZE){ return false;}		//full inventory
+
+			//modifies whiffles and checks if hero can afford
+			if(!this->modWhif(toolPtr->get_cost())){
+				item->displayStat(row, "Can't Afford It!");
+				toolPtr = NULL;
+				return false;
 			}
-			toolPtr = NULL;
-			return true;
-		}	
-		toolPtr = NULL;
-		return false;
-		
+
+			//adds tool to inventory
+			if(addTool(toolPtr) == false){	//if something went wrong while adding to inventory
+				toolPtr = NULL;
+				return false;
+			}
+
+			toolPtr = NULL;	
+			return true;	
+		}
 	}
 
 	return false;
