@@ -204,3 +204,17 @@ bool Hero::selectTool(tool * & item, int obstacleType){	//selects a tool and cop
 
 	return false;
 }
+		
+bool Hero::purchaseItem(grovnik * item){ //asks the user if they want to buy an item, checks if its food or tools
+	food * foodPtr = dynamic_cast<food*>(item);
+	if(foodPtr){	//its food, time to eat
+	
+	}
+
+	tool * toolPtr = dynamic_cast<tool*>(item);
+	if(toolPtr){	//its a tool, add to inventory
+	
+	}
+
+	return false;
+}

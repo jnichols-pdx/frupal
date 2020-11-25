@@ -16,6 +16,7 @@ class Hero
 		bool addTool(tool * item);  //returns false if inventory is full, unless a ship is being added it will add the ship
 		bool selectTool(tool * & item, int obstacleType);	//selects a tool and copies it into the item argument, returns false if inventory is empty
 						//or if the hero selects the ship. The hero can not remove the ship from their inventory
+		bool purchaseItem(grovnik * item); //asks the user if they want to buy an item, checks if its food or tools
 
   private:
   	int whiffles; //hero whiffles
