@@ -170,26 +170,35 @@ obstacle: *<x location\>* *<y location\>* *<kind\>* *<energy cost\>* *<descripti
 
 Specifies one of many obstacles on a map, which cost energy to remove.  
 Displayed in game as a black **!**.  
-*<kind\>* is a string that defines what type of obstacle this is, and thus what tools affect this obstacle. (Should match a tool's *<target\>*)  
+*<kind\>* is a single word name that defines what 'kind' or 'type' of obstacle this is.  
+*<kind\>* should be a single plural word without spaces like 'boulders' or 'trees'.  
+This name will be used by tools to determine which obstacles they affect.  
 *<kind\>* may not contain whitespace, and is not visible to the player.  
 *<energy cost\>* is the amount of energy required for a player to remove this obstacle without the appropriate tool.  
 *<description\>* Should be used for the player-visible description of an obstacle instead of *<kind\>*.  
 The following example places a boulder requiring 15 energy to remove on the western edge of a 128x128 map:  
 
-Example: `obstacle: 0 44 boulder 15 Someone or something has driven a pillar of granite into the ground here, blocking your path.`
+Example: `obstacle: 0 44 boulders 15 Someone or something has driven a pillar of granite into the ground here, blocking your path.`
 
 ---
 ### Tools
 
-tool: *<x location\>* *<y location\>* *<target\>* *<divisor\>* *<cost\>* *<description\>*
+tool: *<x location\>* *<y location\>* *<kind\>* *<target_count\>* *<targets...\>* *<divisor\>* *<cost\>* *<description\>*
 
 Specifies one of many tools on a map, which can lower the energy cost of removing obstacles.  
 Displayed in game as a black **T**.  
-*<target\>* is a string that defines what type of obstacle this tool helps to remove. (Should match an obstacle's *<kind\>*)  
-*<target\>* may not contain whitespace, and is not visible to the player.  
+*<kind\>* is a short name for the 'class' or 'type' of tool. 
+*<kind\>* should be a single plural word without spaces like 'saws' or 'hammers'.  
+*<target_count\>* is how many different kinds of obstacle this tool can remove.  
+*<targets...\>* is a whitespace separated list of kinds of obstacles that this tool removes.  
+These should match the *<kind\>* names of obstacles on the map.  
+there **MUST** be exactly as any targets as *<target_count\>*  
 *<divisor\>* is a number that will be used to divide the energy cost of an obstacle.  
 A tool with a divisor of `3` would make the obstacle it removes cost only 1/3 as much energy to remove.  
 *<cost\>* is the price in whiffles to purchase this tool.  
 The following example places a hammer, costing 100 grovnicks, with divisor 2, that affects boulders, along the northern edge of a 128x128 map:  
 
-Example: `tool: 61 0 boulder 2 100 Rock smashing hammer X2`
+Example: `tool: 61 0 hammers 1 boulders 2 100 Rock smashing hammer X2`  
+
+The following example places some dynamite, costing 50 grovniks, with divisor 1000, that affects four things: boulders, tress, train tracks and whales, along the northern edge of a 128x128 map:  
+Example: `tool: 61 0 explosives 4 boulders trees train-tracks whales 1000 50 Dynamite of ultimate destructino X1000`  

@@ -52,7 +52,7 @@ void grovnik::displayStat(int & row, const char * text, int offset){
 	while(row < lastLine){
 		int index = (menu_width - offset) * (row - lastLine + lines);
 		strncpy(data, text + index, chunkWidth);
-		data[chunkWidth + 1] = '\0';
+		data[chunkWidth] = '\0';
 		mvprintw(row, x - menu_width + offset, data);
 		++row;
 	}
@@ -90,9 +90,15 @@ istream& operator >> (istream& source, grovnik& destination)
 //-------------------------------------------------------------------
 //TODO
 
-binocular::binocular() : grovnik('B')
+binocular::binocular() : grovnik('B'), cost(0)
 {
 	
+}
+
+//constructor with args
+binocular::binocular(int cost) : grovnik('B')
+{
+	this->cost = cost;
 }
 
 binocular::~binocular()
@@ -103,6 +109,18 @@ binocular::~binocular()
 void binocular::display_info()
 {//TODO
 	
+}
+
+//returns the ship cost
+int binocular::get_cost()
+{
+	return cost;
+}
+
+//virtual helper to allow istream  >> binocularObject
+void binocular::read(istream & source)
+{
+  source >> cost;
 }
 
 //-------------------------------------------------------------------
@@ -138,6 +156,12 @@ int ship::get_cost()
 	return cost;
 }
 
+//virtual helper to allow istream  >> shipObject
+void ship::read(istream & source)
+{
+  source >> cost;
+}
+
 //-------------------------------------------------------------------
 
 
@@ -150,6 +174,7 @@ treasure_chest::treasure_chest(char * name, int amount) : grovnik('$')
 {
 	this->name = new char[strlen(name)+1];
 	strcpy(this->name,name);
+
 	this->amount = amount;
 }
 
@@ -231,35 +256,94 @@ void royal_diamond::display_info()
 
 //-------------------------------------------------------------------
 
+vector<string> toolObstacle::toolTypes;
+vector<string> toolObstacle::obstacleTypes;
+
+toolObstacle::toolObstacle()
+{
+}
+
+toolObstacle::toolObstacle(char disp) : grovnik(disp)
+{
+}
+
+
+//returns index of the specified index of toFind in toolTypes, or -1 if not found.
+int toolObstacle::find_tool_by_typename(const char * toFind)
+{
+  return find_string(toolTypes,toFind);
+}
+
+//returns index of the specified index of toFind in obstacleTypes, or -1 if not found.
+int toolObstacle::find_obstacle_by_typename(const char * toFind)
+{
+
+  return find_string(obstacleTypes,toFind);
+}
+
+//appends toAdd to the toolTypes vector if it isn't already present
+//returns the index where toAdd was found or placed in toolTypes
+int toolObstacle::add_tool_typename(const string toAdd)
+{
+  int loc = find_string(toolTypes,toAdd.c_str());
+  if(-1 == loc)
+  {
+    toolTypes.push_back(toAdd);
+    return toolTypes.size()-1;
+  }
+  else
+    return loc;
+}
+
+//appends toAdd to the obstacleTypes vector if it isn't already present
+//returns the index where toAdd was found or placed in obstacleTypes 
+int toolObstacle::add_obstacle_typename(const string toAdd)
+{
+  int loc = find_string(obstacleTypes,toAdd.c_str());
+  if(-1 == loc)
+  {
+    obstacleTypes.push_back(toAdd);
+    return obstacleTypes.size()-1;
+  }
+  else
+    return loc;
+}
+
+int toolObstacle::find_string(const vector<string> & vec, const char * toFind)
+{
+  for(int i = 0; i < (int) vec.size(); ++i)
+  {
+    if(vec[i].compare(toFind) == 0)
+      return i;
+  }
+  return -1;
+}
+
+//-------------------------------------------------------------------
+
 //default constructor
-obstacle::obstacle() : grovnik('!'), name(NULL), name_b(NULL), b_energy(0)
+obstacle::obstacle() : toolObstacle('!'), description(NULL), kind(0), b_energy(0)
 {
 
 }
 
 //constructor with args
-obstacle::obstacle(char * name, char * name_b, int b_energy) : grovnik('!')
+obstacle::obstacle(char * description, int kind, int b_energy) : toolObstacle('!')
 {
-	this->name = new char[strlen(name)+1];
-	strcpy(this->name,name);
+	this->description = new char[strlen(description)+1];
+	strcpy(this->description,description);
 	
-	this->name_b = new char[strlen(name_b)+1];
-	strcpy(this->name_b,name_b);
-	
+	this->kind = kind;
+
 	this->b_energy = b_energy;
 }
 
 //destructor
 obstacle::~obstacle()
 {
-	if(name){
-		delete [] name;
-		name = NULL;
-	}
-
-	if(name_b){
-		delete [] name_b;
-		name_b = NULL;
+	if(description){
+		delete [] description;
+		description = NULL;
 	}
 }
 
@@ -271,11 +355,15 @@ void obstacle::display_info()
 	clearLines(row);
 
 	displayStat(row, "Grovnik Info: ");
-	displayStat(row, "Obstacle: ");
-	displayStat(row, name, 4); //offset of 7
+  displayStat(row, "Obstacle Kind: ");
+  --row;
+	displayStat(row, get_kind_text(), 16);
+
+	displayStat(row, "Description: ");
+	displayStat(row, description, 4); //offset of 7
 
 	displayStat(row, "Break w/ ");
-	displayStat(row, name_b, 4);
+	//displayStat(row, name_b, 4); //TODO - list tools in our inventory that can break this.
 
 	displayStat(row, "Energy: ");
 	displayStat(row, itos(b_energy, energyStr), 4);	
@@ -284,14 +372,9 @@ void obstacle::display_info()
 	
 }
 
-char * obstacle::get_name()
+const char * obstacle::get_description()
 {
-	return name;
-}
-
-char * obstacle::get_name_b()
-{
-	return name_b;
+	return description;
 }
 
 int obstacle::get_b_energy()
@@ -299,41 +382,49 @@ int obstacle::get_b_energy()
 	return (-b_energy);
 }
 
+const char * obstacle::get_kind_text()
+{
+  return obstacleTypes[kind].c_str();
+}
+
+int obstacle::get_kind_int()
+{
+  return kind;
+}
+
 //virtual helper to allow istream >> obstacleObject
 void obstacle::read(istream & source)
 {
   string temp;
-  source >> temp;
-  name_b = new char[temp.length() + 1];
-  strcpy(name_b,temp.c_str());
+  source >> temp; //Holds obstacle kind
+  kind = add_obstacle_typename(temp.c_str());
   source >> b_energy;
 
   //strip leading whitespace before using getline()
   source >> ws;
 
-  getline(source, temp);
+  getline(source, temp); //Holds the obstacle's description
 
   //Strip any trailing '\r' characters from input.
   if(temp[temp.length() -1] == '\r')
     temp.erase(temp.length() -1);
 
-  name = new char[temp.length() + 1];
-  strcpy(name,temp.c_str());
+  description= new char[temp.length() + 1];
+  strcpy(description,temp.c_str());
 }
 
 //-------------------------------------------------------------------
 
-tool::tool() : grovnik('T'), name(NULL), description(NULL), cost(0), divisor(1)
+tool::tool() : toolObstacle('T'), description(NULL), kind(0), cost(0), divisor(1)
 {}
 
 //constructor with args
-tool::tool(char * name, char * description, int cost, int divisor) : grovnik('T')
+tool::tool(char * description, int kind, int cost, int divisor) : toolObstacle('T')
 {
-	this->name = new char[strlen(name)+1];
-	strcpy(this->name,name);
-	
 	this->description = new char[strlen(description)+1];
 	strcpy(this->description,description);
+
+  this->kind = kind;
 
 	this->cost = cost;
 
@@ -341,22 +432,23 @@ tool::tool(char * name, char * description, int cost, int divisor) : grovnik('T'
 }
 
 tool::~tool(){
-	if(name != NULL){
-		delete [] name;	
-		name = NULL;
-	}
-
 	if(description != NULL){
-		 delete [] description;	
-		name = NULL;
+		delete [] description;	
+		description = NULL;
 	}
+  delete [] targets;
+
 }
 		
 tool::tool(tool & to_copy){
-	name = new char[strlen(to_copy.name)+1];
-	strcpy(name,to_copy.name);
 	description = new char[strlen(to_copy.description)+1];
 	strcpy(description,to_copy.description);
+  target_count = to_copy.target_count;
+  targets = new int[target_count];
+  for(int i = 0; i < target_count; ++i)
+    targets[i] = to_copy.targets[i];
+
+  kind= to_copy.kind;
 	cost = to_copy.cost;
 	divisor = to_copy.divisor;
 }
@@ -370,12 +462,17 @@ void tool::display_info()
 	clearLines(row);
 
 	displayStat(row, "Cursor Grovnik Info: ");
-	displayStat(row, "Tool: ");
+	displayStat(row, "Tool Kind: ");
 	--row;
-	displayStat(row, name, 7); //offset of 7
+	displayStat(row, get_kind_text(), 12);
 
 	displayStat(row, "Description: ");
 	displayStat(row, description, 4);
+
+  displayStat(row, "Breaks: ");
+  for(int i = 0; i < target_count; ++i)
+    displayStat(row, obstacleTypes[targets[i]].c_str(),4);
+
 
 	displayStat(row, "Cost: ");
 	--row;
@@ -390,16 +487,16 @@ void tool::display_info()
 }
 
 void tool::display_name(int y){	//displays tool name in the menu 
-	if(name == NULL) return;
-	mvwprintw(stdscr, y, COLS*0.75+3, "%s", name);
+	if(description == NULL) return;
+	mvwprintw(stdscr, y, COLS*0.75+3, "%s", description);
 	refresh();
 }
 
 bool tool::check_equal(const char * item)
 {
 	if(item == NULL) return false;
-	if(this->name == NULL) return false;	
-	if(strcmp(this->name, item) == 0) return true;
+	if(this->description== NULL) return false;	
+	if(strcmp(this->description, item) == 0) return true;
 	else return false;
 }
 
@@ -413,19 +510,45 @@ int tool::get_divisor() 		//returns divisor
 	return divisor;
 }
 
+const char * tool::get_description()
+{
+    return description;
+}
+
+bool tool::check_if_targets(const int possible_target)
+{
+  bool found = false;
+  for(int i = 0; !found && i < target_count; ++i)
+    found = (possible_target == targets[i]);
+
+  return found;
+}
+
+const char * tool::get_kind_text()
+{
+    return toolTypes[kind].c_str();
+}
+
 //virtual helper to allow istream >>toolObject 
 void tool::read(istream & source)
 {
   string temp;
-  source >> temp;
-  name = new char[temp.length() + 1];
-  strcpy(name,temp.c_str());
+  source >> temp; //holds tool kind
+  kind = add_tool_typename(temp);
+  source >> target_count; //TODO REALLY NEED INPUT VALIDATION IN ALL OF THESE read FUNCTIONS
+  targets = new int[target_count];
+  for(int i = 0; i < target_count; ++i)
+  {
+    source >> temp;
+    targets[i] = add_obstacle_typename(temp);
+  }
+
   source >> divisor >> cost;
 
   //strip leading whitespace before using getline()
   source >> ws;
 
-  getline(source, temp);
+  getline(source, temp); //holds tool description
 
   //Strip any trailing '\r' characters from input.
   if(temp[temp.length() -1] == '\r')

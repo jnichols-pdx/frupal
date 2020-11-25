@@ -24,8 +24,9 @@ Frupal::Frupal(WINDOW * win, int y, int x)
     {
       terrainMap[i][j] = '.';
       visitMap[i][j] = false;
+      itemMap[i][j] = NULL;
     }	    
-  
+
   loadFinished = true;
 }
 
@@ -41,6 +42,12 @@ Frupal::Frupal(WINDOW * win, char * mapFileName): xHero(5), yHero(5)//remove
   multy = multx = 0;
 
 	wbkgd(win, COLOR_PAIR(6));
+
+  for(int i = 0; i < 128; ++i)
+    for(int j = 0; j < 128; ++j)
+    {
+      itemMap[i][j] = NULL;
+    }
 
   loadFinished = loadMap(mapFileName);
   if(loadFinished)
@@ -112,7 +119,8 @@ bool Frupal::parseLine(string line, ifstream & mapFile, bool & terrain, bool & s
 
   if(elemName.compare("terrain:") == 0) {
     lineStream >> xMax >> yMax;
-    if(xMax < 1 || xMax > 128 || yMax < 1 || yMax > 128)
+    //reject map if map size too large or small
+    if(xMax < 2 || xMax > 128 || yMax < 2 || yMax > 128)
       return false;
 
     //Adjusted for static map size
@@ -128,7 +136,8 @@ bool Frupal::parseLine(string line, ifstream & mapFile, bool & terrain, bool & s
   }
   else if(elemName.compare("start:") == 0) {
     lineStream >> xHero >> yHero;
-    if(xHero < 0 || xHero >= xMax || yHero < 0 || yHero >= yMax) 
+    //reject map if hero starts out of bounds
+    if(xHero < 0 || xHero >= xMax || yHero < 0 || yHero >= yMax)
       return false;
     yCur = yHero;
     xCur = xHero;
@@ -148,10 +157,10 @@ bool Frupal::parseLine(string line, ifstream & mapFile, bool & terrain, bool & s
     newItem = new clue();
   }
   else if(elemName.compare("ship:") == 0) {
-    //TODO: implement
+    newItem = new ship();
   }
   else if(elemName.compare("binoculars:") == 0) {
-    //TODO: implement
+    newItem = new binocular();
   }
   else if(elemName.compare("obstacle:") == 0) {
     newItem = new obstacle();
@@ -159,13 +168,18 @@ bool Frupal::parseLine(string line, ifstream & mapFile, bool & terrain, bool & s
   else if(elemName.compare("tool:") == 0) {
     newItem = new tool();
   }
+  else {
+    return false; //reject map file on unexpected input
+  }
 
 
   if(newItem)
   {
     lineStream >> x >> y;
-    if(x <0 || x >= xMax || y < 0 || y >= yMax)
+    if(x <0 || x >= xMax || y < 0 || y >= yMax) //reject if grovnik out of bounds
       return false;
+    if(itemMap[y][x] != NULL)
+      return false; //reject map file if multiple grovniks at the same location
     lineStream >> *newItem;
     itemMap[y][x] = newItem;
   }
