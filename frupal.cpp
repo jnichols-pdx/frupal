@@ -310,7 +310,7 @@ bool Frupal::validMove(int y, int x){
 		obstacle * obstacleptr = dynamic_cast<obstacle*>(itemMap[y][x]);
 		if(obstacleptr){
 			tool * copy = NULL;
-			if(!mainGuy.selectTool(copy)){	//no tool selected
+			if(!mainGuy.selectTool(copy, obstacleptr->get_kind_int())){	//no tool selected
 				if(!mainGuy.modEner(obstacleptr->get_b_energy())) loseGame();
 				else{
 					 delete itemMap[y][x];
@@ -318,7 +318,7 @@ bool Frupal::validMove(int y, int x){
 				}
 			}
 			else{						//tool selected
-				if(!mainGuy.modEner(obstacleptr->get_b_energy()/copy->get_divisor())) loseGame();
+				if(!mainGuy.modEner(obstacleptr->get_b_energy()/ copy->get_divisor())) loseGame();
 				else{
 					 delete itemMap[y][x];
 					 itemMap[y][x] = NULL;
@@ -330,7 +330,6 @@ bool Frupal::validMove(int y, int x){
 			}
 			return true;
 		}
-
 	}
 
 	return true;

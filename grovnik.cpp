@@ -1,4 +1,4 @@
-//grovnik class functions
+//obstacleptr->/grovnik class functions
 
 #include "grovnik.h"
 

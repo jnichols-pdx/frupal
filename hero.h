@@ -14,7 +14,7 @@ class Hero
 
 		bool checkInventory(const char * item);	//check if the hero has this in their inventory, returns false when its not in it
 		bool addTool(tool * item);  //returns false if inventory is full, unless a ship is being added it will add the ship
-		bool selectTool(tool * & item);	//selects a tool and copies it into the item argument, returns false if inventory is empty
+		bool selectTool(tool * & item, int obstacleType);	//selects a tool and copies it into the item argument, returns false if inventory is empty
 						//or if the hero selects the ship. The hero can not remove the ship from their inventory
 
   private:

@@ -126,24 +126,30 @@ bool Hero::addTool(tool * item){  //returns false if inventory is full, unless a
 	return false;	//inventory was full
 }
 		
-bool Hero::selectTool(tool * & item){	//selects a tool and copies it into the item argument, returns false if inventory is empty
+bool Hero::selectTool(tool * & item, int obstacleType){	//selects a tool and copies it into the item argument, returns false if inventory is empty
 	if(item != NULL){
 		delete item;
 		item = NULL;	
 	}
 	if(items == 0) return false;  //empty inventory
-
+			
+	int counter = 0;
 	keypad(stdscr, true);
-	
 	int y = 10;	//where the inventory starts in the menu
 	int arrPos = 0; //array position
 	int userInput = 0;
+	
+						//lines 143-150 can be a seperate function
 	mvwprintw(stdscr, y+items+1, COLS*0.75+3, "Select tool by pressing RETURN");	//not sure why this doesn't work
 	mvwprintw(stdscr, y+items+2, COLS*0.75+3, "The tool 'ship' is unselectable");
 
 	for(int i=0; i<items;++i){//display everything in inventory
 		inventory[i]->display_name(i+y);		
+		if(inventory[i]->check_if_targets(obstacleType == true)) ++counter;	//check if there is no items in our inventory that can break the obstacle
 	}
+	if(counter == 0) return false;	//no items, return
+
+
 	refresh();
 	do{	
 		mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">");	//highlight new position
@@ -155,13 +161,11 @@ bool Hero::selectTool(tool * & item){	//selects a tool and copies it into the it
 					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, " ");	//clear current one	//the > display and moving does not work
 					arrPos = items -1; //go to last element
 					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">");	//highlight new position
-					refresh();
 				}
 				else{
 					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, " ");
 					--arrPos;
 					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">"); 
-					refresh();
 				}
 				break;
 	
@@ -170,30 +174,25 @@ bool Hero::selectTool(tool * & item){	//selects a tool and copies it into the it
 					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, " ");	//clear current one
 					arrPos = 0; //go to first element
 					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">");	//highlight new position
-					refresh();
 				}
 				else{
 					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, " ");
 					++arrPos;
 					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">"); 
-					refresh();
 				}
 				break;
 			default: break;	
 		}
 		refresh();
-	}while(userInput != char(10));
+	}while((inventory[arrPos]->check_if_targets(obstacleType) == false) && userInput != char(10));     //continue if to select until user makes valid decision
 
-	if(inventory[arrPos]->check_equal("ship") == true) return false; //can't remove the ship
-
-	for(int i = 0; i< INVSIZE+2;++i){		//clear inventory in menu				//this works
-		mvwprintw(stdscr, y+i, COLS*0.75+2, "                                         ");
-	}
+	
+	//clear inventory
+	for(int i = 0; i< INVSIZE+2;++i){ mvwprintw(stdscr, y+i, COLS*0.75+2, "                                         ");}
 	refresh();
 
 	item = new tool(*inventory[arrPos]);	//copy tool item with copy constructor
 	delete inventory[arrPos];		//deallocate memory
-	
 	for(int i = arrPos; i <items; ++i){	//shift everything up
 		if(i == items -1){		//if at last element
 			inventory[i] = NULL;
