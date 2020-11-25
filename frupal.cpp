@@ -307,6 +307,20 @@ bool Frupal::validMove(int y, int x){
 				return false;
 			}
 		}
+	
+		tool * toolptr = dynamic_cast<tool*>(itemMap[y][x]);
+		if(toolptr){
+			if(mainGuy.purchaseItem(toolptr) == true){
+				delete itemMap[y][x];
+				itemMap[y][x] = NULL;	
+				toolptr = NULL;
+				return true;
+			}	
+			else{
+				toolptr = NULL;
+				return false;
+			}
+		}
 
 		clue * clueptr = dynamic_cast<clue*>(itemMap[y][x]);
 		if(clueptr){

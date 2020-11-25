@@ -219,14 +219,36 @@ bool Hero::purchaseItem(grovnik * item){ //asks the user if they want to buy an 
 		if(userInput == 'y' || userInput == 'Y'){
 			whiffles = whiffles - foodPtr->get_cost();
 			energy = energy + foodPtr->get_energy();
+			foodPtr = NULL;
 			return true;
 		}
-		else return false;
+		foodPtr = NULL;
+		return false;
 	}
 
 	tool * toolPtr = dynamic_cast<tool*>(item);
 	if(toolPtr){	//its a tool, add to inventory
-	
+		if(items == INVSIZE)	return false;		//full inventory
+		mvwprintw(stdscr, 10, COLS*0.75+2, "Would you like to buy %s", toolPtr->get_description());
+		mvwprintw(stdscr, 11, COLS*0.75+2, "For %d whiffles? (Y/N)", toolPtr->get_cost());
+		refresh();
+		int userInput = 0;
+		userInput = getch();
+		mvwprintw(stdscr, 10, COLS*0.75+2, "                                             ");
+		mvwprintw(stdscr, 11, COLS*0.75+2, "                      ");
+		refresh();
+		if(userInput == 'y' || userInput == 'Y'){
+			whiffles = whiffles - toolPtr->get_cost();
+			if(addTool(toolPtr) == false){	//if something went wrong while adding to inventory
+				toolPtr = NULL;	
+				return false;	
+			}
+			toolPtr = NULL;
+			return true;
+		}	
+		toolPtr = NULL;
+		return false;
+		
 	}
 
 	return false;
