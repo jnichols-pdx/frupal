@@ -52,7 +52,7 @@ void grovnik::displayStat(int & row, const char * text, int offset){
 	while(row < lastLine){
 		int index = (menu_width - offset) * (row - lastLine + lines);
 		strncpy(data, text + index, chunkWidth);
-		data[chunkWidth + 1] = '\0';
+		data[chunkWidth] = '\0';
 		mvprintw(row, x - menu_width + offset, data);
 		++row;
 	}
@@ -174,6 +174,7 @@ treasure_chest::treasure_chest(char * name, int amount) : grovnik('$')
 {
 	this->name = new char[strlen(name)+1];
 	strcpy(this->name,name);
+
 	this->amount = amount;
 }
 
@@ -287,8 +288,8 @@ int toolObstacle::add_tool_typename(const string toAdd)
   int loc = find_string(toolTypes,toAdd.c_str());
   if(-1 == loc)
   {
-    obstacleTypes.push_back(toAdd);//this feels off
-    return obstacleTypes.size()-1;
+    toolTypes.push_back(toAdd);
+    return toolTypes.size()-1;
   }
   else
     return 0;
@@ -301,7 +302,7 @@ int toolObstacle::add_obstacle_typename(const string toAdd)
   int loc = find_string(obstacleTypes,toAdd.c_str());
   if(-1 == loc)
   {
-    obstacleTypes.push_back(toAdd);//this feels off
+    obstacleTypes.push_back(toAdd);
     return obstacleTypes.size()-1;
   }
   else
@@ -311,7 +312,7 @@ int toolObstacle::add_obstacle_typename(const string toAdd)
 int toolObstacle::find_string(const vector<string> & vec, const char * toFind)
 {
 
-return 0;
+return -1;
 }
 
 //-------------------------------------------------------------------
@@ -350,11 +351,15 @@ void obstacle::display_info()
 	clearLines(row);
 
 	displayStat(row, "Grovnik Info: ");
-	displayStat(row, "Obstacle: ");
-	displayStat(row, name, 4); //offset of 7
+  displayStat(row, "Obstacle Kind: ");
+  --row;
+	displayStat(row, get_kind_text(), 16);
+
+	displayStat(row, "Description: ");
+	displayStat(row, description, 4); //offset of 7
 
 	displayStat(row, "Break w/ ");
-	displayStat(row, name_b, 4);
+	//displayStat(row, name_b, 4); //TODO - list tools in our inventory that can break this.
 
 	displayStat(row, "Energy: ");
 	displayStat(row, itos(b_energy, energyStr), 4);	
@@ -390,7 +395,6 @@ void obstacle::read(istream & source)
   source >> temp; //Holds obstacle kind
   kind = add_obstacle_typename(temp.c_str());
   source >> b_energy;
-  getline(source, temp); 
 
   //strip leading whitespace before using getline()
   source >> ws;
@@ -428,6 +432,7 @@ tool::~tool(){
 		delete [] description;	
 		description = NULL;
 	}
+  delete [] targets;
 
 }
 		
@@ -448,12 +453,17 @@ void tool::display_info()
 	clearLines(row);
 
 	displayStat(row, "Cursor Grovnik Info: ");
-	displayStat(row, "Tool: ");
+	displayStat(row, "Tool Kind: ");
 	--row;
-	displayStat(row, name, 7); //offset of 7
+	displayStat(row, get_kind_text(), 12);
 
 	displayStat(row, "Description: ");
 	displayStat(row, description, 4);
+
+  displayStat(row, "Breaks: ");
+  for(int i = 0; i < target_count; ++i)
+    displayStat(row, obstacleTypes[targets[i]].c_str(),4);
+
 
 	displayStat(row, "Cost: ");
 	--row;
