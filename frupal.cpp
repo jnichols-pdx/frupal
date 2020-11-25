@@ -24,8 +24,9 @@ Frupal::Frupal(WINDOW * win, int y, int x)
     {
       terrainMap[i][j] = '.';
       visitMap[i][j] = false;
+      itemMap[i][j] = NULL;
     }	    
-  
+
   loadFinished = true;
 }
 
@@ -41,6 +42,12 @@ Frupal::Frupal(WINDOW * win, char * mapFileName): xHero(5), yHero(5)//remove
   multy = multx = 0;
 
 	wbkgd(win, COLOR_PAIR(6));
+
+  for(int i = 0; i < 128; ++i)
+    for(int j = 0; j < 128; ++j)
+    {
+      itemMap[i][j] = NULL;
+    }
 
   loadFinished = loadMap(mapFileName);
   if(loadFinished)
