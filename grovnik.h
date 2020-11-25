@@ -13,6 +13,7 @@
 #include <string> 
 #include <cstring>
 #include <sstream>
+#include <vector>
 
 //what is this for? TODO
 #include <unistd.h>
@@ -95,42 +96,62 @@ class royal_diamond : public grovnik
 	private:	
 };
 
-class obstacle : public grovnik
+class toolObstacle : public grovnik
+{
+  public:
+    toolObstacle();
+    toolObstacle(char disp);
+  protected:
+    static std::vector<std::string> toolTypes; 
+    static std::vector<std::string> obstacleTypes;
+    int find_tool_by_typename(const char * toFind);
+    int find_obstacle_by_typename(const char * toFind);
+    int add_tool_typename(const std::string toAdd);
+    int add_obstacle_typename(const std::string toAdd);
+    int find_string(const std::vector<std::string> & vec, const char * toFind);
+
+};
+
+class obstacle : public toolObstacle 
 {
 	public:
 		obstacle();
 		obstacle(char * name, int obstacle_type, int b_energy);
     ~obstacle();
 		void display_info();
-		char * get_name();
+		const char * get_description();
+    const char * get_kind_text();
 		int get_b_energy();
-    int get_type();
+    int get_kind_int();
 		
 	protected:
-		char * name; //name of obstacle
-    int obstacle_type; //Numeric ID for what kind of obstacle this is
+		char * description; //name of obstacle
+    int kind; //Numeric ID for what kind of obstacle this is
 		int b_energy; //amount of energy that is required to break it
     virtual void read(std::istream & source);
 	
 	private:	
 };
 
-class tool : public grovnik
+class tool : public toolObstacle 
 {
 	public:
 		tool();
-		tool(char * name, int target_type, int cost, int divisor);
+		tool(char * name, int kind, int cost, int divisor);
 		tool(tool & to_copy);	//copy constructor
 		~tool();
 		void display_info();			//displays tool description in the menu
 		void display_name(int y);	//displays tool name in the menu at specific y coordinate
-		char * get_name();
+	  const char * get_description();
+    const char * get_kind_text();
 		int get_cost();
-    int get_target();
+    bool check_if_targets(const int possible_target);
 		bool check_equal(const char * item);
 	protected:
-		char * name;
-    int target_type; //Numeric ID for what kind of obstacle this tool helps remove
+		char * description;
+    int * targets; //Numeric IDs for what kind of obstacle this tool helps remove,
+    int target_count;
+    int kind; //Numeric index into 
 		int cost;
     int divisor;
     virtual void read(std::istream & source);

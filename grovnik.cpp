@@ -184,19 +184,80 @@ void royal_diamond::display_info()
 
 //-------------------------------------------------------------------
 
+vector<string> toolObstacle::toolTypes;
+vector<string> toolObstacle::obstacleTypes;
+
+toolObstacle::toolObstacle()
+{
+}
+
+toolObstacle::toolObstacle(char disp) : grovnik(disp)
+{
+}
+
+
+//returns index of the specified index of toFind in toolTypes, or -1 if not found.
+int toolObstacle::find_tool_by_typename(const char * toFind)
+{
+  return find_string(toolTypes,toFind);
+}
+
+//returns index of the specified index of toFind in obstacleTypes, or -1 if not found.
+int toolObstacle::find_obstacle_by_typename(const char * toFind)
+{
+
+  return find_string(obstacleTypes,toFind);
+}
+
+//appends toAdd to the toolTypes vector if it isn't already present
+//returns the index where toAdd was found or placed in toolTypes
+int toolObstacle::add_tool_typename(const string toAdd)
+{
+  int loc = find_string(toolTypes,toAdd.c_str());
+  if(-1 == loc)
+  {
+    obstacleTypes.push_back(toAdd);//this feels off
+    return obstacleTypes.size()-1;
+  }
+  else
+    return 0;
+}
+
+//appends toAdd to the obstacleTypes vector if it isn't already present
+//returns the index where toAdd was found or placed in obstacleTypes 
+int toolObstacle::add_obstacle_typename(const string toAdd)
+{
+  int loc = find_string(obstacleTypes,toAdd.c_str());
+  if(-1 == loc)
+  {
+    obstacleTypes.push_back(toAdd);//this feels off
+    return obstacleTypes.size()-1;
+  }
+  else
+    return 0;
+}
+
+int toolObstacle::find_string(const vector<string> & vec, const char * toFind)
+{
+
+return 0;
+}
+
+//-------------------------------------------------------------------
+
 //default constructor
-obstacle::obstacle() : grovnik('!'), name(NULL), obstacle_type(0), b_energy(0)
+obstacle::obstacle() : toolObstacle('!'), description(NULL), kind(0), b_energy(0)
 {
 
 }
 
 //constructor with args
-obstacle::obstacle(char * name, int obstacle_type, int b_energy) : grovnik('!')
+obstacle::obstacle(char * description, int kind, int b_energy) : toolObstacle('!')
 {
-	this->name = new char[strlen(name)+1];
-	strcpy(this->name,name);
+	this->description = new char[strlen(description)+1];
+	strcpy(this->description,description);
 	
-	this->obstacle_type = obstacle_type;
+	this->kind = kind;
 
 	this->b_energy = b_energy;
 }
@@ -204,8 +265,8 @@ obstacle::obstacle(char * name, int obstacle_type, int b_energy) : grovnik('!')
 //destructor
 obstacle::~obstacle()
 {
-	delete [] name;
-	name = NULL;
+	delete [] description;
+	description = NULL;
 }
 
 void obstacle::display_info()
@@ -213,14 +274,9 @@ void obstacle::display_info()
 	
 }
 
-char * obstacle::get_name()
+const char * obstacle::get_description()
 {
-	return name;
-}
-
-int obstacle::get_type()
-{
-  return obstacle_type;
+	return description;
 }
 
 int obstacle::get_b_energy()
@@ -228,28 +284,40 @@ int obstacle::get_b_energy()
 	return b_energy;
 }
 
+const char * obstacle::get_kind_text()
+{
+  return obstacleTypes[kind].c_str();
+}
+
+int obstacle::get_kind_int()
+{
+  return kind;
+}
+
 //virtual helper to allow istream >> obstacleObject
 void obstacle::read(istream & source)
 {
   string temp;
-  source >>obstacle_type >> b_energy;
-  getline(source, temp);
-  name = new char[temp.length() + 1];
-  strcpy(name,temp.c_str());
+  source >> temp; //Holds obstacle kind
+  kind = add_obstacle_typename(temp.c_str());
+  source >> b_energy;
+  getline(source, temp); //Holds the obstacle's description
+  description= new char[temp.length() + 1];
+  strcpy(description,temp.c_str());
 }
 
 //-------------------------------------------------------------------
 
-tool::tool() : grovnik('T'), name(NULL), target_type(0), cost(0), divisor(1)
+tool::tool() : toolObstacle('T'), description(NULL), kind(0), cost(0), divisor(1)
 {}
 
 //constructor with args
-tool::tool(char * name, int target_type, int cost, int divisor) : grovnik('T')
+tool::tool(char * description, int kind, int cost, int divisor) : toolObstacle('T')
 {
-	this->name = new char[strlen(name)+1];
-	strcpy(this->name,name);
-	
-  this->target_type = target_type;
+	this->description = new char[strlen(description)+1];
+	strcpy(this->description,description);
+
+  this->kind = kind;
 
 	this->cost = cost;
 
@@ -257,17 +325,17 @@ tool::tool(char * name, int target_type, int cost, int divisor) : grovnik('T')
 }
 
 tool::~tool(){
-	if(name != NULL){
-		delete [] name;	
-		name = NULL;
+	if(description != NULL){
+		delete [] description;	
+		description = NULL;
 	}
 
 }
 		
 tool::tool(tool & to_copy){
-	name = new char[strlen(to_copy.name)+1];
-	strcpy(name,to_copy.name);
-  target_type = to_copy.target_type;
+	description = new char[strlen(to_copy.description)+1];
+	strcpy(description,to_copy.description);
+  kind= to_copy.kind;
 	cost = to_copy.cost;
 	divisor = to_copy.divisor;
 }
@@ -278,16 +346,16 @@ void tool::display_info()
 }
 
 void tool::display_name(int y){	//displays tool name in the menu 
-	if(name == NULL) return;
-	mvwprintw(stdscr, y, COLS*0.75+3, "%s", name);
+	if(description == NULL) return;
+	mvwprintw(stdscr, y, COLS*0.75+3, "%s", description);
 	refresh();
 }
 
 bool tool::check_equal(const char * item)
 {
 	if(item == NULL) return false;
-	if(this->name == NULL) return false;	
-	if(strcmp(this->name, item) == 0) return true;
+	if(this->description== NULL) return false;	
+	if(strcmp(this->description, item) == 0) return true;
 	else return false;
 }
 
@@ -296,19 +364,43 @@ int tool::get_cost()
 	return cost;
 }
 
-int tool::get_target()
+const char * tool::get_description()
 {
-	return target_type;
+    return description;
+}
+
+bool tool::check_if_targets(const int possible_target)
+{
+  bool found = false;
+  for(int i = 0; !found && i < target_count; ++i)
+    found = (possible_target == targets[i]);
+
+  return found;
+}
+
+const char * tool::get_kind_text()
+{
+    return toolTypes[kind].c_str();
 }
 
 //virtual helper to allow istream >>toolObject 
 void tool::read(istream & source)
 {
   string temp;
-  source >> target_type >> divisor >> cost;
-  getline(source, temp);
-  name = new char[temp.length() + 1];
-  strcpy(name ,temp.c_str());
+  source >> temp; //holds tool kind
+  kind = add_tool_typename(temp);
+  source >> target_count; //TODO REALLY NEED INPUT VALIDATION IN ALL OF THESE read FUNCTIONS
+  targets = new int[target_count];
+  for(int i = 0; i < target_count; ++i)
+  {
+    source >> temp;
+    targets[i] = add_obstacle_typename(temp);
+  }
+
+  source >> divisor >> cost;
+  getline(source, temp); //holds tool description
+  description = new char[temp.length() + 1];
+  strcpy(description, temp.c_str());
 }
 
 //-------------------------------------------------------------------
