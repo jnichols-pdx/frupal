@@ -379,7 +379,7 @@ const char * obstacle::get_description()
 
 int obstacle::get_b_energy()
 {
-	return b_energy;
+	return (-b_energy);
 }
 
 const char * obstacle::get_kind_text()
@@ -443,6 +443,11 @@ tool::~tool(){
 tool::tool(tool & to_copy){
 	description = new char[strlen(to_copy.description)+1];
 	strcpy(description,to_copy.description);
+  target_count = to_copy.target_count;
+  targets = new int[target_count];
+  for(int i = 0; i < target_count; ++i)
+    targets[i] = to_copy.targets[i];
+
   kind= to_copy.kind;
 	cost = to_copy.cost;
 	divisor = to_copy.divisor;
@@ -498,6 +503,11 @@ bool tool::check_equal(const char * item)
 int tool::get_cost()
 {
 	return cost;
+}
+		
+int tool::get_divisor() 		//returns divisor
+{
+	return divisor;
 }
 
 const char * tool::get_description()

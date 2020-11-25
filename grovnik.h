@@ -149,6 +149,7 @@ class tool : public toolObstacle
     const char * get_kind_text();
 		int get_cost();
     bool check_if_targets(const int possible_target);
+		int get_divisor(); 		//returns divisor
 		bool check_equal(const char * item);
 	protected:
 		char * description;
