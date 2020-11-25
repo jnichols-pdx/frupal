@@ -322,6 +322,8 @@ bool Frupal::validMove(int y, int x){
 			return true;
 		}
 
+		//TODO this function is getting out of hand
+		//Make this into it's own function, function is almost 100 lines
 		obstacle * obstacleptr = dynamic_cast<obstacle*>(itemMap[y][x]);
 		if(obstacleptr){
 			tool * copy = NULL;
@@ -333,8 +335,9 @@ bool Frupal::validMove(int y, int x){
 				}
 			}
 			else{						//tool selected
-				if(!mainGuy.modEner(obstacleptr->get_b_energy()/ copy->get_divisor())) loseGame();
-				else{
+				if(!mainGuy.modEner(obstacleptr->get_b_energy() / copy->get_divisor())){
+					loseGame();
+				}else{
 					 delete itemMap[y][x];
 					 itemMap[y][x] = NULL;
 				}
