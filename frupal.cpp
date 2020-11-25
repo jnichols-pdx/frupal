@@ -295,8 +295,26 @@ bool Frupal::validMove(int y, int x){
 
 		obstacle * obstacleptr = dynamic_cast<obstacle*>(itemMap[y][x]);
 		if(obstacleptr){
-			//TODO select Tool, return false if none that work 
-			return false;
+			tool * copy = NULL;
+			if(!mainGuy.selectTool(copy)){	//no tool selected
+				if(!mainGuy.modEner(obstacleptr->get_b_energy())) loseGame();
+				else{
+					 delete itemMap[y][x];
+					 itemMap[y][x] = NULL;
+				}
+			}
+			else{						//tool selected
+				if(!mainGuy.modEner(obstacleptr->get_b_energy()/copy->get_divisor())) loseGame();
+				else{
+					 delete itemMap[y][x];
+					 itemMap[y][x] = NULL;
+				}
+			}
+			if(copy != NULL){	//deallocate the copy
+				delete copy;
+				copy = NULL;	
+			}
+			return true;
 		}
 
 	}

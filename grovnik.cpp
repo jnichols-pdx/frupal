@@ -296,7 +296,7 @@ char * obstacle::get_name_b()
 
 int obstacle::get_b_energy()
 {
-	return b_energy;
+	return (-b_energy);
 }
 
 //virtual helper to allow istream >> obstacleObject
@@ -406,6 +406,11 @@ bool tool::check_equal(const char * item)
 int tool::get_cost()
 {
 	return cost;
+}
+		
+int tool::get_divisor() 		//returns divisor
+{
+	return divisor;
 }
 
 //virtual helper to allow istream >>toolObject 
