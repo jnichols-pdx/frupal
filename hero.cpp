@@ -30,18 +30,18 @@ Hero::~Hero(){
 
 bool Hero::modEner(int nRG)
 {
-  energy += nRG;
 
-	if(energy <= 0){
+	if(energy + nRG <= 0){
 		return false;
 	}
 
+  energy += nRG;
 	return true;
 }
 
 bool Hero::modWhif(int whif)
 {
-	if(whiffles += whif < 0){
+	if(whiffles + whif < 0){
 		return false;
 	}
 
@@ -126,20 +126,26 @@ bool Hero::addTool(tool * item){  //returns false if inventory is full, unless a
 	return false;	//inventory was full
 }
 		
-bool Hero::selectTool(tool * & item){	//selects a tool and copies it into the item argument, returns false if inventory is empty
+bool Hero::selectTool(tool * & item, int obstacleType){	//selects a tool and copies it into the item argument, returns false if inventory is empty
 	if(item != NULL){
 		delete item;
 		item = NULL;	
 	}
 	if(items == 0) return false;  //empty inventory
-
+			
+	int counter = 0;
 	keypad(stdscr, true);
-	
-	int y = 10;	//where the inventory starts in the menu
+	int y = 10;	//where the inventory starts in the menu      - change this variable to change y position of where inventory starts in the menu
 	int arrPos = 0; //array position
 	int userInput = 0;
+	for(int i=0; i<items; ++i){
+		if(inventory[i]->check_if_targets(obstacleType == true)) ++counter;	//check if there is no items in our inventory that can break the obstacle
+	}
+	if(counter == 0) return false;	//no items, return
+	
+						//lines 143-150 can be a seperate function
 	mvwprintw(stdscr, y+items+1, COLS*0.75+3, "Select tool by pressing RETURN");	//not sure why this doesn't work
-	mvwprintw(stdscr, y+items+2, COLS*0.75+3, "The tool 'ship' is unselectable");
+	mvwprintw(stdscr, y+items+2, COLS*0.75+3, "You need a tool that can break: ");  //TODO it would be cool to have this
 
 	for(int i=0; i<items;++i){//display everything in inventory
 		inventory[i]->display_name(i+y);		
@@ -155,13 +161,11 @@ bool Hero::selectTool(tool * & item){	//selects a tool and copies it into the it
 					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, " ");	//clear current one	//the > display and moving does not work
 					arrPos = items -1; //go to last element
 					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">");	//highlight new position
-					refresh();
 				}
 				else{
 					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, " ");
 					--arrPos;
 					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">"); 
-					refresh();
 				}
 				break;
 	
@@ -170,30 +174,25 @@ bool Hero::selectTool(tool * & item){	//selects a tool and copies it into the it
 					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, " ");	//clear current one
 					arrPos = 0; //go to first element
 					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">");	//highlight new position
-					refresh();
 				}
 				else{
 					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, " ");
 					++arrPos;
 					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">"); 
-					refresh();
 				}
 				break;
 			default: break;	
 		}
 		refresh();
-	}while(userInput != char(10));
+	}while((inventory[arrPos]->check_if_targets(obstacleType) == false) && userInput != char(10));     //continue to select until user makes valid decision
 
-	if(inventory[arrPos]->check_equal("ship") == true) return false; //can't remove the ship
-
-	for(int i = 0; i< INVSIZE+2;++i){		//clear inventory in menu				//this works
-		mvwprintw(stdscr, y+i, COLS*0.75+2, "                                         ");
-	}
+	
+	//clear inventory
+	for(int i = 0; i< INVSIZE+2;++i){ mvwprintw(stdscr, y+i, COLS*0.75+2, "                                         ");}
 	refresh();
 
 	item = new tool(*inventory[arrPos]);	//copy tool item with copy constructor
 	delete inventory[arrPos];		//deallocate memory
-	
 	for(int i = arrPos; i <items; ++i){	//shift everything up
 		if(i == items -1){		//if at last element
 			inventory[i] = NULL;
@@ -201,6 +200,57 @@ bool Hero::selectTool(tool * & item){	//selects a tool and copies it into the it
 			return true;
 		}
 		inventory[i] = inventory[i+1];
+	}
+
+	return false;
+}
+		
+bool Hero::purchaseItem(grovnik * item){ //asks the user if they want to buy an item, checks if its food or tools
+
+	int row = item->display_info() + 1;
+	item->displayStat(row, "Purchase? (y/n)", 4);
+
+	int userInput = 0;
+	userInput = getch();
+
+	//if hero purchases with 'y'
+	if(userInput == 'y' || userInput == 'Y'){
+		food * foodPtr = dynamic_cast<food*>(item);
+		if(foodPtr){	//its food, time to eat
+			
+			//modifies whiffles and checks if hero can afford
+			if(!this->modWhif(foodPtr->get_cost())){
+				item->displayStat(row, "Can't Afford It!");
+				foodPtr = NULL;
+				return false;
+			}
+
+			//adds energy
+			energy += foodPtr->get_energy();
+			foodPtr = NULL;
+			return true;
+		}
+
+		tool * toolPtr = dynamic_cast<tool*>(item);
+		if(toolPtr){	//its a tool, add to inventory
+			if(items == INVSIZE){ return false;}		//full inventory
+
+			//modifies whiffles and checks if hero can afford
+			if(!this->modWhif(toolPtr->get_cost())){
+				item->displayStat(row, "Can't Afford It!");
+				toolPtr = NULL;
+				return false;
+			}
+
+			//adds tool to inventory
+			if(addTool(toolPtr) == false){	//if something went wrong while adding to inventory
+				toolPtr = NULL;
+				return false;
+			}
+
+			toolPtr = NULL;	
+			return true;	
+		}
 	}
 
 	return false;

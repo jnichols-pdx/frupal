@@ -106,9 +106,9 @@ binocular::~binocular()
 	
 }
 
-void binocular::display_info()
+int binocular::display_info()
 {//TODO
-	
+	return 0;	
 }
 
 //returns the ship cost
@@ -145,9 +145,9 @@ ship::~ship()
 }
 
 //virtual function
-void ship::display_info()
+int ship::display_info()
 {
-	
+	return 0;	
 }
 
 //returns the ship cost
@@ -186,7 +186,7 @@ treasure_chest::~treasure_chest()
 
 }
 
-void treasure_chest::display_info()
+int treasure_chest::display_info()
 {
 	int row = 4;
 	clearLines(row);
@@ -197,7 +197,7 @@ void treasure_chest::display_info()
 	displayStat(row, name, 11); //offset of 7
 
 	refresh();
-	
+	return row;	
 }
 
 char * treasure_chest::get_name()
@@ -242,7 +242,7 @@ royal_diamond::~royal_diamond()
 	
 }
 
-void royal_diamond::display_info()
+int royal_diamond::display_info()
 {
 	int row = 4;
 	clearLines(row);
@@ -251,7 +251,7 @@ void royal_diamond::display_info()
 	displayStat(row, "Royal Diamond!");
 	displayStat(row, "Grab to win!");
 	refresh();
-	
+	return row;	
 }
 
 //-------------------------------------------------------------------
@@ -347,7 +347,7 @@ obstacle::~obstacle()
 	}
 }
 
-void obstacle::display_info()
+int obstacle::display_info()
 {
 	char energyStr[5] = {0};
 
@@ -369,7 +369,7 @@ void obstacle::display_info()
 	displayStat(row, itos(b_energy, energyStr), 4);	
 
 	refresh();
-	
+	return row;	
 }
 
 const char * obstacle::get_description()
@@ -453,7 +453,7 @@ tool::tool(tool & to_copy){
 	divisor = to_copy.divisor;
 }
 
-void tool::display_info()
+int tool::display_info()
 {
 	char costStr[5] = {0};
 	char divisorStr[3] = {0};
@@ -483,7 +483,7 @@ void tool::display_info()
 	displayStat(row, itos(divisor, divisorStr), 16);	
 
 	refresh();
-	
+	return row;
 }
 
 void tool::display_name(int y){	//displays tool name in the menu 
@@ -582,7 +582,7 @@ food::~food()
 	}
 }
 
-void food::display_info()
+int food::display_info()
 {
 	char costStr[5] = {0};
 	char energyStr[4] = {0};
@@ -605,6 +605,7 @@ void food::display_info()
 	displayStat(row, itos(energy, energyStr), 9);	
 
 	refresh();
+	return row;
 }
 
 char * food::get_name()
@@ -662,7 +663,7 @@ clue::~clue()
 	}
 }
 
-void clue::display_info()
+int clue::display_info()
 {	
 	int row = 4;
 	clearLines(row);
@@ -679,8 +680,8 @@ void clue::display_info()
 		displayStat(row, "???", 4);
 	}
 
-
 	refresh();
+	return row;
 }
 
 char * clue::get_clue()

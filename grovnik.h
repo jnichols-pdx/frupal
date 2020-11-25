@@ -31,9 +31,9 @@ class grovnik
 
 		//virtual functions
 		virtual ~grovnik();
-		virtual void display_info() = 0;   //displays information of the grovnik
+		virtual int display_info() = 0;   //displays information of the grovnik
     friend std::istream& operator>> (std::istream& source, grovnik& destination);
-		
+	
 	protected:
     virtual void read(std::istream & source);
 		char character;
@@ -47,7 +47,7 @@ class binocular : public grovnik
 		binocular();
 		binocular(int cost);
 		~binocular();
-		void display_info();
+		int display_info();
     int get_cost();
 	protected:
     virtual void read(std::istream & source);
@@ -62,7 +62,7 @@ class ship : public grovnik
 		ship();
 		ship(int cost);
 		~ship();
-		void display_info();
+		int display_info();
 		int get_cost();
 	protected:
     virtual void read(std::istream & source);
@@ -79,7 +79,7 @@ class treasure_chest : public grovnik
 		~treasure_chest();
 		int get_amount();
     char * get_name();
-		void display_info();
+		int display_info();
 	protected:
     char * name;
 		int amount;
@@ -93,7 +93,7 @@ class royal_diamond : public grovnik
 	public:
 		royal_diamond();
 		~royal_diamond();
-		void display_info();
+		int display_info();
 	protected:
 	
 	private:	
@@ -121,7 +121,7 @@ class obstacle : public toolObstacle
 		obstacle();
 		obstacle(char * name, int obstacle_type, int b_energy);
     ~obstacle();
-		void display_info();
+		int display_info();
 		const char * get_description();
     const char * get_kind_text();
 		int get_b_energy();
@@ -143,7 +143,7 @@ class tool : public toolObstacle
 		tool(char * name, int kind, int cost, int divisor);
 		tool(tool & to_copy);	//copy constructor
 		~tool();
-		void display_info();			//displays tool description in the menu
+		int display_info();			//displays tool description in the menu
 		void display_name(int y);	//displays tool name in the menu at specific y coordinate
 	  const char * get_description();
     const char * get_kind_text();
@@ -169,7 +169,7 @@ class food : public grovnik
 		food();
 		food(char * name, int cost, int energy);
 		~food();
-		void display_info();
+		int display_info();
 		char * get_name();
 		int get_cost();
 		int get_energy();
@@ -189,7 +189,7 @@ class clue : public grovnik
 		~clue();
 		clue(char * clue);
 		char * get_clue();
-		void display_info();
+		int display_info();
 		void discover();
 	protected:
 		bool discovered; 
