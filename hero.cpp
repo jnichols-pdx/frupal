@@ -135,21 +135,21 @@ bool Hero::selectTool(tool * & item, int obstacleType){	//selects a tool and cop
 			
 	int counter = 0;
 	keypad(stdscr, true);
-	int y = 10;	//where the inventory starts in the menu
+	int y = 10;	//where the inventory starts in the menu      - change this variable to change y position of where inventory starts in the menu
 	int arrPos = 0; //array position
 	int userInput = 0;
-	
-						//lines 143-150 can be a seperate function
-	mvwprintw(stdscr, y+items+1, COLS*0.75+3, "Select tool by pressing RETURN");	//not sure why this doesn't work
-	mvwprintw(stdscr, y+items+2, COLS*0.75+3, "The tool 'ship' is unselectable");
-
-	for(int i=0; i<items;++i){//display everything in inventory
-		inventory[i]->display_name(i+y);		
+	for(int i=0; i<items; ++i){
 		if(inventory[i]->check_if_targets(obstacleType == true)) ++counter;	//check if there is no items in our inventory that can break the obstacle
 	}
 	if(counter == 0) return false;	//no items, return
+	
+						//lines 143-150 can be a seperate function
+	mvwprintw(stdscr, y+items+1, COLS*0.75+3, "Select tool by pressing RETURN");	//not sure why this doesn't work
+	mvwprintw(stdscr, y+items+2, COLS*0.75+3, "You need a tool that can break: ");  //TODO it would be cool to have this
 
-
+	for(int i=0; i<items;++i){//display everything in inventory
+		inventory[i]->display_name(i+y);		
+	}
 	refresh();
 	do{	
 		mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">");	//highlight new position
@@ -184,7 +184,7 @@ bool Hero::selectTool(tool * & item, int obstacleType){	//selects a tool and cop
 			default: break;	
 		}
 		refresh();
-	}while((inventory[arrPos]->check_if_targets(obstacleType) == false) && userInput != char(10));     //continue if to select until user makes valid decision
+	}while((inventory[arrPos]->check_if_targets(obstacleType) == false) && userInput != char(10));     //continue to select until user makes valid decision
 
 	
 	//clear inventory
