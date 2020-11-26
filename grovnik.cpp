@@ -165,12 +165,12 @@ void ship::read(istream & source)
 //-------------------------------------------------------------------
 
 
-treasure_chest::treasure_chest() : grovnik('$'), name(NULL), amount(0)
+treasure_chest::treasure_chest() : grovnik('$'), name(NULL), amount(0), discovered(false)
 {
 
 }
 
-treasure_chest::treasure_chest(char * name, int amount) : grovnik('$')
+treasure_chest::treasure_chest(char * name, int amount) : grovnik('$'), discovered(false)
 {
 	this->name = new char[strlen(name)+1];
 	strcpy(this->name,name);
@@ -191,13 +191,22 @@ int treasure_chest::display_info()
 	int row = 4;
 	clearLines(row);
 
+	if(discovered){
 	displayStat(row, "Cursor Grovnik Info: ");
 	displayStat(row, "Treasure: ");
 	--row;
 	displayStat(row, name, 11); //offset of 7
-
+	displayStat(row, "Amount: ");
+	--row;
+	//TODO change static 500 value to the int amount
+	displayStat(row, "500", 9);
+	}else{	
+		displayStat(row, "???", 4);
+	}
+	
 	refresh();
-	return row;	
+	return row;
+	
 }
 
 char * treasure_chest::get_name()
@@ -208,6 +217,10 @@ char * treasure_chest::get_name()
 int treasure_chest::get_amount()
 {
 	return amount;
+}
+
+void treasure_chest::discover(){
+	discovered = true;
 }
 
 //virtual helper to allow istream  >> treasureChestObject

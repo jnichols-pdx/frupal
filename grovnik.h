@@ -78,12 +78,14 @@ class treasure_chest : public grovnik
 		treasure_chest(char * name, int amount);
 		~treasure_chest();
 		int get_amount();
-    char * get_name();
+		char * get_name();
 		int display_info();
+		void discover();
 	protected:
-    char * name;
+		char * name;
 		int amount;
-    virtual void read(std::istream & source);
+		virtual void read(std::istream & source);
+		bool discovered;
 	
 	private:	
 };
