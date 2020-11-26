@@ -45,13 +45,15 @@ class binocular : public grovnik
 {
 	public:
 		binocular();
-		binocular(int cost);
+		binocular(int cost, int range);
 		~binocular();
 		int display_info();
     int get_cost();
+    int get_range();
 	protected:
     virtual void read(std::istream & source);
 		int cost;
+    int range; // how far a hero with these binoculars may see.
 	
 	private:
 };
