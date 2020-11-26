@@ -163,6 +163,32 @@ bool Hero::selectTool(tool * & item, int obstacleType){	//selects a tool and cop
 		inventory[i]->display_name(i+y);		
 	}
 	refresh();
+	arrPos = select(obstacleType);
+
+	
+	//clear inventory
+	for(int i = 0; i< INVSIZE+2;++i){ mvwprintw(stdscr, y+i, COLS*0.75+2, "                                         ");}
+	refresh();
+
+	item = new tool(*inventory[arrPos]);	//copy tool item with copy constructor
+	delete inventory[arrPos];		//deallocate memory
+	for(int i = arrPos; i <items; ++i){	//shift everything up
+		if(i == items -1){		//if at last element
+			inventory[i] = NULL;
+			--items;
+			return true;
+		}
+		inventory[i] = inventory[i+1];
+	}
+
+	return false;
+}
+    
+int Hero::select(int obstacleType){
+	int arrPos = 0;
+	int y = 10;
+	int userInput = 0;
+
 	do{	
 		mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">");	//highlight new position
 		refresh();
@@ -197,25 +223,11 @@ bool Hero::selectTool(tool * & item, int obstacleType){	//selects a tool and cop
 		}
 		refresh();
 	}while((inventory[arrPos]->check_if_targets(obstacleType) == false) && userInput != char(10));     //continue to select until user makes valid decision
+	return arrPos;
 
-	
-	//clear inventory
-	for(int i = 0; i< INVSIZE+2;++i){ mvwprintw(stdscr, y+i, COLS*0.75+2, "                                         ");}
-	refresh();
-
-	item = new tool(*inventory[arrPos]);	//copy tool item with copy constructor
-	delete inventory[arrPos];		//deallocate memory
-	for(int i = arrPos; i <items; ++i){	//shift everything up
-		if(i == items -1){		//if at last element
-			inventory[i] = NULL;
-			--items;
-			return true;
-		}
-		inventory[i] = inventory[i+1];
-	}
-
-	return false;
 }
+
+
 //asks the user if they want to buy an item, checks if its food or tools or binoculars
 bool Hero::purchaseItem(grovnik * item){
 
