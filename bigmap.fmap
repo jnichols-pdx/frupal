@@ -139,7 +139,7 @@ clue: 0 0 This is the northwest corner of the map.\nThe Royal Diamonds are near\
 food: 15 4 20 50 Loaf of Bread
 ship: 4 6 1450
 clue: 11 1 Killroy was here! He hid the Royal Diamonds right behind you!
-binoculars: 10 6 25
+binoculars: 10 6 25 2
 obstacle: 5 4 trees 30 An overgrown Willow TREE blocks the thin path of dry ground between the lake and the marshlands.
 obstacle: 17 8 trees 100 The diamonds are trapped between sturdy Ironwood TREES.
 tool: 0 8 axes 1 trees 2 100 Woodsman's axe X2
