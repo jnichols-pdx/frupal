@@ -196,10 +196,7 @@ int treasure_chest::display_info()
 	displayStat(row, "Treasure: ");
 	--row;
 	displayStat(row, name, 11); //offset of 7
-	displayStat(row, "Amount: ");
-	--row;
-	//TODO change static 500 value to the int amount
-	displayStat(row, "500", 9);
+	displayStat(row, "Collecting Treasure");
 	}else{	
 		displayStat(row, "???", 4);
 	}
