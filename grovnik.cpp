@@ -64,15 +64,16 @@ istream& operator >> (istream& source, grovnik& destination)
 //-------------------------------------------------------------------
 //TODO
 
-binocular::binocular() : grovnik('B'), cost(0)
+binocular::binocular() : grovnik('B'), cost(0), range(2)
 {
 	
 }
 
 //constructor with args
-binocular::binocular(int cost) : grovnik('B')
+binocular::binocular(int cost, int range) : grovnik('B')
 {
 	this->cost = cost;
+	this->range = range;
 }
 
 binocular::~binocular()
@@ -81,19 +82,44 @@ binocular::~binocular()
 }
 
 int binocular::display_info()
-{//TODO
-	return 0;	
+{
+	char costStr[5] = {0};
+	char rangeStr[4] = {0};
+
+	int row = 4;
+	clearLines(row);
+
+
+	displayStat(row, "Cursor Grovnik Info: ");
+	displayStat(row, "Binoculars: ");
+
+	displayStat(row, "Cost: ");
+	--row;
+	displayStat(row, itos(cost, costStr), 7);
+
+	displayStat(row, "Sight: +");
+	--row;
+	displayStat(row, itos(range -1, rangeStr), 9);
+
+	refresh();
+	return row;
 }
 
-//returns the ship cost
+//returns the binoculars cost
 int binocular::get_cost()
 {
 	return cost;
 }
 
+//returns the binoculars vision range
+int binocular::get_range()
+{
+	return range;
+}
+
 //virtual helper to allow istream  >> binocularObject
 void binocular::read(istream & source) {
-  source >> cost;
+  source >> cost >> range;
 }
 
 //-------------------------------------------------------------------
@@ -580,7 +606,7 @@ int food::display_info()
 	clearLines(row);
 
 
-	displayStat(row, "Cursor Grovnick Info: ");
+	displayStat(row, "Cursor Grovnik Info: ");
 	displayStat(row, "Food: ");
 	--row;
 	displayStat(row, name, 7);
@@ -591,7 +617,7 @@ int food::display_info()
 
 	displayStat(row, "Energy: +");
 	--row;
-	displayStat(row, itos(energy, energyStr), 9);	
+	displayStat(row, itos(energy, energyStr), 9);
 
 	refresh();
 	return row;
