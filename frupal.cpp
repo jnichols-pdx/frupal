@@ -321,6 +321,19 @@ bool Frupal::validMove(int y, int x){
 			clueptr->display_info();
 			return true;
 		}
+		
+		treasure_chest * treasureptr = dynamic_cast<treasure_chest*>(itemMap[y][x]);
+		if(treasureptr){
+			treasureptr->discover();
+			treasureptr->display_info();
+			if(mainGuy.modWhif(treasureptr->get_amount()))
+			{
+				delete itemMap[y][x];
+				itemMap[y][x] = NULL;
+			}
+			refresh();
+			return true;
+		}
 
 		obstacle * obstacleptr = dynamic_cast<obstacle*>(itemMap[y][x]);
 		if(obstacleptr){
