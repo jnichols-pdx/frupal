@@ -211,7 +211,7 @@ bool Hero::selectTool(tool * & item, int obstacleType){	//selects a tool and cop
 bool Hero::purchaseItem(grovnik * item){ //asks the user if they want to buy an item, checks if its food or tools
 
 	int row = item->display_info() + 1;
-	item->displayStat(row, "Purchase? (y/n)", 4);
+	item->displayStat(row, "Purchase? (y/n)", 4);	//TODO this never clears in inventory 
 
 	int userInput = 0;
 	userInput = getch();
