@@ -163,7 +163,7 @@ bool Hero::selectTool(tool * & item, int obstacleType){	//selects a tool and cop
 		inventory[i]->display_name(i+y);		
 	}
 	refresh();
-	arrPos = select(obstacleType);
+	arrPos = select(obstacleType);	//which tool in inventory is selected
 
 	
 	//clear inventory
@@ -222,7 +222,7 @@ int Hero::select(int obstacleType){
 			default: break;	
 		}
 		refresh();
-	}while((inventory[arrPos]->check_if_targets(obstacleType) == false) && userInput != char(10));     //continue to select until user makes valid decision
+	}while((inventory[arrPos]->check_if_targets(obstacleType) == false) || userInput != char(10));     //continue to select until user makes valid decision
 	return arrPos;
 
 }
