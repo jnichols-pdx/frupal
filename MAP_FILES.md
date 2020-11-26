@@ -152,16 +152,17 @@ Example: `ship: 128 64 10000`
 ---
 ### Binoculars
 
-binoculars: *<x location\>* *<y location\>* *<cost\>*
+binoculars: *<x location\>* *<y location\>* *<cost\>* *<distance\>*
 
 Specifies the location of the Binoculars on the map.  
 Displayed in game as a black **B**.  
 The Binoculars allow a player to see two grovniks around themselves, instead of one.  
 *<cost\>* is the price in whiffles to purchase the Binoculars.  
+*<distance\>* is how far in grovniks a hero can see if they own these binoculars.  
 This element may only be specified **once**.  
 The following example places the Binoculars, which cost 500 whiffles to purchase, along the southern edge of a 128x128 map:  
 
-Example: `binoculars: 70 128 500`
+Example: `binoculars: 70 128 500 5`
 
 ---
 ### Obstacles
