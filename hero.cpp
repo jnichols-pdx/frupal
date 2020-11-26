@@ -2,6 +2,8 @@
 
 #include "hero.h"
 
+using namespace::menu;
+
 Hero::Hero(){
 	whiffles = 1000;
 	energy = 100;
@@ -206,7 +208,7 @@ bool Hero::selectTool(tool * & item, int obstacleType){	//selects a tool and cop
 bool Hero::purchaseItem(grovnik * item){ //asks the user if they want to buy an item, checks if its food or tools
 
 	int row = item->display_info() + 1;
-	item->displayStat(row, "Purchase? (y/n)", 4);
+	displayStat(row, "Purchase? (y/n)", 4);
 
 	int userInput = 0;
 	userInput = getch();
@@ -218,7 +220,7 @@ bool Hero::purchaseItem(grovnik * item){ //asks the user if they want to buy an 
 			
 			//modifies whiffles and checks if hero can afford
 			if(!this->modWhif(0 - foodPtr->get_cost())){
-				item->displayStat(row, "Can't Afford It!");
+				displayStat(row, "Can't Afford It!");
 				foodPtr = NULL;
 				return false;
 			}
@@ -235,7 +237,7 @@ bool Hero::purchaseItem(grovnik * item){ //asks the user if they want to buy an 
 
 			//modifies whiffles and checks if hero can afford
 			if(!this->modWhif(0 - toolPtr->get_cost())){
-				item->displayStat(row, "Can't Afford It!");
+				displayStat(row, "Can't Afford It!");
 				toolPtr = NULL;
 				return false;
 			}
@@ -251,7 +253,7 @@ bool Hero::purchaseItem(grovnik * item){ //asks the user if they want to buy an 
 		}
 	}
 
-	item->clearLines(4);
+	clearLines(4);
 
 	return false;
 }

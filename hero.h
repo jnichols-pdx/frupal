@@ -1,4 +1,5 @@
 #include "grovnik.h"
+#include "menu.h"
 
 const int INVSIZE = 10;
 
