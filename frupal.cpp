@@ -350,47 +350,37 @@ bool Frupal::validMove(int y, int x){
 		//Make this into it's own function, function is almost 100 lines
 		obstacle * obstacleptr = dynamic_cast<obstacle*>(itemMap[y][x]);
 		if(obstacleptr){
-			tool * copy = NULL;
-			/*
-			int userInput = 0;
-			int y = obstacleptr->display_info();
-			mvwprintw(stdscr, y - 1, COLS*0.75+3, "Break? (Y/N)");
-			refresh();
-			userInput = getch();						//this chunk messes with delete itemMap for some reason	
-											//the problem is when selecting yes option the obstacle doesnt get deleted
-			obstacleptr->clearLines(4);
-			if(userInput == 'n' || userInput == 'N'){
-				refresh();
-				return false;
-			}
-			refresh();
-			*/
-			
-			if(!mainGuy.selectTool(copy, obstacleptr->get_kind_int())){	//no tool selected
-				if(!mainGuy.modEner(obstacleptr->get_b_energy())) loseGame();
-				else{
-					 delete itemMap[y][x];
-					 itemMap[y][x] = NULL;
-				}
-			}
-			else{						//tool selected
-				if(!mainGuy.modEner(obstacleptr->get_b_energy() / copy->get_divisor())){
-					loseGame();
-				}else{
-					 delete itemMap[y][x];
-					 itemMap[y][x] = NULL;
-				}
-			}
-			if(copy != NULL){	//deallocate the copy
-				delete copy;
-				copy = NULL;	
-			}	
-			obstacleptr = NULL;
+			breakObstacle(obstacleptr, y, x);
 			return true;
 		}
 	}
 
 	return true;
+}
+		
+void Frupal::breakObstacle(obstacle * item, int y , int x){	//breaks obstacle at coordinates
+	tool * copy = NULL;
+	if(!mainGuy.selectTool(copy, item->get_kind_int())){	//no tool selected
+		if(!mainGuy.modEner(item->get_b_energy())) loseGame();
+		else{
+			 delete itemMap[y][x];
+			 itemMap[y][x] = NULL;
+		}
+	}
+	else{						//tool selected
+		if(!mainGuy.modEner(item->get_b_energy() / copy->get_divisor())){
+			loseGame();
+		}else{
+			 delete itemMap[y][x];
+			 itemMap[y][x] = NULL;
+		}
+	}
+	if(copy != NULL){	//deallocate the copy
+		delete copy;
+		copy = NULL;	
+	}	
+	item = NULL;
+
 }
 
 //function displays loss and waits to exit game //TODO

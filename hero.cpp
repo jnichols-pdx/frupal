@@ -232,7 +232,7 @@ int Hero::select(int obstacleType){
 bool Hero::purchaseItem(grovnik * item){
 
 	int row = item->display_info() + 1;
-	mvwprintw(stdscr, row, COLS*0.75+3, "Purchase? (Y/N)");
+	displayStat(row, "Purchase? (Y/N)");
 		
 
 	int userInput = 0;

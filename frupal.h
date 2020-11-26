@@ -36,6 +36,8 @@ class Frupal
 
 		char loseGame(); //called when player runs out of energy
 		char winGame(); //called when player gets royal diamond
+	
+		void breakObstacle(obstacle * item, int y , int x);	//breaks obstacle at coordinates
 
     bool loadMap(char * mapFileName); //loads map from a filename
     //Parse one line/element
