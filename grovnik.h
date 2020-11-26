@@ -27,6 +27,7 @@ class grovnik
 		grovnik(char character);
 		char get_character() const;
 		char * itos(int, char*); //converts int to string for displays
+    void convertNewlines(std::string & source);
 
 		//virtual functions
 		virtual ~grovnik();

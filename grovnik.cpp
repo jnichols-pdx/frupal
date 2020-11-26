@@ -36,6 +36,16 @@ char * grovnik::itos(int num, char * numStr){
 	return numStr;
 }
 
+//Changes occurrences of the string "\n" inside source to '\n' characters.
+void grovnik::convertNewlines(string & source){
+  int idx = -2;
+  while((idx = (int)source.find("\\n")) >= 0)
+  {
+     source.replace(idx, 1, "\n");
+     source.erase(idx + 1,1);
+  }
+}
+
 
 //grovnik read from stream function
 //this function is virtual
@@ -82,8 +92,7 @@ int binocular::get_cost()
 }
 
 //virtual helper to allow istream  >> binocularObject
-void binocular::read(istream & source)
-{
+void binocular::read(istream & source) {
   source >> cost;
 }
 
@@ -188,6 +197,8 @@ void treasure_chest::read(istream & source)
   //Strip any trailing '\r' characters from input.
   if(temp[temp.length() -1] == '\r')
     temp.erase(temp.length() -1);
+
+  convertNewlines(temp);
 
   name = new char[temp.length() + 1];
   strcpy(name,temp.c_str());
@@ -373,6 +384,8 @@ void obstacle::read(istream & source)
   if(temp[temp.length() -1] == '\r')
     temp.erase(temp.length() -1);
 
+  convertNewlines(temp);
+
   description= new char[temp.length() + 1];
   strcpy(description,temp.c_str());
 }
@@ -518,6 +531,8 @@ void tool::read(istream & source)
   if(temp[temp.length() -1] == '\r')
     temp.erase(temp.length() -1);
 
+  convertNewlines(temp);
+
   description= new char[temp.length() + 1];
   strcpy(description,temp.c_str());
 }
@@ -602,6 +617,8 @@ void food::read(istream & source)
   if(temp[temp.length() -1] == '\r')
     temp.erase(temp.length() -1);
 
+  convertNewlines(temp);
+
   name = new char[temp.length() + 1];
   strcpy(name,temp.c_str());
 }
@@ -669,16 +686,8 @@ void clue::read(istream & source)
   //Strip any trailing '\r' characters from input.
   if(temp[temp.length() -1] == '\r')
     temp.erase(temp.length() -1);
-
-  int idx = -2;
-  while((idx = (int)temp.find("\\n")) >= 0)
-  //while(string::npos != (temp.find("\\n")))
-  {
-    //int idx = temp.find("\\n");
-     temp.replace(idx, 1, "\n");
-     temp.erase(idx + 1,1);
-  }
-
+ 
+  convertNewlines(temp);
 
   clueText = new char[temp.length() + 1];
   strcpy(clueText,temp.c_str());
