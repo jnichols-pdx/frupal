@@ -11,12 +11,13 @@
 //i think we only need to stick to one of these
 //or remove both and stick to char arrays TODO
 #include <string> 
-#include <cstring>
 #include <sstream>
 #include <vector>
 
 //what is this for? TODO
 #include <unistd.h>
+
+#include "menu.h"
 
 //base class for grovniks
 class grovnik
@@ -26,8 +27,7 @@ class grovnik
 		grovnik(char character);
 		char get_character() const;
 		char * itos(int, char*); //converts int to string for displays
-		void displayStat(int & row, const char * text, int offset = 1);	//displays info
-		void clearLines(int start, int end = 16); //clears menu between start/end
+    void convertNewlines(std::string & source);
 
 		//virtual functions
 		virtual ~grovnik();
