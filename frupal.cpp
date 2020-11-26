@@ -308,10 +308,21 @@ bool Frupal::validMove(int y, int x){
 		if(toolptr){
 			if(mainGuy.purchaseItem(toolptr) == true){
 				delete itemMap[y][x];
-				itemMap[y][x] = NULL;	
+				itemMap[y][x] = NULL;
 			}
 
 			toolptr = NULL;
+			return true;
+		}
+
+		binocular * binocptr = dynamic_cast<binocular*>(itemMap[y][x]);
+		if(binocptr){
+			if(mainGuy.purchaseItem(binocptr) == true){
+				delete itemMap[y][x];
+				itemMap[y][x] = NULL;
+			}
+
+			binocptr = NULL;
 			return true;
 		}
 
@@ -471,8 +482,9 @@ int Frupal::getmv()
 }
 
 void Frupal::updateVisitMap(){
-  for(int y = yHero - 1; y <= yHero + 1; y++){
-    for(int x = xHero - 1; x <= xHero + 1; x++){
+  int range = mainGuy.visionRange();
+  for(int y = yHero - range; y <= yHero + range; y++){
+    for(int x = xHero - range; x <= xHero + range; x++){
       if(y >= 0 && y < 128 && x >= 0 && x < 128)
 			  visitMap[y][x] = true;
 		}

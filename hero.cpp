@@ -11,15 +11,17 @@ Hero::Hero(){
  		inventory[i] = NULL;	
 	}
 	items = 0;
+  vision = 1;
 }
 
-Hero::Hero(int whif, int nRG){
+Hero::Hero(int whif, int nRG, int range){
 	whiffles = whif;
 	energy = nRG;
 	items = 0;
         for(int i = 0; i<10; ++i){
  		inventory[i] = NULL;	
-	}	
+	}
+  vision = range;
 	//inventory[0] = new tool("ship");
 }
 
@@ -77,6 +79,11 @@ void Hero::showHeroInfo(){
 	mvprintw(y, x, whiffStr);
 
 	refresh();
+}
+
+//Returns how far the hero can see.
+int Hero::visionRange(){
+  return vision;
 }
 
 //checks inventory for a certain item
@@ -204,8 +211,8 @@ bool Hero::selectTool(tool * & item, int obstacleType){	//selects a tool and cop
 
 	return false;
 }
-		
-bool Hero::purchaseItem(grovnik * item){ //asks the user if they want to buy an item, checks if its food or tools
+//asks the user if they want to buy an item, checks if its food or tools or binoculars
+bool Hero::purchaseItem(grovnik * item){
 
 	int row = item->display_info() + 1;
 	displayStat(row, "Purchase? (y/n)", 4);
@@ -250,6 +257,24 @@ bool Hero::purchaseItem(grovnik * item){ //asks the user if they want to buy an 
 
 			toolPtr = NULL;	
 			return true;	
+		}
+
+		binocular* binocPtr = dynamic_cast<binocular*>(item);
+		if(binocPtr){	//its binoculars, improve hero's sight
+
+			//modifies whiffles and checks if hero can afford
+			if(!this->modWhif(0 - binocPtr->get_cost())){
+				displayStat(row, "Can't Afford It!");
+				binocPtr = NULL;
+				return false;
+			}
+
+      //increase vision range
+			int range = binocPtr->get_range();
+      if(vision < range) //don't downgrade if the user purchases another, worse, pair of binoculars
+        vision = range;
+			binocPtr = NULL;
+			return true;
 		}
 	}
 
