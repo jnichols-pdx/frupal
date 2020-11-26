@@ -140,9 +140,14 @@ bool Hero::selectTool(tool * & item, int obstacleType){	//selects a tool and cop
 		if(inventory[i]->check_if_targets(obstacleType == true)) ++counter;	//check if there is no items in our inventory that can break the obstacle
 	}
 	if(counter == 0) return false;	//no items, return
+
+	mvwprintw(stdscr, y+items, COLS*0.75+3, "Would you like to select a tool? (Y/N)");	//check if the user actually wants a tool
+	refresh();
+	userInput = getch();
+	if(userInput == 'N' || userInput == 'n') return false;
 	
 						//lines 143-150 can be a seperate function
-	mvwprintw(stdscr, y+items+1, COLS*0.75+3, "Select tool by pressing RETURN");	//not sure why this doesn't work
+	mvwprintw(stdscr, y+items+1, COLS*0.75+3, "Select tool by pressing RETURN");
 	mvwprintw(stdscr, y+items+2, COLS*0.75+3, "You need a tool that can break: ");  //TODO it would be cool to have this
 
 	for(int i=0; i<items;++i){//display everything in inventory
