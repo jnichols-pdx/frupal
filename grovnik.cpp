@@ -3,6 +3,7 @@
 #include "grovnik.h"
 
 using namespace::std;
+using namespace::menu;
 
 //grovnik default constructor
 grovnik::grovnik() : character('\0')
@@ -35,43 +36,16 @@ char * grovnik::itos(int num, char * numStr){
 	return numStr;
 }
 
-void grovnik::displayStat(int & row, const char * text, int offset){
-	if(!text){return;}
-	
-	int x = getmaxx(stdscr);
-  char * data;
-	
-	//calculates menu dimensions and lines needed for text display
-	int menu_width = (x - (x * .75)) - 1;
-  int chunkWidth = menu_width - offset;
-	int lines = ceil(((float)strlen(text))/ ((float)chunkWidth));
-	int lastLine = lines + row;
-  data = new char[chunkWidth + 1];
-	
-	//wraps text around back to menu on next line
-	while(row < lastLine){
-		int index = (menu_width - offset) * (row - lastLine + lines);
-		strncpy(data, text + index, chunkWidth);
-		data[chunkWidth] = '\0';
-		mvprintw(row, x - menu_width + offset, data);
-		++row;
-	}
-  delete [] data;
-
+//Changes occurrences of the string "\n" inside source to '\n' characters.
+void grovnik::convertNewlines(string & source){
+  int idx = -2;
+  while((idx = (int)source.find("\\n")) >= 0)
+  {
+     source.replace(idx, 1, "\n");
+     source.erase(idx + 1,1);
+  }
 }
 
-//clears data on menu from start to end lines
-void grovnik::clearLines(int start, int end){
-	if(start == end){return;}
-	if(start > end){return;}
-	
-	int x = getmaxx(stdscr);
-	
-	move(start, x * .75 + 1);
-
-	clrtoeol();
-	clearLines(++start, end);	
-}
 
 //grovnik read from stream function
 //this function is virtual
@@ -118,8 +92,7 @@ int binocular::get_cost()
 }
 
 //virtual helper to allow istream  >> binocularObject
-void binocular::read(istream & source)
-{
+void binocular::read(istream & source) {
   source >> cost;
 }
 
@@ -165,12 +138,12 @@ void ship::read(istream & source)
 //-------------------------------------------------------------------
 
 
-treasure_chest::treasure_chest() : grovnik('$'), name(NULL), amount(0)
+treasure_chest::treasure_chest() : grovnik('$'), name(NULL), amount(0), discovered(false)
 {
 
 }
 
-treasure_chest::treasure_chest(char * name, int amount) : grovnik('$')
+treasure_chest::treasure_chest(char * name, int amount) : grovnik('$'), discovered(false)
 {
 	this->name = new char[strlen(name)+1];
 	strcpy(this->name,name);
@@ -191,13 +164,19 @@ int treasure_chest::display_info()
 	int row = 4;
 	clearLines(row);
 
+	if(discovered){
 	displayStat(row, "Cursor Grovnik Info: ");
 	displayStat(row, "Treasure: ");
 	--row;
 	displayStat(row, name, 11); //offset of 7
-
+	displayStat(row, "Collecting Treasure");
+	}else{	
+		displayStat(row, "???", 4);
+	}
+	
 	refresh();
-	return row;	
+	return row;
+	
 }
 
 char * treasure_chest::get_name()
@@ -208,6 +187,10 @@ char * treasure_chest::get_name()
 int treasure_chest::get_amount()
 {
 	return amount;
+}
+
+void treasure_chest::discover(){
+	discovered = true;
 }
 
 //virtual helper to allow istream  >> treasureChestObject
@@ -224,6 +207,8 @@ void treasure_chest::read(istream & source)
   //Strip any trailing '\r' characters from input.
   if(temp[temp.length() -1] == '\r')
     temp.erase(temp.length() -1);
+
+  convertNewlines(temp);
 
   name = new char[temp.length() + 1];
   strcpy(name,temp.c_str());
@@ -409,6 +394,8 @@ void obstacle::read(istream & source)
   if(temp[temp.length() -1] == '\r')
     temp.erase(temp.length() -1);
 
+  convertNewlines(temp);
+
   description= new char[temp.length() + 1];
   strcpy(description,temp.c_str());
 }
@@ -554,6 +541,8 @@ void tool::read(istream & source)
   if(temp[temp.length() -1] == '\r')
     temp.erase(temp.length() -1);
 
+  convertNewlines(temp);
+
   description= new char[temp.length() + 1];
   strcpy(description,temp.c_str());
 }
@@ -638,6 +627,8 @@ void food::read(istream & source)
   if(temp[temp.length() -1] == '\r')
     temp.erase(temp.length() -1);
 
+  convertNewlines(temp);
+
   name = new char[temp.length() + 1];
   strcpy(name,temp.c_str());
 }
@@ -705,6 +696,8 @@ void clue::read(istream & source)
   //Strip any trailing '\r' characters from input.
   if(temp[temp.length() -1] == '\r')
     temp.erase(temp.length() -1);
+ 
+  convertNewlines(temp);
 
   clueText = new char[temp.length() + 1];
   strcpy(clueText,temp.c_str());

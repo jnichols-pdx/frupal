@@ -6,6 +6,8 @@ terrain::terrain(){}
 
 terrain::~terrain(){}
 
+using namespace::menu;
+
 //returns ncurses color constant for terrain type
 //terrain type passed in as character representation 
 int terrain::get_color(char terType){
@@ -85,15 +87,4 @@ bool terrain::display_info(char terType){
 	}
 	refresh();
 	return true;
-}
-
-void terrain::clearLines(int start, int end){
-	if(start == end){return;}
-	if(start > end){return;}
-
-	int x = getmaxx(stdscr);
-	move(start, x * .75 + 1);
-
-	clrtoeol();
-	clearLines(++start, end);	
 }
