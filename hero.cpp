@@ -187,7 +187,8 @@ int Hero::select(int obstacleType){
 	int userInput = 0;
 
 	do{	
-		if(userInput == char(10) && inventory[arrPos]->check_if_targets(obstacleType) == false) mvwprintw(stdscr, y+items+2, COLS*0.75+3, "You need to select the correct tool");
+		if(userInput == char(10) && inventory[arrPos]->check_if_targets(obstacleType) == false) 
+			mvwprintw(stdscr, y+items+2, COLS*0.75+3, "You need to select a correct tool");
 		else mvwprintw(stdscr, y+items+2, COLS*0.75+3, "                                   ");
 
 		mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">");	//highlight new position
