@@ -297,9 +297,11 @@ bool Frupal::validMove(int y, int x){
 		food * foodptr = dynamic_cast<food*>(itemMap[y][x]);
 		if(foodptr){
 			if(mainGuy.purchaseItem(foodptr) == true){
+				refresh();
 				delete itemMap[y][x];
 				itemMap[y][x] = NULL;
 			}
+			refresh();
 			foodptr = NULL;
 			return true;
 		}
@@ -307,10 +309,12 @@ bool Frupal::validMove(int y, int x){
 		tool * toolptr = dynamic_cast<tool*>(itemMap[y][x]);
 		if(toolptr){
 			if(mainGuy.purchaseItem(toolptr) == true){
+				refresh();
 				delete itemMap[y][x];
 				itemMap[y][x] = NULL;
 			}
 
+			refresh();
 			toolptr = NULL;
 			return true;
 		}

@@ -235,11 +235,10 @@ bool Hero::purchaseItem(grovnik * item){
 	int row = item->display_info() + 1;
 	displayStat(row, "Purchase? (Y/N)");
 		
-
 	int userInput = 0;
 	userInput = getch();
 		
-	clearLines(row);
+	clearLines(row-1);
 
 	//if hero purchases with 'y'
 	if(userInput == 'y' || userInput == 'Y'){
