@@ -248,7 +248,8 @@ void Frupal::lkrt()
 
 //moves character by offsets passed in
 char Frupal::heroMove(int yOffset, int xOffset){
-	if(validMove(yHero + yOffset, xHero + xOffset)){
+	char status = validMove(yHero + yOffset, xHero + xOffset);
+	if(status == ' '){ //valid move
 		mvwdelch(curWin, yHero, xHero);
 
 		yHero += yOffset;
@@ -268,30 +269,30 @@ char Frupal::heroMove(int yOffset, int xOffset){
 	}
 
 	mainGuy.showHeroInfo();
-  return ' ';
+  return status;
 }
 
 //checks if a move is valid
-bool Frupal::validMove(int y, int x){
+char Frupal::validMove(int y, int x){
 	//checks for out of bounds
 	if(y < 0 || y >= yMax){
-		return false;
+		return 'n';
 	}else if(x < 0 || x >= xMax){
-		return false;
+		return 'n';
 
 	//checks for a wall
 	}else if(terrainMap[y][x] == '='){
 		if(!mainGuy.modEner(-1)){
-			loseGame();
+			return loseGame();
 		}
-		return false;
+		return 'n';
 
 	//checks for water
 	}else if(terrainMap[y][x] == '~'){
 		if(mainGuy.checkInventory("ship")){
-			return true;
+			return ' ';
 		}
-		return false;
+		return 'n';
 
 	}else if(itemMap[y][x]){
 		food * foodptr = dynamic_cast<food*>(itemMap[y][x]);
@@ -301,7 +302,7 @@ bool Frupal::validMove(int y, int x){
 				itemMap[y][x] = NULL;
 			}
 			foodptr = NULL;
-			return true;
+			return ' ';
 		}
 	
 		tool * toolptr = dynamic_cast<tool*>(itemMap[y][x]);
@@ -312,7 +313,7 @@ bool Frupal::validMove(int y, int x){
 			}
 
 			toolptr = NULL;
-			return true;
+			return ' ';
 		}
 
 		binocular * binocptr = dynamic_cast<binocular*>(itemMap[y][x]);
@@ -323,14 +324,14 @@ bool Frupal::validMove(int y, int x){
 			}
 
 			binocptr = NULL;
-			return true;
+			return ' ';
 		}
 
 		clue * clueptr = dynamic_cast<clue*>(itemMap[y][x]);
 		if(clueptr){
 			clueptr->discover();
 			clueptr->display_info();
-			return true;
+			return ' ';
 		}
 		
 		treasure_chest * treasureptr = dynamic_cast<treasure_chest*>(itemMap[y][x]);
@@ -343,42 +344,50 @@ bool Frupal::validMove(int y, int x){
 				itemMap[y][x] = NULL;
 			}
 			refresh();
-			return true;
+			return ' ';
 		}
 
 		obstacle * obstacleptr = dynamic_cast<obstacle*>(itemMap[y][x]);
 		if(obstacleptr){
-			breakObstacle(obstacleptr, y, x);
+			char status = breakObstacle(obstacleptr, y, x);
 			obstacleptr = NULL;
-			return true;
+			return status;
 		}
 	}
 
-	return true;
+	return ' ';
 }
 		
-void Frupal::breakObstacle(obstacle * item, int y , int x){	//breaks obstacle at coordinates
+char Frupal::breakObstacle(obstacle * item, int y , int x){	//breaks obstacle at coordinates
+
 	tool * copy = NULL;
+	char status = ' ';
 	if(!mainGuy.selectTool(copy, item->get_kind_int())){	//no tool selected
-		if(!mainGuy.modEner(item->get_b_energy())) loseGame();
-		else{
+		if(!mainGuy.modEner(item->get_b_energy())){
+			status = loseGame();
+
+		}else{
 			 delete itemMap[y][x];
 			 itemMap[y][x] = NULL;
 		}
-	}
-	else{						//tool selected
+
+	}else{						//tool selected
 		if(!mainGuy.modEner(item->get_b_energy() / copy->get_divisor())){
-			loseGame();
+			status = loseGame();
+
 		}else{
 			 delete itemMap[y][x];
 			 itemMap[y][x] = NULL;
 		}
 	}
+
 	if(copy != NULL){	//deallocate the copy
 		delete copy;
 		copy = NULL;	
 	}	
 	item = NULL;
+
+	return status;
 
 }
 
