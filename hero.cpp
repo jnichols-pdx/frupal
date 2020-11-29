@@ -107,7 +107,6 @@ bool Hero::addTool(tool * item){  //returns false if inventory is full, unless a
 		for(int i=0; i<INVSIZE; ++i){		//first check if theres space available
 			if(inventory[i] == NULL) {
 				inventory[i] = new tool(*item);		//copy item into inventory
-				whiffles = whiffles - item->get_cost();
 				++items;
 				return true;
 			}
@@ -123,7 +122,6 @@ bool Hero::addTool(tool * item){  //returns false if inventory is full, unless a
 		for(int i=0; i<INVSIZE; ++i){
 			if(inventory[i] == NULL) {		//theres space add here
 				inventory[i] = new tool(*item);		
-				whiffles = whiffles - item->get_cost();
 				++items;
 				return true;
 			}
