@@ -151,11 +151,11 @@ bool Hero::selectTool(tool * & item, int obstacleType){	//selects a tool and cop
 	mvwprintw(stdscr, y+items, COLS*0.75+3, "Would you like to select a tool? (Y/N)");	//check if the user actually wants a tool
 	refresh();
 	userInput = getch();
+	mvwprintw(stdscr, y+items, COLS*0.75+3, "                                      ");
+	refresh();
 	if(userInput == 'N' || userInput == 'n') return false;
 	
-						//lines 143-150 can be a seperate function
 	mvwprintw(stdscr, y+items+1, COLS*0.75+3, "Select tool by pressing RETURN");
-	mvwprintw(stdscr, y+items+2, COLS*0.75+3, "You need a tool that can break: ");  //TODO it would be cool to have this
 
 	for(int i=0; i<items;++i){//display everything in inventory
 		inventory[i]->display_name(i+y);		
@@ -163,8 +163,7 @@ bool Hero::selectTool(tool * & item, int obstacleType){	//selects a tool and cop
 	refresh();
 	arrPos = select(obstacleType);	//which tool in inventory is selected
 
-	
-	//clear inventory
+	//clear inventory in the menu
 	for(int i = 0; i< INVSIZE+2;++i){ mvwprintw(stdscr, y+i, COLS*0.75+2, "                                         ");}
 	refresh();
 
@@ -188,6 +187,9 @@ int Hero::select(int obstacleType){
 	int userInput = 0;
 
 	do{	
+		if(userInput == char(10) && inventory[arrPos]->check_if_targets(obstacleType) == false) mvwprintw(stdscr, y+items+2, COLS*0.75+3, "You need to select the correct tool");
+		else mvwprintw(stdscr, y+items+2, COLS*0.75+3, "                                   ");
+
 		mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">");	//highlight new position
 		refresh();
 		userInput = getch();
@@ -235,6 +237,8 @@ bool Hero::purchaseItem(grovnik * item){
 
 	int userInput = 0;
 	userInput = getch();
+		
+	clearLines(row);
 
 	//if hero purchases with 'y'
 	if(userInput == 'y' || userInput == 'Y'){
@@ -244,6 +248,7 @@ bool Hero::purchaseItem(grovnik * item){
 			//modifies whiffles and checks if hero can afford
 			if(!this->modWhif(0 - foodPtr->get_cost())){
 				displayStat(row, "Can't Afford It!");
+				clearLines(row);
 				foodPtr = NULL;
 				return false;
 			}
@@ -261,6 +266,7 @@ bool Hero::purchaseItem(grovnik * item){
 			//modifies whiffles and checks if hero can afford
 			if(!modWhif(0 - toolPtr->get_cost())){
 				displayStat(row, "Can't Afford It!");
+				clearLines(row);
 				toolPtr = NULL;
 				return false;
 			}
@@ -281,6 +287,7 @@ bool Hero::purchaseItem(grovnik * item){
 			//modifies whiffles and checks if hero can afford
 			if(!this->modWhif(0 - binocPtr->get_cost())){
 				displayStat(row, "Can't Afford It!");
+				clearLines(row);
 				binocPtr = NULL;
 				return false;
 			}

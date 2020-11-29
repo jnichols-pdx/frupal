@@ -346,11 +346,10 @@ bool Frupal::validMove(int y, int x){
 			return true;
 		}
 
-		//TODO this function is getting out of hand
-		//Make this into it's own function, function is almost 100 lines
 		obstacle * obstacleptr = dynamic_cast<obstacle*>(itemMap[y][x]);
 		if(obstacleptr){
 			breakObstacle(obstacleptr, y, x);
+			obstacleptr = NULL;
 			return true;
 		}
 	}
