@@ -12,6 +12,7 @@ Hero::Hero(){
 	}
 	items = 0;
   vision = 1;
+  waterWalk = false;
 }
 
 Hero::Hero(int whif, int nRG, int range){
@@ -23,6 +24,7 @@ Hero::Hero(int whif, int nRG, int range){
 	}
   vision = range;
 	//inventory[0] = new tool("ship");
+  waterWalk = false;
 }
 
 Hero::~Hero(){
@@ -89,6 +91,10 @@ int Hero::visionRange(){
 //checks inventory for a certain item
 bool Hero::checkInventory(const char * item){
 	if(item == NULL) return false;   //empty string return false
+
+//XXX quick and dirty check for ship, suggest refactoring.
+  if(0 == strcmp(item,"ship"))
+    return waterWalk;
 
 	for(int i=0; i<INVSIZE; ++i){
 		if(inventory[i] == NULL) {}	//for no seg faults
@@ -290,6 +296,22 @@ bool Hero::purchaseItem(grovnik * item){
       if(vision < range) //don't downgrade if the user purchases another, worse, pair of binoculars
         vision = range;
 			binocPtr = NULL;
+			return true;
+		}
+    
+		ship* shipPtr = dynamic_cast<ship*>(item);
+		if(shipPtr){	//its a ship, give the hero waterWalk
+
+			//modifies whiffles and checks if hero can afford
+			if(!this->modWhif(0 - shipPtr->get_cost())){
+				displayStat(row, "Can't Afford It!");
+				clearLines(row);
+				binocPtr = NULL;
+				return false;
+			}
+
+      waterWalk = true;
+			shipPtr= NULL;
 			return true;
 		}
 	}
