@@ -416,6 +416,9 @@ char Frupal::breakObstacle(obstacle * item, int y , int x){	//breaks obstacle at
 	}	
 	item = NULL;
 
+	++menuRow;
+	menu::displayStat(menuRow, "! BREAKING \nOBSTACLE !");
+
 	return status;
 
 }
