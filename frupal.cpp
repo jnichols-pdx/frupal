@@ -291,7 +291,7 @@ char Frupal::validMove(int y, int x){
 		if(mainGuy.checkInventory("ship")){
 			int menuRow = (rand() % 2) + 4;
 			menu::clearLines(3);
-			menu::displayStat(menuRow, "v^v^~W~~A~~V~~E~^v^v");
+			menu::displayStat(menuRow, "v^v^ W~~A~~V~~E ^v^v");
 			return ' ';
 
 		}else{
