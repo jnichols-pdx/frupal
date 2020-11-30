@@ -101,7 +101,7 @@ bool Frupal::loadMap(char * mapFileName)
 //the calling function can verify that these Required elements have been loaded.
 bool Frupal::parseLine(string line, ifstream & mapFile, bool & terrain, bool & start, bool & diamonds)
 {
-  int x, y;
+  int x = -1, y = -1;
   string elemName;
   grovnik* newItem = NULL;
 
@@ -180,7 +180,14 @@ bool Frupal::parseLine(string line, ifstream & mapFile, bool & terrain, bool & s
       return false;
     if(itemMap[y][x] != NULL)
       return false; //reject map file if multiple grovniks at the same location
-    lineStream >> *newItem;
+    try
+    {
+      lineStream >> *newItem;
+    }
+    catch(int x)
+    {
+      return false;
+    }
     itemMap[y][x] = newItem;
   }
 
