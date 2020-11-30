@@ -9,7 +9,7 @@ void menu::clearLines(int start, int end){
   if(-1 == end)
   {
     int y = getmaxy(stdscr);
-    end = y - 5;
+    end = y - 4;
   }
 
 	if(start == end){return;}
