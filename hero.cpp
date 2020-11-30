@@ -12,6 +12,7 @@ Hero::Hero(){
 	}
 	items = 0;
   vision = 1;
+  waterWalk = false;
 }
 
 Hero::Hero(int whif, int nRG, int range){
@@ -23,6 +24,7 @@ Hero::Hero(int whif, int nRG, int range){
 	}
   vision = range;
 	//inventory[0] = new tool("ship");
+  waterWalk = false;
 }
 
 Hero::~Hero(){
@@ -90,6 +92,10 @@ int Hero::visionRange(){
 bool Hero::checkInventory(const char * item){
 	if(item == NULL) return false;   //empty string return false
 
+//XXX quick and dirty check for ship, suggest refactoring.
+  if(0 == strcmp(item,"ship"))
+    return waterWalk;
+
 	for(int i=0; i<INVSIZE; ++i){
 		if(inventory[i] == NULL) {}	//for no seg faults
 		else{
@@ -107,7 +113,6 @@ bool Hero::addTool(tool * item){  //returns false if inventory is full, unless a
 		for(int i=0; i<INVSIZE; ++i){		//first check if theres space available
 			if(inventory[i] == NULL) {
 				inventory[i] = new tool(*item);		//copy item into inventory
-				whiffles = whiffles - item->get_cost();
 				++items;
 				return true;
 			}
@@ -123,7 +128,6 @@ bool Hero::addTool(tool * item){  //returns false if inventory is full, unless a
 		for(int i=0; i<INVSIZE; ++i){
 			if(inventory[i] == NULL) {		//theres space add here
 				inventory[i] = new tool(*item);		
-				whiffles = whiffles - item->get_cost();
 				++items;
 				return true;
 			}
@@ -142,60 +146,27 @@ bool Hero::selectTool(tool * & item, int obstacleType){	//selects a tool and cop
 			
 	int counter = 0;
 	keypad(stdscr, true);
-	int y = 10;	//where the inventory starts in the menu      - change this variable to change y position of where inventory starts in the menu
+	int y = 4;	//where the inventory starts in the menu      - change this variable to change y position of where inventory starts in the menu
 	int arrPos = 0; //array position
 	int userInput = 0;
 	for(int i=0; i<items; ++i){
-		if(inventory[i]->check_if_targets(obstacleType == true)) ++counter;	//check if there is no items in our inventory that can break the obstacle
+		if(inventory[i]->check_if_targets(obstacleType) == true) ++counter;	//check if there is no items in our inventory that can break the obstacle
 	}
 	if(counter == 0) return false;	//no items, return
-	
-						//lines 143-150 can be a seperate function
-	mvwprintw(stdscr, y+items+1, COLS*0.75+3, "Select tool by pressing RETURN");	//not sure why this doesn't work
-	mvwprintw(stdscr, y+items+2, COLS*0.75+3, "You need a tool that can break: ");  //TODO it would be cool to have this
 
-	for(int i=0; i<items;++i){//display everything in inventory
-		inventory[i]->display_name(i+y);		
-	}
+	displayStat(y, "Would you like to \nselect a tool? (Y/N)");
 	refresh();
-	do{	
-		mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">");	//highlight new position
-		refresh();
-		userInput = getch();
-		switch(userInput){
-			case KEY_UP:
-				if(arrPos == 0){		//if at first element
-					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, " ");	//clear current one	//the > display and moving does not work
-					arrPos = items -1; //go to last element
-					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">");	//highlight new position
-				}
-				else{
-					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, " ");
-					--arrPos;
-					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">"); 
-				}
-				break;
-	
-			case KEY_DOWN:
-				if(arrPos == items -1){ 	//if at last element
-					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, " ");	//clear current one
-					arrPos = 0; //go to first element
-					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">");	//highlight new position
-				}
-				else{
-					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, " ");
-					++arrPos;
-					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">"); 
-				}
-				break;
-			default: break;	
-		}
-		refresh();
-	}while((inventory[arrPos]->check_if_targets(obstacleType) == false) && userInput != char(10));     //continue to select until user makes valid decision
+	userInput = getch();
+	clearLines(4);
+	refresh();
+	if(userInput == 'N' || userInput == 'n') return false;
 
-	
-	//clear inventory
-	for(int i = 0; i< INVSIZE+2;++i){ mvwprintw(stdscr, y+i, COLS*0.75+2, "                                         ");}
+	y = 4;
+	displayStat(y, "Select tool by pressing RETURN");
+	refresh();
+
+	arrPos = select(obstacleType);	//which tool in inventory is selected
+	clearLines(4);
 	refresh();
 
 	item = new tool(*inventory[arrPos]);	//copy tool item with copy constructor
@@ -211,14 +182,62 @@ bool Hero::selectTool(tool * & item, int obstacleType){	//selects a tool and cop
 
 	return false;
 }
+    
+int Hero::select(int obstacleType){
+	int arrPos = 0;
+	int userInput = 0;
+	int y = 9;
+
+	do{	
+		if(userInput == char(10) && inventory[arrPos]->check_if_targets(obstacleType) == false){
+			y = 9;
+			clearLines(y);
+			displayStat(y, "You need to select a\ncorrect tool");		//this has a problem of displaying continuous lines after TODO
+		}
+		else clearLines(y=9);
+
+		clearLines(6, 9);
+		inventory[arrPos]->display_name(7);		//display one at a time for simplicity sake
+		
+		refresh();
+		userInput = getch();
+		switch(userInput){
+			case KEY_UP:
+				if(arrPos == 0){		//if at first element
+					arrPos = items -1; //go to last element
+				}
+				else{
+					--arrPos;
+				}
+				break;
+	
+			case KEY_DOWN:
+				if(arrPos == items -1){ 	//if at last element
+					arrPos = 0; //go to first element
+				}
+				else{
+					++arrPos;
+				}
+				break;
+			default: break;	
+		}
+		refresh();
+	}while((inventory[arrPos]->check_if_targets(obstacleType) == false) || userInput != char(10));     //continue to select until user makes valid decision
+	return arrPos;
+
+}
+
+
 //asks the user if they want to buy an item, checks if its food or tools or binoculars
 bool Hero::purchaseItem(grovnik * item){
 
 	int row = item->display_info() + 1;
-	displayStat(row, "Purchase? (y/n)", 4);
-
+	displayStat(row, "Purchase? (Y/N)");
+		
 	int userInput = 0;
 	userInput = getch();
+		
+	clearLines(4);
 
 	//if hero purchases with 'y'
 	if(userInput == 'y' || userInput == 'Y'){
@@ -228,6 +247,7 @@ bool Hero::purchaseItem(grovnik * item){
 			//modifies whiffles and checks if hero can afford
 			if(!this->modWhif(0 - foodPtr->get_cost())){
 				displayStat(row, "Can't Afford It!");
+				clearLines(row);
 				foodPtr = NULL;
 				return false;
 			}
@@ -245,6 +265,7 @@ bool Hero::purchaseItem(grovnik * item){
 			//modifies whiffles and checks if hero can afford
 			if(!this->modWhif(0 - toolPtr->get_cost())){
 				displayStat(row, "Can't Afford It!");
+				clearLines(row);
 				toolPtr = NULL;
 				return false;
 			}
@@ -265,6 +286,7 @@ bool Hero::purchaseItem(grovnik * item){
 			//modifies whiffles and checks if hero can afford
 			if(!this->modWhif(0 - binocPtr->get_cost())){
 				displayStat(row, "Can't Afford It!");
+				clearLines(row);
 				binocPtr = NULL;
 				return false;
 			}
@@ -274,6 +296,22 @@ bool Hero::purchaseItem(grovnik * item){
       if(vision < range) //don't downgrade if the user purchases another, worse, pair of binoculars
         vision = range;
 			binocPtr = NULL;
+			return true;
+		}
+    
+		ship* shipPtr = dynamic_cast<ship*>(item);
+		if(shipPtr){	//its a ship, give the hero waterWalk
+
+			//modifies whiffles and checks if hero can afford
+			if(!this->modWhif(0 - shipPtr->get_cost())){
+				displayStat(row, "Can't Afford It!");
+				clearLines(row);
+				binocPtr = NULL;
+				return false;
+			}
+
+      waterWalk = true;
+			shipPtr= NULL;
 			return true;
 		}
 	}

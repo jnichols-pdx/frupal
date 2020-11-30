@@ -146,7 +146,23 @@ ship::~ship()
 //virtual function
 int ship::display_info()
 {
-	return 0;	
+	char costStr[5] = {0};
+	int row = 4;
+
+	clearLines(row);
+
+
+	displayStat(row, "Cursor Grovnik Info: ");
+	displayStat(row, "Sailing Ship: ");
+
+	displayStat(row, "Cost: ");
+	--row;
+	displayStat(row, itos(cost, costStr), 7);
+
+	displayStat(row, "Allows free travel on water.");
+
+	refresh();
+	return row;
 }
 
 //returns the ship cost
@@ -501,7 +517,7 @@ int tool::display_info()
 
 void tool::display_name(int y){	//displays tool name in the menu 
 	if(description == NULL) return;
-	mvwprintw(stdscr, y, COLS*0.75+3, "%s", description);
+	displayStat(y, description);
 	refresh();
 }
 

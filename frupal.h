@@ -29,13 +29,15 @@ class Frupal
     void updateCur();//updates curMin and curMax series ints based on hero location - for map scroll
 
 		char heroMove(int yOffset, int xOffset); //move hero by offsets
-		bool validMove(int y, int x); //validates move
+		char validMove(int y, int x); //validates move
 
 		void updateVisitMap(); //updates visible areas
 		void showCurInfo();
 
 		char loseGame(); //called when player runs out of energy
 		char winGame(); //called when player gets royal diamond
+	
+		char breakObstacle(obstacle * item, int y , int x);	//breaks obstacle at coordinates
 
     bool loadMap(char * mapFileName); //loads map from a filename
     //Parse one line/element
