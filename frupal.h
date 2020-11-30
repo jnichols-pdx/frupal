@@ -5,6 +5,8 @@
 // is this needed? TODO #include <unistd.h>
 
 #include <ncurses.h>
+#include <unistd.h>
+#include <random>
 #include "hero.h"
 #include "grovnik.h"
 #include "terrain.h"
