@@ -264,7 +264,7 @@ bool Hero::purchaseItem(grovnik * item){
 			if(items == INVSIZE){ return false;}		//full inventory
 
 			//modifies whiffles and checks if hero can afford
-			if(!modWhif(0 - toolPtr->get_cost())){
+			if(!this->modWhif(0 - toolPtr->get_cost())){
 				displayStat(row, "Can't Afford It!");
 				clearLines(row);
 				toolPtr = NULL;
