@@ -1,4 +1,5 @@
 #include "frupal.h"
+#include <unistd.h>
 
 Frupal::Frupal(WINDOW * win, int y, int x)
 {
@@ -289,12 +290,10 @@ char Frupal::validMove(int y, int x){
 	//checks for water
 	}else if(terrainMap[y][x] == '~'){
 		if(mainGuy.checkInventory("ship")){
-			int menuRow = (rand() % 2) + 4;
-			menu::clearLines(3);
-			menu::displayStat(menuRow, "v^v^~W~~A~~V~~E~^v^v");
 			return ' ';
-
-		}else{
+		}
+    else
+		{
       if(!mainGuy.modEner(-1)){
 			return loseGame();
 		  }
