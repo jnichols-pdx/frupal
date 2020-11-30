@@ -292,7 +292,13 @@ char Frupal::validMove(int y, int x){
 		if(mainGuy.checkInventory("ship")){
 			return ' ';
 		}
-		return 'n';
+    else
+		{
+      if(!mainGuy.modEner(-1)){
+			return loseGame();
+		  }
+		  return 'n';
+    }
 
 	}else if(itemMap[y][x]){
 		food * foodptr = dynamic_cast<food*>(itemMap[y][x]);
@@ -331,6 +337,17 @@ char Frupal::validMove(int y, int x){
 			return ' ';
 		}
 
+		ship* shipptr = dynamic_cast<ship*>(itemMap[y][x]);
+		if(shipptr){
+			if(mainGuy.purchaseItem(shipptr) == true){
+				delete itemMap[y][x];
+				itemMap[y][x] = NULL;
+			}
+
+			binocptr = NULL;
+			return ' ';
+		}
+
 		clue * clueptr = dynamic_cast<clue*>(itemMap[y][x]);
 		if(clueptr){
 			clueptr->discover();
@@ -356,6 +373,11 @@ char Frupal::validMove(int y, int x){
 			char status = breakObstacle(obstacleptr, y, x);
 			obstacleptr = NULL;
 			return status;
+		}
+    
+		royal_diamond* diamondptr= dynamic_cast<royal_diamond*>(itemMap[y][x]);
+		if(diamondptr){
+			return winGame();
 		}
 	}
 

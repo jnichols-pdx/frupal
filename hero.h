@@ -26,6 +26,8 @@ class Hero
   	int whiffles; //hero whiffles
   	int energy; //hero energy
     int vision; //how far the hero can see.
+    bool waterWalk; // can the hero travel on water tiles
     int items; //items in the inventory
+
     tool *inventory[INVSIZE+1];	//10 inventory items
 };
