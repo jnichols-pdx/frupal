@@ -119,7 +119,17 @@ int binocular::get_range()
 
 //virtual helper to allow istream  >> binocularObject
 void binocular::read(istream & source) {
-  source >> cost >> range;
+  source >> cost;
+  if(cost <= 0 && source.fail())
+    throw("Incorrect binoculars: cost missing or invalid.");
+  source >> range;
+  if(range <= 0 && source.fail())
+    throw("Incorrect binoculars: range missing or invalid.");
+  string temp;
+  getline(source,temp);
+  if(temp.find_first_not_of(" \n\r\t") != string::npos)
+    throw("Incorrect binoculars: unexpected text after range on line.");
+  
 }
 
 //-------------------------------------------------------------------
@@ -424,12 +434,17 @@ void obstacle::read(istream & source)
 {
   string temp;
   source >> temp; //Holds obstacle kind
+  if(temp.length() == 0)
+    throw "Incomplete obstacle: missing kind, energy cost and description.";
   kind = add_obstacle_typename(temp.c_str());
   source >> b_energy;
+  if(b_energy == 0 && source.fail())
+    throw "Incorrect obstacle: missing or invalid energy cost.";
 
   //strip leading whitespace before using getline()
   source >> ws;
 
+  temp.erase();
   getline(source, temp); //Holds the obstacle's description
 
   //Strip any trailing '\r' characters from input.
@@ -437,6 +452,9 @@ void obstacle::read(istream & source)
     temp.erase(temp.length() -1);
 
   convertNewlines(temp);
+
+  if(temp.length() == 0)
+    throw "Incomplete obstacle: missing description.";
 
   description= new char[temp.length() + 1];
   strcpy(description,temp.c_str());

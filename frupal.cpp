@@ -184,9 +184,12 @@ bool Frupal::parseLine(string line, ifstream & mapFile, bool & terrain, bool & s
     {
       lineStream >> *newItem;
     }
-    catch(int x)
+    catch(const char * s)
     {
-      return false;
+      endwin();
+      std::cerr << s << std::endl;
+      exit(-1);
+      //return false;
     }
     itemMap[y][x] = newItem;
   }
