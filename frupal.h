@@ -32,7 +32,7 @@ class Frupal
 		char validMove(int y, int x); //validates move
 
 		void updateVisitMap(); //updates visible areas
-		void showCurInfo();
+		int showCurInfo(int y, int x);
 
 		char loseGame(); //called when player runs out of energy
 		char winGame(); //called when player gets royal diamond

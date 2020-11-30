@@ -54,26 +54,25 @@ bool Hero::modWhif(int whif)
 }
 
 void Hero::showHeroInfo(){
-	int xMax = 0;
-	int yMax = 0;
-	int offset = 2;
+	int xMax, yMax = 0;
+	int offset = 1;
 	int y, x = 0;
 	char energyStr[5] = {0}; //game can support 9999 energy
 	char whiffStr[10] = {0}; //game can support 999,999,999 whiffles
 
 	getmaxyx(stdscr, yMax, xMax);
 
-	move(yMax - 5, (xMax * .75) + offset);
+	move(yMax - 3, (xMax * .75) + offset);
 	clrtoeol(); 
-	move(yMax - 4, (xMax * .75) + offset);
+	move(yMax - 2, (xMax * .75) + offset);
 	clrtoeol(); 
 
-	mvprintw(yMax - 5, (xMax * 0.75) + offset, "Energy: ");
+	mvprintw(yMax - 3, (xMax * 0.75) + offset, "Energy: ");
 	getyx(stdscr, y, x);
 	sprintf(energyStr, "%d", energy);
 	mvprintw(y, x, energyStr);
 
-	mvprintw(yMax - 4, (xMax * 0.75) + offset, "Whiffles: ");
+	mvprintw(yMax - 2, (xMax * 0.75) + offset, "Whiffles: ");
 	getyx(stdscr, y, x);
 	sprintf(whiffStr, "%d", whiffles);
 	mvprintw(y, x, whiffStr);
@@ -131,7 +130,7 @@ bool Hero::addTool(tool * item){  //returns false if inventory is full, unless a
 	return false;	//inventory was full
 }
 		
-bool Hero::selectTool(tool * & item, int obstacleType){	//selects a tool and copies it into the item argument, returns false if inventory is empty
+bool Hero::selectTool(tool * & item, int obstacleType, int menuRow){	//selects a tool and copies it into the item argument, returns false if inventory is empty
 	if(item != NULL){
 		delete item;
 		item = NULL;	
@@ -140,7 +139,7 @@ bool Hero::selectTool(tool * & item, int obstacleType){	//selects a tool and cop
 			
 	int counter = 0;
 	keypad(stdscr, true);
-	int y = 4;	//where the inventory starts in the menu      - change this variable to change y position of where inventory starts in the menu
+	int startRow = menuRow;	//where the inventory starts in the menu      - change this variable to change y position of where inventory starts in the menu
 	int arrPos = 0; //array position
 	int userInput = 0;
 	for(int i=0; i<items; ++i){
@@ -148,18 +147,17 @@ bool Hero::selectTool(tool * & item, int obstacleType){	//selects a tool and cop
 	}
 	if(counter == 0) return false;	//no items, return
 
-	displayStat(y, "Would you like to \nselect a tool? (Y/N)");
+	displayStat(menuRow, "Would you like to \nselect a tool? (Y/N)");
 	refresh();
 	userInput = getch();
-	clearLines(4);
+	clearLines(startRow);
 	refresh();
 	if(userInput == 'N' || userInput == 'n') return false;
 
-	y = 4;
-	displayStat(y, "Select tool by pressing RETURN");
+	displayStat(startRow, "Select tool by pressing RETURN");
 	refresh();
 
-	arrPos = select(obstacleType);	//which tool in inventory is selected
+	arrPos = select(obstacleType, menuRow + 2);	//which tool in inventory is selected
 	clearLines(4);
 	refresh();
 
@@ -177,21 +175,23 @@ bool Hero::selectTool(tool * & item, int obstacleType){	//selects a tool and cop
 	return false;
 }
     
-int Hero::select(int obstacleType){
+int Hero::select(int obstacleType, int menuRow){
 	int arrPos = 0;
 	int userInput = 0;
-	int y = 9;
+	int startRow = menuRow;
 
 	do{	
 		if(userInput == char(10) && inventory[arrPos]->check_if_targets(obstacleType) == false){
-			y = 9;
-			clearLines(y);
-			displayStat(y, "You need to select a\ncorrect tool");		//this has a problem of displaying continuous lines after TODO
+			menuRow = startRow;
+			clearLines(startRow);
+			displayStat(menuRow, "You need to select a\ncorrect tool");		//this has a problem of displaying continuous lines after TODO
 		}
-		else clearLines(y=9);
+		else{
+			clearLines(startRow);
+		}
 
-		clearLines(6, 9);
-		inventory[arrPos]->display_name(7);		//display one at a time for simplicity sake
+		clearLines(startRow - 2, startRow);
+		inventory[arrPos]->display_name(startRow - 2);		//display one at a time for simplicity sake
 		
 		refresh();
 		userInput = getch();

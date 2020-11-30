@@ -366,7 +366,10 @@ char Frupal::breakObstacle(obstacle * item, int y , int x){	//breaks obstacle at
 
 	tool * copy = NULL;
 	char status = ' ';
-	if(!mainGuy.selectTool(copy, item->get_kind_int())){	//no tool selected
+
+	int menuRow = item->display_info(); //displays obstacle info
+
+	if(!mainGuy.selectTool(copy, item->get_kind_int(), menuRow)){	//no tool selected
 		if(!mainGuy.modEner(item->get_b_energy())){
 			status = loseGame();
 
@@ -465,19 +468,19 @@ int Frupal::getmv()
   {
     case KEY_UP://cursor up
 			lkup();
-			showCurInfo();
+			showCurInfo(yCur, xCur);
       break;
     case KEY_DOWN://cursor down
 			lkdn();
-			showCurInfo();
+			showCurInfo(yCur, xCur);
       break;
     case KEY_LEFT://cursor left
 			lklt();
-			showCurInfo();
+			showCurInfo(yCur, xCur);
       break;
     case KEY_RIGHT://cursor right
 			lkrt();
-			showCurInfo();
+			showCurInfo(yCur, xCur);
       break;
 		case 'w'://hero up
 			ch = heroMove(-1, 0);
@@ -592,21 +595,22 @@ void Frupal::showMap()
 }
 
 //shows information on current cursor coordinate
-void Frupal::showCurInfo(){
-	grovnik * currentGrovnik = itemMap[yCur][xCur];
+int Frupal::showCurInfo(int y, int x){
+	grovnik * currentGrovnik = itemMap[y][x];
 
 	//displays cursor info if on discovered tile
-	if(visitMap[yCur][xCur]){
+	if(visitMap[y][x]){
 		if(currentGrovnik){
-			currentGrovnik->display_info(); //if theres a grovnik, display info
-		}else{
-			//otherwise it displays terrain info
-			terrainInfo.display_info(terrainMap[yCur][xCur]);
+			return currentGrovnik->display_info(); //if theres a grovnik, display info
 		}
 
-	}else{ //display if tile not discovered
-		terrainInfo.display_info('0');
-		mvprintw(4, COLS*.75 + 4, "Darkness rules here");
-		refresh();
+		//otherwise it displays terrain info
+		terrainInfo.display_info(terrainMap[y][x]);
+		return 7;
 	}
+
+	terrainInfo.display_info('0');
+	mvprintw(4, COLS*.75 + 4, "Darkness rules here");
+	refresh();
+	return 5;
 }
