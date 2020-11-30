@@ -357,6 +357,11 @@ char Frupal::validMove(int y, int x){
 			obstacleptr = NULL;
 			return status;
 		}
+    
+		royal_diamond* diamondptr= dynamic_cast<royal_diamond*>(itemMap[y][x]);
+		if(diamondptr){
+			return winGame();
+		}
 	}
 
 	return ' ';
