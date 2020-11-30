@@ -292,7 +292,13 @@ char Frupal::validMove(int y, int x){
 		if(mainGuy.checkInventory("ship")){
 			return ' ';
 		}
-		return 'n';
+    else
+		{
+      if(!mainGuy.modEner(-1)){
+			return loseGame();
+		  }
+		  return 'n';
+    }
 
 	}else if(itemMap[y][x]){
 		food * foodptr = dynamic_cast<food*>(itemMap[y][x]);
@@ -323,6 +329,17 @@ char Frupal::validMove(int y, int x){
 		binocular * binocptr = dynamic_cast<binocular*>(itemMap[y][x]);
 		if(binocptr){
 			if(mainGuy.purchaseItem(binocptr) == true){
+				delete itemMap[y][x];
+				itemMap[y][x] = NULL;
+			}
+
+			binocptr = NULL;
+			return ' ';
+		}
+
+		ship* shipptr = dynamic_cast<ship*>(itemMap[y][x]);
+		if(shipptr){
+			if(mainGuy.purchaseItem(shipptr) == true){
 				delete itemMap[y][x];
 				itemMap[y][x] = NULL;
 			}

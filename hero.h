@@ -25,6 +25,7 @@ class Hero
   	int energy; //hero energy
     int items; //items in the inventory
     int vision; //how far the hero can see.
+    bool waterWalk; // can the hero travel on water tiles
     tool *inventory[INVSIZE+1];	//10 inventory items
     int select(int obstacleType);
 };

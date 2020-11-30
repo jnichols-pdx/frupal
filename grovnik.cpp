@@ -146,7 +146,23 @@ ship::~ship()
 //virtual function
 int ship::display_info()
 {
-	return 0;	
+	char costStr[5] = {0};
+	int row = 4;
+
+	clearLines(row);
+
+
+	displayStat(row, "Cursor Grovnik Info: ");
+	displayStat(row, "Sailing Ship: ");
+
+	displayStat(row, "Cost: ");
+	--row;
+	displayStat(row, itos(cost, costStr), 7);
+
+	displayStat(row, "Allows free travel on water.");
+
+	refresh();
+	return row;
 }
 
 //returns the ship cost
