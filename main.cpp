@@ -19,8 +19,11 @@ int main(int argc, char ** argv)
 	  move(0, x*.75);
 	  vline('#', y);
 
-	  mvwprintw(stdscr, 0, x*0.75+13, "Arrow Keys to Move Cursor"); //Print out instructions to the menu
-    mvwprintw(stdscr, 1, x*0.75+13, "WASD Keys to Move Cursor"); //Print out instructions to the menu
+	 // mvwprintw(stdscr, 0, x*0.75+13, "Arrow Keys to Move Cursor"); //Print out instructions to the menu
+   // mvwprintw(stdscr, 1, x*0.75+13, "WASD Keys to Move Hero"); //Print out instructions to the menu
+    int row = 0;
+	  menu::displayStat(row, "Arrow Keys to Move Cursor",1); //Print out instructions to the menu
+    menu::displayStat(row, "WASD Keys to Move Hero",1); //Print out instructions to the menu
     refresh();
 
     Frupal * g;
