@@ -140,7 +140,7 @@ bool Hero::selectTool(tool * & item, int obstacleType){	//selects a tool and cop
 			
 	int counter = 0;
 	keypad(stdscr, true);
-	int y = 10;	//where the inventory starts in the menu      - change this variable to change y position of where inventory starts in the menu
+	int y = 4;	//where the inventory starts in the menu      - change this variable to change y position of where inventory starts in the menu
 	int arrPos = 0; //array position
 	int userInput = 0;
 	for(int i=0; i<items; ++i){
@@ -148,23 +148,19 @@ bool Hero::selectTool(tool * & item, int obstacleType){	//selects a tool and cop
 	}
 	if(counter == 0) return false;	//no items, return
 
-	mvwprintw(stdscr, y+items, COLS*0.75+3, "Would you like to select a tool? (Y/N)");	//check if the user actually wants a tool
+	displayStat(y, "Would you like to \nselect a tool? (Y/N)");
 	refresh();
 	userInput = getch();
-	mvwprintw(stdscr, y+items, COLS*0.75+3, "                                      ");
+	clearLines(4);
 	refresh();
 	if(userInput == 'N' || userInput == 'n') return false;
-	
-	mvwprintw(stdscr, y+items+1, COLS*0.75+3, "Select tool by pressing RETURN");
 
-	for(int i=0; i<items;++i){//display everything in inventory
-		inventory[i]->display_name(i+y);		
-	}
+	y = 4;
+	displayStat(y, "Select tool by pressing RETURN");
 	refresh();
-	arrPos = select(obstacleType);	//which tool in inventory is selected
 
-	//clear inventory in the menu
-	for(int i = 0; i< INVSIZE+2;++i){ mvwprintw(stdscr, y+i, COLS*0.75+2, "                                         ");}
+	arrPos = select(obstacleType);	//which tool in inventory is selected
+	clearLines(4);
 	refresh();
 
 	item = new tool(*inventory[arrPos]);	//copy tool item with copy constructor
@@ -183,41 +179,38 @@ bool Hero::selectTool(tool * & item, int obstacleType){	//selects a tool and cop
     
 int Hero::select(int obstacleType){
 	int arrPos = 0;
-	int y = 10;
 	int userInput = 0;
+	int y = 9;
 
 	do{	
-		if(userInput == char(10) && inventory[arrPos]->check_if_targets(obstacleType) == false) 
-			mvwprintw(stdscr, y+items+2, COLS*0.75+3, "You need to select a correct tool");
-		else mvwprintw(stdscr, y+items+2, COLS*0.75+3, "                                   ");
+		if(userInput == char(10) && inventory[arrPos]->check_if_targets(obstacleType) == false){
+			y = 9;
+			clearLines(y);
+			displayStat(y, "You need to select a\ncorrect tool");		//this has a problem of displaying continuous lines after TODO
+		}
+		else clearLines(y=9);
 
-		mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">");	//highlight new position
+		clearLines(6, 9);
+		inventory[arrPos]->display_name(7);		//display one at a time for simplicity sake
+		
 		refresh();
 		userInput = getch();
 		switch(userInput){
 			case KEY_UP:
 				if(arrPos == 0){		//if at first element
-					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, " ");	//clear current one	//the > display and moving does not work
 					arrPos = items -1; //go to last element
-					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">");	//highlight new position
 				}
 				else{
-					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, " ");
 					--arrPos;
-					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">"); 
 				}
 				break;
 	
 			case KEY_DOWN:
 				if(arrPos == items -1){ 	//if at last element
-					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, " ");	//clear current one
 					arrPos = 0; //go to first element
-					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">");	//highlight new position
 				}
 				else{
-					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, " ");
 					++arrPos;
-					mvwprintw(stdscr, y+arrPos, COLS*0.75+2, ">"); 
 				}
 				break;
 			default: break;	
@@ -238,7 +231,7 @@ bool Hero::purchaseItem(grovnik * item){
 	int userInput = 0;
 	userInput = getch();
 		
-	clearLines(row-1);
+	clearLines(4);
 
 	//if hero purchases with 'y'
 	if(userInput == 'y' || userInput == 'Y'){

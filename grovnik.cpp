@@ -501,7 +501,7 @@ int tool::display_info()
 
 void tool::display_name(int y){	//displays tool name in the menu 
 	if(description == NULL) return;
-	mvwprintw(stdscr, y, COLS*0.75+3, "%s", description);
+	displayStat(y, description);
 	refresh();
 }
 
