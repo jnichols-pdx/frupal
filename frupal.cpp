@@ -188,6 +188,8 @@ bool Frupal::parseLine(string line, ifstream & mapFile, bool & terrain, bool & s
     {
       endwin();
       std::cerr << s << std::endl;
+      std::cerr << "Offending line in map file:"<< std::endl;
+      std::cerr << ">>>" << line << "<<<" << std::endl;
       exit(-1);
       //return false;
     }
