@@ -463,16 +463,17 @@ char Frupal::winGame(){
   nodelay(curWin,  true);
   while(ch != 'y' && ch != 'Y' && ch != 'n' && ch != 'N' && ch != 'q' && ch != 'Q')
   {
-    if(pretty >= 2)
+    if(pretty > 1)
       pretty = 0;
 
     werase(curWin);
+    wbkgd(curWin, COLOR_PAIR(7));
     wattron(curWin, COLOR_PAIR(7+pretty));
     mvwaddstr(curWin, winYMax/2, (winXMax/2)-8, "A WINNER IS YOU!");
     wattroff(curWin, COLOR_PAIR(7+pretty));
-    wattron(curWin, COLOR_PAIR(8-pretty));
+    wattron(curWin, COLOR_PAIR(7+pretty));
     mvwaddstr(curWin, winYMax/2+1, (winXMax/2)-8, "Play Again (Y/N)");
-    wattroff(curWin, COLOR_PAIR(8-pretty));
+    wattroff(curWin, COLOR_PAIR(7+pretty));
     ch = wgetch(curWin);
     ++pretty;
     usleep(175000);
@@ -569,19 +570,6 @@ void Frupal::showMap()
 
   updateCur();
 
-  int offY = 0;
-  int offX = 0;
-
-  if(yHero > winYMax)
-  {
-    offY = yHero - winYMax+1;
-  }
-  if(xHero > winXMax)
-  {
-    offX = xHero - winXMax+1;
-  }
-
-
 	//updates map
 	for(int y = 0; y < yMax; y++){
 		for(int x = 0; x < xMax; x++){
@@ -605,13 +593,13 @@ void Frupal::showMap()
           }
 
 				  wattron(curWin, color);//turn on color pair
-				  mvwaddch(curWin, y-offY, x-offX, grovnikIcon);//write space to map
+				  mvwaddch(curWin, y+(winYMax/2)-yHero, x+(winXMax/2)-xHero, grovnikIcon);//write space to map
 				  wattroff(curWin, color);//turn off color pair
 
 			  //undiscovered areas
 			  }else{ 
           wattron(curWin, COLOR_PAIR(6));//turn on color BLACK
-				  mvwaddch(curWin, y-offY,x-offX, ' ');//write space to map
+				  mvwaddch(curWin, y+(winYMax/2)-yHero,x+(winXMax/2)-xHero, ' ');//write space to map
           wattroff(curWin, COLOR_PAIR(6));//turn off color BLACK
 			  }
 		  }
@@ -620,7 +608,7 @@ void Frupal::showMap()
 	  
 	//shows hero on screen
 	wattron(curWin, COLOR_PAIR(1));//turn on color RED
-	mvwaddch(curWin, yHero-(offY), xHero-offX,'@');//write @ to map for hero
+	mvwaddch(curWin, winYMax/2, winXMax/2,'@');//write @ to map for hero
 	wattroff(curWin, COLOR_PAIR(1));//turn off color RED
   
 }
