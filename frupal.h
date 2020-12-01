@@ -52,7 +52,6 @@ class Frupal
     //based on hero location, current maximum value for x and y based on current hero location
 		
 		int xHero, yHero; //hero location
-    int mapHerox, mapHeroy;
     Hero mainGuy;
 
     grovnik * itemMap[128][128]; //map that holds items such as clues, food, tools etc.

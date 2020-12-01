@@ -6,8 +6,6 @@ Frupal::Frupal(WINDOW * win, int y, int x)
   curWin = win;
 
   getmaxyx(curWin, winYMax, winXMax);
-	xHero = mapHerox = x;
-	yHero = mapHeroy = y;
 	mvwaddch(curWin, yHero, xHero, '@');
   multy = multx = 0;
   xCur = x;
@@ -41,8 +39,6 @@ Frupal::Frupal(WINDOW * win, char * mapFileName): xHero(5), yHero(5)//remove
 	mainGuy.showHeroInfo();
   multy = multx = 0;
 
-  mapHeroy = 1;
-  mapHerox = 1;
 
 	wbkgd(win, COLOR_PAIR(6));
 
@@ -257,11 +253,6 @@ char Frupal::heroMove(int yOffset, int xOffset){
 		yHero += yOffset;
 		xHero += xOffset;
 
-    if((yOffset == -1 && mapHeroy > 0) || (yOffset == 1 && mapHeroy < winYMax))
-      mapHeroy += yOffset;
-    if((xOffset == -1 && mapHerox > 0) || (xOffset == 1 && mapHerox < winXMax))
-      mapHerox += xOffset;
-
 		showMap();//update map
 
 		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
@@ -446,9 +437,10 @@ char Frupal::loseGame(){
       pretty = 0;
 
     werase(curWin);
-    wattron(curWin, COLOR_PAIR(10-pretty));
+    wbkgd(curWin, COLOR_PAIR(10)); 
+    wattron(curWin, COLOR_PAIR(9+pretty));
     mvwaddstr(curWin, winYMax/2, (winXMax/2)-5, "GAME OVER!");
-    wattroff(curWin, COLOR_PAIR(10-pretty));
+    wattroff(curWin, COLOR_PAIR(9+pretty));
     wattron(curWin, COLOR_PAIR(9+pretty));
     mvwaddstr(curWin, winYMax/2+1, (winXMax/2)-8, "Play Again (Y/N)");
     wattroff(curWin, COLOR_PAIR(9+pretty));
