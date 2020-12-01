@@ -8,8 +8,8 @@ Frupal::Frupal(WINDOW * win, int y, int x)
   getmaxyx(curWin, winYMax, winXMax);
 	mvwaddch(curWin, yHero, xHero, '@');
   multy = multx = 0;
-  xCur = x;
-  yCur = y;
+  xCur = winXMax/2;
+  yCur = winYMax/2;
   xMax = yMax = 128;
 
   keypad(curWin, true);
@@ -138,8 +138,8 @@ bool Frupal::parseLine(string line, ifstream & mapFile, bool & terrain, bool & s
     //reject map if hero starts out of bounds
     if(xHero < 0 || xHero >= xMax || yHero < 0 || yHero >= yMax)
       return false;
-    yCur = yHero;
-    xCur = xHero;
+    yCur = winYMax/2;
+    xCur = winXMax/2;
     start = true;
   }
   else if (elemName.compare("diamonds:") == 0) {
@@ -260,8 +260,8 @@ char Frupal::heroMove(int yOffset, int xOffset){
 		}
 
     //moving our hero now updates the cursor location to him
-    yCur = yHero;
-    xCur = xHero;
+    yCur = winYMax/2;
+    xCur = winXMax/2;
 
     //And hides the cursor
     curs_set(0);
@@ -571,39 +571,34 @@ void Frupal::showMap()
   updateCur();
 
 	//updates map
-	for(int y = 0; y < yMax; y++){
-		for(int x = 0; x < xMax; x++){
-			
-      if(y >= 0 && y < yMax && x >= 0 && x < yMax)
-      {
-			  //discovered areas
-				  if(visitMap[y][x] == true){
-					  int color = terrainInfo.get_color(terrainMap[y][x]);//gets color
-
-          //Display item grovniks
-          currentGrovnik = itemMap[y][x];
-          if(currentGrovnik){
-            grovnikIcon = currentGrovnik->get_character();
-            if(grovnikIcon == '%') { //special case the royal diamonds
-              color = COLOR_PAIR(7); // white on cyan
-              grovnikIcon = '$';
-            }
-          } else {
-            grovnikIcon = ' '; //No item, show just the terrain.
+  for(int y = 0; y < yMax; y++){
+    for(int x = 0; x < xMax; x++){
+		  //discovered areas
+      if(visitMap[y][x] == true){
+        int color = terrainInfo.get_color(terrainMap[y][x]);//gets color
+        //Display item grovniks
+        currentGrovnik = itemMap[y][x];
+        
+        if(currentGrovnik){
+          grovnikIcon = currentGrovnik->get_character();
+          if(grovnikIcon == '%') { //special case the royal diamonds
+            color = COLOR_PAIR(7); // white on cyan
+            grovnikIcon = '$';
           }
+        } else {
+          grovnikIcon = ' '; //No item, show just the terrain.
+        }
 
-				  wattron(curWin, color);//turn on color pair
-				  mvwaddch(curWin, y+(winYMax/2)-yHero, x+(winXMax/2)-xHero, grovnikIcon);//write space to map
-				  wattroff(curWin, color);//turn off color pair
-
-			  //undiscovered areas
-			  }else{ 
-          wattron(curWin, COLOR_PAIR(6));//turn on color BLACK
-				  mvwaddch(curWin, y+(winYMax/2)-yHero,x+(winXMax/2)-xHero, ' ');//write space to map
-          wattroff(curWin, COLOR_PAIR(6));//turn off color BLACK
-			  }
-		  }
-    }
+				wattron(curWin, color);//turn on color pair
+				mvwaddch(curWin, y+(winYMax/2)-yHero, x+(winXMax/2)-xHero, grovnikIcon);//write space to map
+				wattroff(curWin, color);//turn off color pair
+		   //undiscovered areas
+		   }else{ 
+        wattron(curWin, COLOR_PAIR(6));//turn on color BLACK
+	  	  mvwaddch(curWin, y+(winYMax/2)-yHero,x+(winXMax/2)-xHero, ' ');//write space to map
+        wattroff(curWin, COLOR_PAIR(6));//turn off color BLACK
+	  }
+	 }
   }
 	  
 	//shows hero on screen
@@ -615,18 +610,23 @@ void Frupal::showMap()
 
 //shows information on current cursor coordinate
 int Frupal::showCurInfo(int y, int x){
-	grovnik * currentGrovnik = itemMap[y][x];
+  int trueY = y-(winYMax/2)+yHero;
+  int trueX = x-(winXMax/2)+xHero;
+  if(trueY >= 0 && trueY < yMax && trueX >= 0 && trueX < xMax) {
+    grovnik * currentGrovnik = itemMap[trueY][trueX];
 
 	//displays cursor info if on discovered tile
-	if(visitMap[y][x]){
-		if(currentGrovnik){
-			return currentGrovnik->display_info(); //if theres a grovnik, display info
-		}
 
-		//otherwise it displays terrain info
-		terrainInfo.display_info(terrainMap[y][x]);
-		return 7;
-	}
+	  if(visitMap[trueY][trueX]){
+		  if(currentGrovnik){
+			  return currentGrovnik->display_info(); //if theres a grovnik, display info
+		  }
+
+		  //otherwise it displays terrain info
+		  terrainInfo.display_info(terrainMap[trueY][trueX]);
+		  return 7;
+	  }
+  }
 
 	terrainInfo.display_info('0');
 	mvprintw(4, COLS*.75 + 4, "Darkness rules here");
