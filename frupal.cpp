@@ -6,8 +6,8 @@ Frupal::Frupal(WINDOW * win, int y, int x)
   curWin = win;
 
   getmaxyx(curWin, winYMax, winXMax);
-	xHero = x;
-	yHero = y;
+	xHero = mapHerox = x;
+	yHero = mapHeroy = y;
 	mvwaddch(curWin, yHero, xHero, '@');
   multy = multx = 0;
   xCur = x;
@@ -40,6 +40,9 @@ Frupal::Frupal(WINDOW * win, char * mapFileName): xHero(5), yHero(5)//remove
   mainGuy = Hero(1000, 100);
 	mainGuy.showHeroInfo();
   multy = multx = 0;
+
+  mapHeroy = 1;
+  mapHerox = 1;
 
 	wbkgd(win, COLOR_PAIR(6));
 
@@ -250,10 +253,15 @@ void Frupal::lkrt()
 char Frupal::heroMove(int yOffset, int xOffset){
 	char status = validMove(yHero + yOffset, xHero + xOffset);
 	if(status == ' '){ //valid move
-		mvwdelch(curWin, yHero, xHero);
 
 		yHero += yOffset;
 		xHero += xOffset;
+
+    if((yOffset == -1 && mapHeroy > 0) || (yOffset == 1 && mapHeroy < winYMax))
+      mapHeroy += yOffset;
+    if((xOffset == -1 && mapHerox > 0) || (xOffset == 1 && mapHerox < winXMax))
+      mapHerox += xOffset;
+
 		showMap();//update map
 
 		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
@@ -434,16 +442,16 @@ char Frupal::loseGame(){
   nodelay(curWin,  true);
   while(ch != 'y' && ch != 'Y' && ch != 'n' && ch != 'N' && ch != 'q' && ch != 'Q')
   {
-    if(pretty >= 8)
-      pretty = 1;
+    if(pretty > 1)
+      pretty = 0;
 
     werase(curWin);
-    wattron(curWin, COLOR_PAIR(pretty));
+    wattron(curWin, COLOR_PAIR(10-pretty));
     mvwaddstr(curWin, winYMax/2, (winXMax/2)-5, "GAME OVER!");
-    wattroff(curWin, COLOR_PAIR(pretty));
-    wattron(curWin, COLOR_PAIR(8-pretty));
+    wattroff(curWin, COLOR_PAIR(10-pretty));
+    wattron(curWin, COLOR_PAIR(9+pretty));
     mvwaddstr(curWin, winYMax/2+1, (winXMax/2)-8, "Play Again (Y/N)");
-    wattroff(curWin, COLOR_PAIR(8-pretty));
+    wattroff(curWin, COLOR_PAIR(9+pretty));
     ch = wgetch(curWin);
     ++pretty;
     usleep(175000);
@@ -569,57 +577,60 @@ void Frupal::showMap()
 
   updateCur();
 
-  int smolY = winYMax*multy;
-  int smolX = winXMax*multx;
-  int bigY, bigX;
-  
-  if(winYMax * (multy+1) > yMax)
-    bigY = yMax;
-  else
-    bigY = winYMax*(multy+1);
-  
-  if(winXMax * (multx+1) > xMax)
-    bigX = xMax;
-  else
-    bigX = winXMax*(multx+1);
+  int offY = 0;
+  int offX = 0;
+
+  if(yHero > winYMax)
+  {
+    offY = yHero - winYMax+1;
+  }
+  if(xHero > winXMax)
+  {
+    offX = xHero - winXMax+1;
+  }
+
 
 	//updates map
-	for(int y = smolY; y < bigY; y++){
-		for(int x = smolX; x < bigX; x++){
+	for(int y = 0; y < yMax; y++){
+		for(int x = 0; x < xMax; x++){
 			
-			//discovered areas
-				if(visitMap[y][x] == true){
-					int color = terrainInfo.get_color(terrainMap[y][x]);//gets color
+      if(y >= 0 && y < yMax && x >= 0 && x < yMax)
+      {
+			  //discovered areas
+				  if(visitMap[y][x] == true){
+					  int color = terrainInfo.get_color(terrainMap[y][x]);//gets color
 
-        //Display item grovniks
-        currentGrovnik = itemMap[y][x];
-        if(currentGrovnik){
-          grovnikIcon = currentGrovnik->get_character();
-          if(grovnikIcon == '%') { //special case the royal diamonds
-            color = COLOR_PAIR(7); // white on cyan
-            grovnikIcon = '$';
+          //Display item grovniks
+          currentGrovnik = itemMap[y][x];
+          if(currentGrovnik){
+            grovnikIcon = currentGrovnik->get_character();
+            if(grovnikIcon == '%') { //special case the royal diamonds
+              color = COLOR_PAIR(7); // white on cyan
+              grovnikIcon = '$';
+            }
+          } else {
+            grovnikIcon = ' '; //No item, show just the terrain.
           }
-        } else {
-          grovnikIcon = ' '; //No item, show just the terrain.
-        }
 
-				wattron(curWin, color);//turn on color pair
-				mvwaddch(curWin, y-(winYMax*(multy)), x-(winXMax*(multx)), grovnikIcon);//write space to map
-				wattroff(curWin, color);//turn off color pair
+				  wattron(curWin, color);//turn on color pair
+				  mvwaddch(curWin, y-offY, x-offX, grovnikIcon);//write space to map
+				  wattroff(curWin, color);//turn off color pair
 
-			//undiscovered areas
-			}else{ 
-				wattron(curWin, COLOR_PAIR(6));//turn on color BLACK
-				mvwaddch(curWin, y-(winYMax*(multy)),x-(winXMax*(multx)), ' ');//write space to map
-				wattroff(curWin, COLOR_PAIR(6));//turn off color BLACK
-			}
-		}
-	}
-
+			  //undiscovered areas
+			  }else{ 
+          wattron(curWin, COLOR_PAIR(6));//turn on color BLACK
+				  mvwaddch(curWin, y-offY,x-offX, ' ');//write space to map
+          wattroff(curWin, COLOR_PAIR(6));//turn off color BLACK
+			  }
+		  }
+    }
+  }
+	  
 	//shows hero on screen
 	wattron(curWin, COLOR_PAIR(1));//turn on color RED
-	mvwaddch(curWin, yHero-(winYMax*(multy)),xHero-(winXMax*(multx)),'@');//write @ to map for hero
+	mvwaddch(curWin, yHero-(offY), xHero-offX,'@');//write @ to map for hero
 	wattroff(curWin, COLOR_PAIR(1));//turn off color RED
+  
 }
 
 //shows information on current cursor coordinate

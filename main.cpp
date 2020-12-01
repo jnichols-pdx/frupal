@@ -46,9 +46,11 @@ int main(int argc, char ** argv)
     init_pair(3,COLOR_BLACK, COLOR_WHITE);
     init_pair(4,COLOR_BLACK, COLOR_GREEN);
     init_pair(5,COLOR_BLACK, COLOR_MAGENTA);
-	  init_pair(6, COLOR_YELLOW, COLOR_BLACK);
-	  init_pair(7, COLOR_WHITE, COLOR_CYAN);
-    init_pair(8, COLOR_CYAN, COLOR_WHITE);
+	  init_pair(6,COLOR_YELLOW, COLOR_BLACK);
+	  init_pair(7,COLOR_WHITE, COLOR_CYAN);
+    init_pair(8,COLOR_CYAN, COLOR_WHITE);
+    init_pair(9,COLOR_RED, COLOR_BLACK);
+    init_pair(10,COLOR_BLACK, COLOR_RED);
 
 	  bkgd(COLOR_PAIR(6));
 	  refresh();
