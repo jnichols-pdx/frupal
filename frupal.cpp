@@ -59,16 +59,32 @@ bool Frupal::loadMap(char * mapFileName)
 {
   ifstream mapFile(mapFileName);
   if(!mapFile)
-    return false;
+  {
+    endwin();
+    cerr << "Failed to load the map!" << endl;
+    cerr << "Could not open " << mapFileName << endl;
+    exit(-1);
+  }
 
   //Check whether this file claims to be a map we understand
   string elemName;
   mapFile >> elemName;
   if(elemName.compare("Frupal_Kingdom:") != 0)
-    return false;
+  {
+    endwin();
+    cerr << "Failed to load the map!" << endl;
+    cerr << mapFileName << " does not appear to be a mapfile." << endl;
+    cerr << "Kingdom of Frupal map files start with \"Frupal_Kingdom:\" on the first line." << endl;
+    exit(-1);
+  }
 
   if(mapFile.fail())
-    return false;
+  {
+    endwin();
+    cerr << "Failed to load the map!" << endl;
+    cerr << "Unable to read mapfile after header element." << endl;
+    exit(-1);
+  }
 
   bool foundTerrain = false;
   bool foundStart= false;
@@ -92,7 +108,25 @@ bool Frupal::loadMap(char * mapFileName)
     lastParseOK = parseLine(sourceLine, mapFile, foundTerrain, foundStart, foundDiamonds);  
   }
 
-  return (foundTerrain && foundStart && foundDiamonds && lastParseOK);
+
+  if(!(foundTerrain && foundStart && foundDiamonds))
+  {
+    endwin();
+    cerr << "Failed to load the map!" << endl;
+
+    if(!foundTerrain)
+      cerr << "Map did not contain the terrain: element." << endl;
+
+    if(!foundStart)
+      cerr << "Map did not contain the start: element." << endl;
+
+    if(!foundDiamonds)
+      cerr << "Map did not contain the diamonds: element." << endl;
+
+    exit(-1);
+  }
+  else
+    return true;
 }
 
 //Parse most elements from a single line string
@@ -121,13 +155,31 @@ bool Frupal::parseLine(string line, ifstream & mapFile, bool & terrain, bool & s
     lineStream >> xMax >> yMax;
     //reject map if map size too large or small
     if(xMax < 2 || xMax > 128 || yMax < 2 || yMax > 128)
-      return false;
+    {
+      endwin();
+      cerr << "Failed to load the map!" << endl;
+      cerr << "Invalid or unsupported terrain size: " << xMax << " x " << yMax << endl;
+      cerr << "Allowed range is 2 x 2 to 128 x 128" << endl;
+      exit(-1);
+    }
 
     //Adjusted for static map size
+    char c = ' ';
     for(int i = 0; i < yMax; ++i){
       for(int j = 0; j < xMax; ++j){
 
-        terrainMap[i][j] = mapFile.get();
+        c = mapFile.get();
+
+        if(c != '.' && c != '~' && c != '"' && c != '=')
+        {
+          endwin();
+          cerr << "Failed to load the map!" << endl;
+          cerr << "Found a '" << c << "' character on terrain row " << i << " column " << j << endl;
+          cerr << "Allowed terrain characters are . ~ \" =" << endl;
+          exit(-1);
+        }
+
+        terrainMap[i][j] = c;
         visitMap[i][j] = false;
       }
       mapFile.ignore(1000, '\n');
@@ -138,7 +190,14 @@ bool Frupal::parseLine(string line, ifstream & mapFile, bool & terrain, bool & s
     lineStream >> xHero >> yHero;
     //reject map if hero starts out of bounds
     if(xHero < 0 || xHero >= xMax || yHero < 0 || yHero >= yMax)
-      return false;
+    {
+      endwin();
+      cerr << "Failed to load the map!" << endl;
+      cerr << "Hero starting location out of range: " << xHero << "," << yHero << endl;
+      cerr << "Allowed range is 0,0 to " << xMax << "," << yMax << endl;
+      exit(-1);
+    }
+
     yCur = yHero;
     xCur = xHero;
     start = true;
@@ -169,7 +228,13 @@ bool Frupal::parseLine(string line, ifstream & mapFile, bool & terrain, bool & s
     newItem = new tool();
   }
   else {
-    return false; //reject map file on unexpected input
+    //reject map file on unexpected input
+    {
+      endwin();
+      cerr << "Failed to load the map!" << endl;
+      cerr << "Found unkown element: " << elemName << endl;
+      exit(-1);
+    }
   }
 
 
@@ -177,9 +242,27 @@ bool Frupal::parseLine(string line, ifstream & mapFile, bool & terrain, bool & s
   {
     lineStream >> x >> y;
     if(x <0 || x >= xMax || y < 0 || y >= yMax) //reject if grovnik out of bounds
-      return false;
+    {
+      endwin();
+      cerr << "Failed to load the map!" << endl;
+      cerr << elemName << " location is out of range: " << x << "," << y << endl;
+      cerr << "Allowed range is 0,0 to " << xMax << "," << yMax << endl;
+      cerr << "Offending line in map file:"<< std::endl;
+      cerr << ">>>" << line << "<<<" << std::endl;
+      exit(-1);
+    }
+
+    //reject map file if multiple grovniks at the same location
     if(itemMap[y][x] != NULL)
-      return false; //reject map file if multiple grovniks at the same location
+    {
+      endwin();
+      cerr << "Failed to load the map!" << endl;
+      cerr << "Item location is already in use: " << x << "," << y << endl;
+      cerr << "Offending line in map file:"<< std::endl;
+      cerr << ">>>" << line << "<<<" << std::endl;
+      exit(-1);
+    }
+
     try
     {
       lineStream >> *newItem;
@@ -187,12 +270,11 @@ bool Frupal::parseLine(string line, ifstream & mapFile, bool & terrain, bool & s
     catch(const char * s)
     {
       endwin();
-      std::cerr << "Failed to load the map!\n", 
-      std::cerr << s << std::endl;
-      std::cerr << "Offending line in map file:"<< std::endl;
-      std::cerr << ">>>" << line << "<<<" << std::endl;
+      cerr << "Failed to load the map!" << endl;
+      cerr << s << std::endl;
+      cerr << "Offending line in map file:"<< std::endl;
+      cerr << ">>>" << line << "<<<" << std::endl;
       exit(-1);
-      //return false;
     }
     itemMap[y][x] = newItem;
   }
