@@ -75,6 +75,7 @@ bool Frupal::loadMap(char * mapFileName)
     cerr << "Failed to load the map!" << endl;
     cerr << mapFileName << " does not appear to be a mapfile." << endl;
     cerr << "Kingdom of Frupal map files start with \"Frupal_Kingdom:\" on the first line." << endl;
+    cerr << "Found >" << elemName << "< instead." << endl;
     exit(-1);
   }
 
@@ -160,6 +161,8 @@ bool Frupal::parseLine(string line, ifstream & mapFile, bool & terrain, bool & s
       cerr << "Failed to load the map!" << endl;
       cerr << "Invalid or unsupported terrain size: " << xMax << " x " << yMax << endl;
       cerr << "Allowed range is 2 x 2 to 128 x 128" << endl;
+      cerr << "Offending line in map file:"<< std::endl;
+      cerr << ">>>" << line << "<<<" << std::endl;
       exit(-1);
     }
 
@@ -195,6 +198,8 @@ bool Frupal::parseLine(string line, ifstream & mapFile, bool & terrain, bool & s
       cerr << "Failed to load the map!" << endl;
       cerr << "Hero starting location out of range: " << xHero << "," << yHero << endl;
       cerr << "Allowed range is 0,0 to " << xMax << "," << yMax << endl;
+      cerr << "Offending line in map file:"<< std::endl;
+      cerr << ">>>" << line << "<<<" << std::endl;
       exit(-1);
     }
 
@@ -233,6 +238,8 @@ bool Frupal::parseLine(string line, ifstream & mapFile, bool & terrain, bool & s
       endwin();
       cerr << "Failed to load the map!" << endl;
       cerr << "Found unkown element: " << elemName << endl;
+      cerr << "Offending line in map file:"<< std::endl;
+      cerr << ">>>" << line << "<<<" << std::endl;
       exit(-1);
     }
   }
