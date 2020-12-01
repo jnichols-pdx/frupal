@@ -99,6 +99,7 @@ class royal_diamond : public grovnik
 		~royal_diamond();
 		int display_info();
 	protected:
+		virtual void read(std::istream & source);
 	
 	private:	
 };

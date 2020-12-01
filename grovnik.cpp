@@ -119,16 +119,22 @@ int binocular::get_range()
 
 //virtual helper to allow istream  >> binocularObject
 void binocular::read(istream & source) {
+  //override values from default constructor to allow error checking
+  cost = -1;
+  range = -1; 
+
   source >> cost;
   if(cost <= 0 && source.fail())
-    throw("Incorrect binoculars: cost missing or invalid.");
+    throw("Incorrect binoculars: missing or invalid <cost>.");
+
   source >> range;
   if(range <= 0 && source.fail())
-    throw("Incorrect binoculars: range missing or invalid.");
+    throw("Incorrect binoculars: missing or invalid <distance>.");
+
   string temp;
   getline(source,temp);
   if(temp.find_first_not_of(" \n\r\t") != string::npos)
-    throw("Incorrect binoculars: unexpected text after range on line.");
+    throw("Incorrect binoculars: found unexpected text on line after <distance>.");
   
 }
 
@@ -184,7 +190,17 @@ int ship::get_cost()
 //virtual helper to allow istream  >> shipObject
 void ship::read(istream & source)
 {
+  //override values from default constructor to allow error checking
+  cost = -1;
+
   source >> cost;
+  if(cost <= 0 && source.fail())
+    throw "Incorrect ship: missing or invalid energy <cost>.";
+
+  string temp;
+  getline(source,temp);
+  if(temp.find_first_not_of(" \n\r\t") != string::npos)
+    throw("Incorrect ship: found unexpected text on line after <cost>.");
 }
 
 //-------------------------------------------------------------------
@@ -248,7 +264,12 @@ void treasure_chest::discover(){
 //virtual helper to allow istream  >> treasureChestObject
 void treasure_chest::read(istream & source)
 {
+  //override values from default constructor to allow error checking
+  amount = -1;
+
   source >> amount;
+  if(amount <= 0 && source.fail())
+    throw "Incorrect treasure: missing or invalid <value>";
 
   //strip leading whitespace before using getline()
   source >> ws;
@@ -261,6 +282,9 @@ void treasure_chest::read(istream & source)
     temp.erase(temp.length() -1);
 
   convertNewlines(temp);
+
+  if(temp.length() == 0)
+    throw "Incomplete treasure: missing <description>.";
 
   name = new char[temp.length() + 1];
   strcpy(name,temp.c_str());
@@ -289,6 +313,17 @@ int royal_diamond::display_info()
 	displayStat(row, "Grab to win!");
 	refresh();
 	return row;	
+}
+
+//virtual helper to allow istream  >> clueObject
+void royal_diamond::read(istream & source)
+{
+  string temp;
+  getline(source, temp);
+
+  if(temp.find_first_not_of(" \n\r\t") != string::npos)
+    throw("Incorrect diamonds: found unexpected text after on line after <y location>.");
+
 }
 
 //-------------------------------------------------------------------
@@ -432,14 +467,18 @@ int obstacle::get_kind_int()
 //virtual helper to allow istream >> obstacleObject
 void obstacle::read(istream & source)
 {
+  //override values from default constructor to allow error checking
+  b_energy = -1;
+
   string temp;
   source >> temp; //Holds obstacle kind
   if(temp.length() == 0)
-    throw "Incomplete obstacle: missing kind, energy cost and description.";
+    throw "Incomplete obstacle: missing <kind>, energy <cost> and <description>.";
+
   kind = add_obstacle_typename(temp.c_str());
   source >> b_energy;
-  if(b_energy == 0 && source.fail())
-    throw "Incorrect obstacle: missing or invalid energy cost.";
+  if(b_energy <= 0 && source.fail())
+    throw "Incorrect obstacle: missing or invalid energy <cost>.";
 
   //strip leading whitespace before using getline()
   source >> ws;
@@ -454,7 +493,7 @@ void obstacle::read(istream & source)
   convertNewlines(temp);
 
   if(temp.length() == 0)
-    throw "Incomplete obstacle: missing description.";
+    throw "Incomplete obstacle: missing <description>.";
 
   description= new char[temp.length() + 1];
   strcpy(description,temp.c_str());
@@ -462,7 +501,7 @@ void obstacle::read(istream & source)
 
 //-------------------------------------------------------------------
 
-tool::tool() : toolObstacle('T'), description(NULL), kind(0), cost(0), divisor(1)
+tool::tool() : toolObstacle('T'), description(NULL), target_count(0), kind(0), cost(0), divisor(1)
 {}
 
 //constructor with args
@@ -476,6 +515,7 @@ tool::tool(char * description, int kind, int cost, int divisor) : toolObstacle('
 	this->cost = cost;
 
   this->divisor = divisor;
+  target_count = 0; //TODO - functions to add targets after initialization? or pass a list object?
 }
 
 tool::~tool(){
@@ -579,18 +619,40 @@ const char * tool::get_kind_text()
 //virtual helper to allow istream >>toolObject 
 void tool::read(istream & source)
 {
+  //override values from default constructor to allow error checking
+  target_count = -1;
+  divisor = -1;
+  cost = -1;
+
   string temp;
   source >> temp; //holds tool kind
+  if(temp.length() == 0)
+    throw "Incomplete tool: missing <kind>, <target_count>, <targets...>, <divisor, <cost> and <description>.";
+
   kind = add_tool_typename(temp);
-  source >> target_count; //TODO REALLY NEED INPUT VALIDATION IN ALL OF THESE read FUNCTIONS
+
+  source >> target_count; 
+  if(target_count <= 0 && source.fail())
+    throw "Incorrect tool: missing or invalid <target_count>.";
+
+  temp.erase();
   targets = new int[target_count];
   for(int i = 0; i < target_count; ++i)
   {
     source >> temp;
+    if(temp.length() == 0)
+      throw "Incomplete tool: missing (or too few) <targets...>, <divisor, <cost> and <description>.";
     targets[i] = add_obstacle_typename(temp);
+    temp.erase();
   }
 
-  source >> divisor >> cost;
+  source >> divisor;
+  if(divisor <= 0 && source.fail())
+    throw "Incorrect tool: missing or invalid <divisor>.";
+
+  source >> cost;
+  if(cost <= 0 && source.fail())
+    throw "Incorrect tool: missing or invalid <cost>.";
 
   //strip leading whitespace before using getline()
   source >> ws;
@@ -602,6 +664,9 @@ void tool::read(istream & source)
     temp.erase(temp.length() -1);
 
   convertNewlines(temp);
+
+  if(temp.length() == 0)
+    throw "Incomplete tool: missing <description>.";
 
   description= new char[temp.length() + 1];
   strcpy(description,temp.c_str());
@@ -675,7 +740,17 @@ int food::get_energy()
 //virtual helper to allow istream >> foodObject
 void food::read(istream & source)
 {
-  source >> cost >> energy;
+  //override values from default constructor to allow error checking
+  cost = -1;
+  energy = -1;
+
+  source >> cost;
+  if(cost<= 0 && source.fail())
+    throw "Incorrect food: missing or invalid energy <cost>.";
+
+  source >> energy;
+  if(energy <= 0 && source.fail())
+    throw "Incorrect food: missing or invalid energy <energy>.";
 
   //strip leading whitespace before using getline()
   source >> ws;
@@ -688,6 +763,9 @@ void food::read(istream & source)
     temp.erase(temp.length() -1);
 
   convertNewlines(temp);
+
+  if(temp.length() == 0)
+    throw "Incomplete food: missing <description>.";
 
   name = new char[temp.length() + 1];
   strcpy(name,temp.c_str());
@@ -758,6 +836,9 @@ void clue::read(istream & source)
     temp.erase(temp.length() -1);
  
   convertNewlines(temp);
+
+  if(temp.length() == 0)
+    throw "Incomplete clue: missing <description>.";
 
   clueText = new char[temp.length() + 1];
   strcpy(clueText,temp.c_str());
