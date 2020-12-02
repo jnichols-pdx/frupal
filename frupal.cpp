@@ -136,10 +136,17 @@ bool Frupal::parseLine(string line, ifstream & mapFile, bool & terrain, bool & s
   else if(elemName.compare("start:") == 0) {
     lineStream >> xHero >> yHero;
     //reject map if hero starts out of bounds
-    if(xHero < 0 || xHero >= xMax || yHero < 0 || yHero >= yMax)
-      return false;
-    xCur = xHero;
-    yCur = yHero;
+    if(xHero < 0 || xHero >= xMax || yHero < 0 || yHero >= yMax){
+      endwin();
+      cerr << "Failed to load the map!" << endl;
+      cerr << "Hero starting location out of range: " << xHero << "," << yHero << endl;
+      cerr << "Allowed range is 0,0 to " << xMax << "," << yMax << endl;
+      cerr << "Offending line in map file:"<< std::endl;
+      cerr << ">>>" << line << "<<<" << std::endl;
+      exit(-1);
+    }
+    xCur = winXMax/2;
+    yCur = winYMax/2;
     start = true;
   }
   else if (elemName.compare("diamonds:") == 0) {
