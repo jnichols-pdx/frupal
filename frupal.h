@@ -11,6 +11,9 @@
 #include "grovnik.h"
 #include "terrain.h"
 
+//temp for debug...
+#include <iostream>
+
 using namespace std;
 
 class Frupal
