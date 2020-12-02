@@ -138,8 +138,8 @@ bool Frupal::parseLine(string line, ifstream & mapFile, bool & terrain, bool & s
     //reject map if hero starts out of bounds
     if(xHero < 0 || xHero >= xMax || yHero < 0 || yHero >= yMax)
       return false;
-    xCur = winXMax/2;
-    yCur = winYMax/2;
+    xCur = xHero;
+    yCur = yHero;
     start = true;
   }
   else if (elemName.compare("diamonds:") == 0) {
