@@ -138,8 +138,8 @@ bool Frupal::parseLine(string line, ifstream & mapFile, bool & terrain, bool & s
     //reject map if hero starts out of bounds
     if(xHero < 0 || xHero >= xMax || yHero < 0 || yHero >= yMax)
       return false;
-    yCur = winYMax/2;
     xCur = winXMax/2;
+    yCur = winYMax/2;
     start = true;
   }
   else if (elemName.compare("diamonds:") == 0) {
@@ -206,43 +206,47 @@ Frupal::~Frupal()
 void Frupal::lkup()
 {
   yCur -= 1;
-  if(yCur < (0 + (winYMax * multy)))
-    yCur = ((multy + 1) * winYMax) -1;
-  if(yCur >= yMax)
-    yCur = yMax -1;
+  if(yCur < 0)
+    yCur = 0;
+  else if(yCur >= winYMax)
+    yCur = winYMax;
   curs_set(1); //Display cursor when it moves
-	wmove(curWin, yCur % winYMax, xCur % winXMax);
+	wmove(curWin, yCur, xCur);
 }
 
 //lkdn updates cursor location downwards
 void Frupal::lkdn()
 {
   yCur -= -1; //yes, I am aware that this is...non-standard. lol
-  if(yCur >= ((multy+1)*winYMax) || yCur >= yMax)
-    yCur = (multy * winYMax);
+  if(yCur < 0)
+    yCur = 0;
+  else if(yCur >= winYMax)
+    yCur = winYMax;
   curs_set(1); //Display cursor when it moves
-	wmove(curWin, yCur % winYMax, xCur % winXMax);
+	wmove(curWin, yCur, xCur);
 }
 
 //lklt updates cursor location to left
 void Frupal::lklt()
 {
   xCur -= 1;
-  if(xCur < (0 + (winXMax * multx)))
-    xCur = ((multx + 1) * winXMax) -1;
-  if(xCur >= xMax)
-    xCur = xMax -1;
+  if(xCur < 0)
+    xCur = 0;
+  else if(xCur >= winXMax)
+    xCur = xMax;
   curs_set(1); //Display cursor when it moves
-	wmove(curWin, yCur % winYMax, xCur % winXMax);
+	wmove(curWin, yCur, xCur);
 }
 
 void Frupal::lkrt()
 {
   xCur -= -1;
-  if(xCur >= ((multx+1)*winXMax) ||xCur >= xMax)
-    xCur = (multx * winXMax);
+  if(xCur < 0)
+    xCur = 0;
+  else if(xCur >= winXMax)
+    xCur = winXMax;
   curs_set(1); //Display cursor when it moves
-	wmove(curWin, yCur % winYMax, xCur % winXMax);
+	wmove(curWin, yCur, xCur);
 }
 
 //moves character by offsets passed in
@@ -256,7 +260,7 @@ char Frupal::heroMove(int yOffset, int xOffset){
 		showMap();//update map
 
 		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
-			return loseGame();
+			//return loseGame();
 		}
 
     //moving our hero now updates the cursor location to him
@@ -282,7 +286,7 @@ char Frupal::validMove(int y, int x){
 	//checks for a wall
 	}else if(terrainMap[y][x] == '='){
 		if(!mainGuy.modEner(-1)){
-			return loseGame();
+			//return loseGame();
 		}
 		return 'n';
 
@@ -395,7 +399,7 @@ char Frupal::breakObstacle(obstacle * item, int y , int x){	//breaks obstacle at
 
 	if(!mainGuy.selectTool(copy, item->get_kind_int(), menuRow)){	//no tool selected
 		if(!mainGuy.modEner(item->get_b_energy())){
-			status = loseGame();
+			//status = loseGame();
 
 		}else{
 			 delete itemMap[y][x];
@@ -404,7 +408,7 @@ char Frupal::breakObstacle(obstacle * item, int y , int x){	//breaks obstacle at
 
 	}else{						//tool selected
 		if(!mainGuy.modEner(item->get_b_energy() / copy->get_divisor())){
-			status = loseGame();
+			//status = loseGame();
 
 		}else{
 			 delete itemMap[y][x];
@@ -598,6 +602,8 @@ void Frupal::showMap()
 	  	  mvwaddch(curWin, y+(winYMax/2)-yHero,x+(winXMax/2)-xHero, ' ');//write space to map
         wattroff(curWin, COLOR_PAIR(6));//turn off color BLACK
 	  }
+    //if(((y == (winYMax/2)-yHero-1) && x >= (winXMax/2)-xHero-1 && x <= (winXMax/2)+xHero+1) || (y >= (winYMax/2)-yHero-1 && y <= (winXMax/2)+yHero+1 && x == (winXMax/2)-xHero-1))
+      //mvwaddch(curWin,y,x,'#');
 	 }
   }
 	  
