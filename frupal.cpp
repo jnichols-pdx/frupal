@@ -364,7 +364,7 @@ char Frupal::heroMove(int yOffset, int xOffset){
 		showMap();//update map
 
 		if(!mainGuy.modEner(terrainInfo.get_travel_cost(terrainMap[yHero][xHero]))){
-			//return loseGame();
+			return loseGame();
 		}
 
     //moving our hero now updates the cursor location to him
@@ -390,7 +390,7 @@ char Frupal::validMove(int y, int x){
 	//checks for a wall
 	}else if(terrainMap[y][x] == '='){
 		if(!mainGuy.modEner(-1)){
-			//return loseGame();
+		  return loseGame();
 		}
 		return 'n';
 
@@ -503,7 +503,7 @@ char Frupal::breakObstacle(obstacle * item, int y , int x){	//breaks obstacle at
 
 	if(!mainGuy.selectTool(copy, item->get_kind_int(), menuRow)){	//no tool selected
 		if(!mainGuy.modEner(item->get_b_energy())){
-			//status = loseGame();
+			status = loseGame();
 
 		}else{
 			 delete itemMap[y][x];
@@ -512,7 +512,7 @@ char Frupal::breakObstacle(obstacle * item, int y , int x){	//breaks obstacle at
 
 	}else{						//tool selected
 		if(!mainGuy.modEner(item->get_b_energy() / copy->get_divisor())){
-			//status = loseGame();
+			status = loseGame();
 
 		}else{
 			 delete itemMap[y][x];
