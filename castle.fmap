@@ -233,6 +233,8 @@ obstacle: 64 43 Tree 20 Pine Tree
 obstacle: 66 40 Tree 20 Pine Tree
 clue: 72 40 You need to find a soft item made of gold to remove the curse
 tool: 115 32 Mythical 1 CursedDoor 1000 250 Golden Feather
+obstacle: 75 58 WallDoor 1000 Wall Entrance
+obstacle: 75 55 WallDoor 1000 Wall Exit
 
 #city
 start: 125 97
@@ -240,4 +242,26 @@ clue: 124 97 Welcome to The Kingdom of Frupal
 clue: 123 97 The town is up ahead
 clue: 122 97 Have a welcoming treat.
 food: 121 97 0 25 Tamale
-
+clue: 79 96 Two competing convenience stores.
+clue: 79 95 Both owners are cousins
+#left store
+food: 59 91 20 20 Peanuts
+food: 61 91 45 25 Beef Jerky
+food: 63 91 80 40 Instant Ramen
+food: 65 91 120 50 Pepperoni Pizza
+food: 67 91 100 40 Hot Dog
+food: 69 91 60 5 A Salad
+food: 71 91 30 10 Bag of chips
+food: 73 91 100 10 Banana
+food: 75 91 20 10 Pack of Gum
+#right store
+food: 83 91 200 20 Peanuts
+food: 85 91 35 25 Beef Jerky
+food: 87 91 80 40 Instant Ramen
+food: 89 91 150 30 Banana Pizza
+food: 91 91 85 40 Hot Dog
+food: 93 91 60 5 A Salad
+food: 95 91 30 10 Bag of chips
+food: 97 91 5 10 Banana
+food: 99 91 20 10 Pack of Gum
+#bank
