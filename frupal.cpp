@@ -743,7 +743,6 @@ int Frupal::showCurInfo(int y, int x){
 	terrainInfo.display_info('0');
   int row = 4;
   displayStat(row, "Darkness rules here", 3);
-	//mvprintw(4, COLS * viewPortRatio+ 4, "Darkness rules here");
 	refresh();
 	return 5;
 }

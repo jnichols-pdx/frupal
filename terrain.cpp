@@ -60,37 +60,25 @@ int terrain::get_travel_cost(char terType){
 bool terrain::display_info(char terType){
 	int row = 4;   	//change this variable to move the position of the text up or down
 	int offset  = 5;    //change this to move it right or left
- //int y = 4;
- //int x = 5
 	clearLines(row);
 	switch(terType){
 		case '~': //water
       displayStat(row, "Water: ", offset);
       displayStat(row, "Cost: 0 energy", offset);
       displayStat(row, "A Boat is required", offset);
-			//mvwprintw(stdscr, y, COLS * viewPortRatio +x, "Water: ");
-			//mvwprintw(stdscr, y+1, COLS * viewPortRatio +x, "Cost: 0 energy");
-			//mvwprintw(stdscr, y+2, COLS * viewPortRatio +x, "A Boat is required");
 			break;
 		case '=': //wall
       displayStat(row, "Wall: ", offset);
       displayStat(row, "Cost: -1 energy", offset);
       displayStat(row, "Impassable", offset);
-			//mvwprintw(stdscr, y, COLS * viewPortRatio +x, "Wall: ");
-			//mvwprintw(stdscr, y+1, COLS * viewPortRatio +x, "Cost: -1 energy");
-			//mvwprintw(stdscr, y+2, COLS * viewPortRatio +x, "Impassable");
 			break;
 		case '.': //meadow
       displayStat(row, "Meadow: ", offset);
       displayStat(row, "Cost: -1 energy", offset);
-			//mvwprintw(stdscr, y, COLS * viewPortRatio +x, "Meadow: ");
-			//mvwprintw(stdscr, y+1, COLS * viewPortRatio +x, "Cost: -1 energy");
 			break;
 		case '"': //swamp
       displayStat(row, "Swamp: ", offset);
       displayStat(row, "Cost: -2 energy", offset);
-			//mvwprintw(stdscr, y, COLS * viewPortRatio +x, "Swamp: ");
-			//mvwprintw(stdscr, y+1, COLS * viewPortRatio +x, "Cost: -2 energy");
 			break;
 		default:
 			break;
