@@ -4,10 +4,10 @@ terrain: 128 128
 .============================================================="""""""""""""""""""""""""~~"""""""""""""""""""""""""""""""""""""""
 .=.............................=.............................=""""""""""""""""""""""""""~~""""""""""""""""""""""""""""""""""""""
 .=.............................=.............................="""""""""""""""""""""""""""~~"""""""""""""""""""........."""""""""
-.=.............................=.............................=""""""""""""""""""""""""""""~~~~~~""""""""""""...=======..""""""""
-.=.............................=.............................=""""""""""""""""""""""""""""~~~~~~~~"""""""""".........=..."""""""
-.=.............................=.............................="""""""""""""""""""""""""""~"~~~~~~~~~"""""".....=.....=..."""""""
-.=.............................=.............................="""""""""""""""""""""""""""~"~~~~~~~~""""""".....=======..."""""""
+.=................=............=.............................=""""""""""""""""""""""""""""~~~~~~""""""""""""...=======..""""""""
+.=...............=.=...........=................=............=""""""""""""""""""""""""""""~~~~~~~~"""""""""".........=..."""""""
+.=..............=...=..........=...............=.=...........="""""""""""""""""""""""""""~"~~~~~~~~~"""""".....=.....=..."""""""
+.=.............................=...............=.=...........="""""""""""""""""""""""""""~"~~~~~~~~""""""".....=======..."""""""
 .=.............................=.............................=""""""""""""""""""""""~~""""~~~~~~"~""""""""".............""""""""
 .=.............................=.............................="""""""""""""""""""""""~~""""~~"""""""""""""""""""""~"""""""""""""
 .================...===========================...============""""""""""""""""""""""""~~"~~~""""""""""""""""""""""~"""""""""""""
@@ -129,7 +129,7 @@ terrain: 128 128
 ...............................................................................................................============.....
 ................................................................................................................................
 #end of map
-diamonds: 18 8
+diamonds: 18 5
 
 #temporary location
 food: 41 45 30 15000 Shredded Beef Soft Tacos
@@ -217,11 +217,6 @@ obstacle: 103 19 Leech 50 Blood sucker
 obstacle: 107 18 Leech 50 Blood sucker
 obstacle: 102 19 Leech 50 Blood sucker
 
-#items in castle
-treasure: 9 24 800 treasure of a fallen warrior
-food: 3 31 300 150 Shredded Beef Soft Tacos
-food: 15 29 1000 1000 Eternal Sandwich
-
 #items in large meadow
 obstacle: 72 39 CursedDoor 1000 A witch cursed the door
 obstacle: 60 40 Tree 20 Pine Tree
@@ -242,7 +237,6 @@ clue: 123 97 The town is up ahead
 clue: 122 97 Have a welcoming treat.
 food: 121 97 0 25 Tamale
 clue: 79 96 Two competing convenience stores.
-clue: 79 95 Both owners are cousins
 #left store
 food: 59 91 20 20 Peanuts
 food: 61 91 45 25 Beef Jerky
@@ -279,8 +273,8 @@ food: 30 88 40 50 Hot Dog
 food: 32 88 40 50 Hot Dog
 
 #lenny's hut
-tool: 15 122 Explosive 4 Metal Tree WallDoor Door 1000 200 Dynamite
-tool: 14 122 Explosive 4 Metal Tree WallDoor Door 1000 200 Dynamite
+tool: 15 122 Explosive 4 Metal Tree WallDoor Door 1000 200 Dynamite X1000
+tool: 14 122 Explosive 4 Metal Tree WallDoor Door 1000 200 Dynamite X1000
 food: 13 122 10 40 Spaghetti
 obstacle: 8 124 Door 10 Worn Door
 clue: 9 124 Lenny's house.
@@ -292,7 +286,7 @@ clue: 110 124 Farmers house
 clue: 115 123 I am worried about my brother Lenny. He lives far left from here.
 
 #gun store
-tool: 60 83 Explosive 3 Tree WallDoor Door 1000 400 Rocket Launcher
+tool: 60 83 Explosive 3 Tree WallDoor Door 1000 400 Rocket Launcher X1000
 binoculars: 58 83 50 2
 
 #mall
@@ -319,3 +313,15 @@ obstacle: 98 68 Door 20 Fancy Door
 food: 95 70 0 175 Golden Steak
 obstacle: 106 67 Door 25 Fancier Door
 clue: 104 69 The owners spent all their money on the door
+
+#witch house
+food: 68 35 50 200 Frog Soup
+tool: 73 35 Mythical 1 Spirit 100 10 Mirror
+
+#items in castle
+treasure: 9 24 800 treasure of a fallen warrior
+food: 3 31 300 150 Shredded Beef Soft Tacos
+food: 15 29 1000 1000 Eternal Sandwich
+obstacle: 48 7 Spirit 1000 Guardian of Blessed Weapon
+tool: 48 6 Mythical 1 Beast 500 100 Blessed Spear
+obstacle: 18 6 Beast 100000 Protector of Royal Diamonds
