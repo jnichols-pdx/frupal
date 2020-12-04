@@ -1,6 +1,8 @@
 #include "frupal.h"
 #include <unistd.h>
 
+using namespace::menu;
+
 Frupal::Frupal(WINDOW * win, int y, int x)
 {
   curWin = win;
@@ -739,7 +741,9 @@ int Frupal::showCurInfo(int y, int x){
   }
 
 	terrainInfo.display_info('0');
-	mvprintw(4, COLS * viewPortRatio+ 4, "Darkness rules here");
+  int row = 4;
+  displayStat(row, "Darkness rules here", 3);
+	//mvprintw(4, COLS * viewPortRatio+ 4, "Darkness rules here");
 	refresh();
 	return 5;
 }
