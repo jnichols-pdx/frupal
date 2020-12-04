@@ -88,7 +88,7 @@ terrain: 128 128
 ............=...........=...........................================................======............=======...................
 ............=====........=......................................................................................................
 ............=....=.......=......................................................................................................
-............=...................................................................................................................
+............=..................=................................................................................................
 ............=....=.......=......................................................................................................
 ............=====........=................................===================.....===================...........................
 ............=...........=.................................=.................=.....=.................=...........................
@@ -253,6 +253,7 @@ food: 69 91 60 5 A Salad
 food: 71 91 30 10 Bag of chips
 food: 73 91 100 10 Banana
 food: 75 91 20 10 Pack of Gum
+clue: 59 93 This place can't keep up with the mall store 5 grovniks to the right and 9 grovniks down
 #right store
 food: 83 91 200 20 Peanuts
 food: 85 91 35 25 Beef Jerky
@@ -265,11 +266,17 @@ food: 97 91 5 10 Banana
 food: 99 91 20 10 Pack of Gum
 #bank
 obstacle: 17 88 Metal 10000 Vault Door
+treasure: 14 88 1500 Gold Bar
 treasure: 13 87 1000 Large Bag of whiffles
 treasure: 13 89 500 Bag of whiffles
 treasure: 15 89 500 Bag of whiffles
 treasure: 15 87 250 Pile of whiffles
 clue: 26 88 The Bank
+
+#hot dog stand
+clue: 31 89 Hot Dog stand
+food: 30 88 40 50 Hot Dog
+food: 32 88 40 50 Hot Dog
 
 #lenny's hut
 tool: 15 122 Explosive 4 Metal Tree WallDoor Door 1000 200 Dynamite
@@ -292,4 +299,23 @@ binoculars: 58 83 50 2
 clue: 64 106 Fresh Produce from Catarina Farms located in the Southwest
 food: 64 107 5 40 Onion
 food: 63 107 5 40 Onion
+food: 62 107 5 40 Onion
 food: 65 107 5 40 Onion
+food: 66 107 5 40 Onion
+food: 20 99 200 150 Pozole
+food: 11 102 250 225 Carne Asada
+food: 35 105 100 250 Salmon
+clue: 23 109 You can find food around here
+
+#whiffle store
+clue: 57 74 Whiffle Tree
+food: 47 69 1 5 Candy bar
+food: 49 69 1 10 Cookie
+food: 51 69 1 1 Gum
+food: 53 69 1 15 Chips
+
+#neighborhood
+obstacle: 98 68 Door 20 Fancy Door
+food: 95 70 0 175 Golden Steak
+obstacle: 106 67 Door 25 Fancier Door
+clue: 104 69 The owners spent all their money on the door
