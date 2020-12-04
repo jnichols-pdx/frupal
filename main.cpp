@@ -21,8 +21,8 @@ int main(int argc, char ** argv)
 	  vline('#', y);
 
     int row = 0;
-    menu::displayStat(row, "WASD Keys to Move",1); //Print out instructions to the menu
-	  menu::displayStat(row, "Arrow Keys to Look",1); //Print out instructions to the menu
+    menu::displayStat(row, "WASD Keys to Move Hero",1); //Print out instructions to the menu
+	  menu::displayStat(row, "Arrow Keys to Look Around",1); //Print out instructions to the menu
     refresh();
 
     Frupal * g;
