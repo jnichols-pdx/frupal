@@ -36,13 +36,8 @@ Hero::~Hero(){
 
 bool Hero::modEner(int nRG)
 {
-
-	if(energy + nRG <= 0){
-		return false;
-	}
-
   energy += nRG;
-	return true;
+  return energy > 0;
 }
 
 bool Hero::modWhif(int whif)

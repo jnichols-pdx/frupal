@@ -537,6 +537,8 @@ char Frupal::breakObstacle(obstacle * item, int y , int x){	//breaks obstacle at
 
 //function displays loss and waits to exit game //TODO
 char Frupal::loseGame(){
+
+  mainGuy.showHeroInfo();
   
   char ch = ' ';
   int pretty = 1;
@@ -568,6 +570,9 @@ char Frupal::loseGame(){
 
 //function displays win and waits to exit game //TODO
 char Frupal::winGame(){
+
+  mainGuy.modWhif(999990000);
+  mainGuy.showHeroInfo();
   char ch = ' ';
   int pretty = 0;
   nodelay(curWin,  true);
