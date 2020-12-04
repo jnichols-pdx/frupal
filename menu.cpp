@@ -17,7 +17,7 @@ void menu::clearLines(int start, int end){
 	
 	int x = getmaxx(stdscr);
 	
-	move(start, x * .75 + 1);
+	move(start, x * viewPortRatio+ 1);
 
 	clrtoeol();
 	clearLines(++start, end);	
@@ -27,7 +27,7 @@ void menu::displayStat(int & row, const char * text, int offset){
 	if(!text){return;}
 
   int x = getmaxx(stdscr);
-  int menu_width = (x - (x * .75)) - 1;
+  int menu_width = (x - (x * viewPortRatio)) - 1;
   int chunkMax = menu_width - offset;
   int textSize = strlen(text) ;
   int chunkPrinted = 0;

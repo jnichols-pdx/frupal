@@ -65,22 +65,22 @@ bool terrain::display_info(char terType){
 
 	switch(terType){
 		case '~': //water
-			mvwprintw(stdscr, y, COLS*0.75+x, "Water: ");
-			mvwprintw(stdscr, y+1, COLS*0.75+x, "Cost: 0 energy");
-			mvwprintw(stdscr, y+2, COLS*0.75+x, "A Boat is required");
+			mvwprintw(stdscr, y, COLS * viewPortRatio +x, "Water: ");
+			mvwprintw(stdscr, y+1, COLS * viewPortRatio +x, "Cost: 0 energy");
+			mvwprintw(stdscr, y+2, COLS * viewPortRatio +x, "A Boat is required");
 			break;
 		case '=': //wall
-			mvwprintw(stdscr, y, COLS*0.75+x, "Wall: ");
-			mvwprintw(stdscr, y+1, COLS*0.75+x, "Cost: -1 energy");
-			mvwprintw(stdscr, y+2, COLS*0.75+x, "Impassable");
+			mvwprintw(stdscr, y, COLS * viewPortRatio +x, "Wall: ");
+			mvwprintw(stdscr, y+1, COLS * viewPortRatio +x, "Cost: -1 energy");
+			mvwprintw(stdscr, y+2, COLS * viewPortRatio +x, "Impassable");
 			break;
 		case '.': //meadow
-			mvwprintw(stdscr, y, COLS*0.75+x, "Meadow: ");
-			mvwprintw(stdscr, y+1, COLS*0.75+x, "Cost: -1 energy");
+			mvwprintw(stdscr, y, COLS * viewPortRatio +x, "Meadow: ");
+			mvwprintw(stdscr, y+1, COLS * viewPortRatio +x, "Cost: -1 energy");
 			break;
 		case '"': //swamp
-			mvwprintw(stdscr, y, COLS*0.75+x, "Swamp: ");
-			mvwprintw(stdscr, y+1, COLS*0.75+x, "Cost: -2 energy");
+			mvwprintw(stdscr, y, COLS * viewPortRatio +x, "Swamp: ");
+			mvwprintw(stdscr, y+1, COLS * viewPortRatio +x, "Cost: -2 energy");
 			break;
 		default:
 			break;

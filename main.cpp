@@ -1,4 +1,5 @@
 #include "frupal.h"
+#include "menu.h"
 
 int main(int argc, char ** argv)
 {
@@ -13,10 +14,10 @@ int main(int argc, char ** argv)
     getmaxyx(stdscr, y, x); //Initialize y + x with the appropriate values for the screen / terminal's current size
   
   
-    WINDOW * mapwin = newwin(y, x*0.75, 0, 0); //Create a new window y lines high, and 75% of x value as described by the standard screen (terminal window size)
+    WINDOW * mapwin = newwin(y, x * viewPortRatio, 0, 0); //Create a new window y lines high, and 75% of x value as described by the standard screen (terminal window size)
 
 	  //vertical line seperating menu and map
-	  move(0, x*.75);
+	  move(0, x * viewPortRatio);
 	  vline('#', y);
 
     int row = 0;

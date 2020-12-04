@@ -64,17 +64,17 @@ void Hero::showHeroInfo(){
 
 	getmaxyx(stdscr, yMax, xMax);
 
-	move(yMax - 3, (xMax * .75) + offset);
+	move(yMax - 3, (xMax * viewPortRatio) + offset);
 	clrtoeol(); 
-	move(yMax - 2, (xMax * .75) + offset);
+	move(yMax - 2, (xMax * viewPortRatio) + offset);
 	clrtoeol(); 
 
-	mvprintw(yMax - 3, (xMax * 0.75) + offset, "Energy: ");
+	mvprintw(yMax - 3, (xMax * viewPortRatio) + offset, "Energy: ");
 	getyx(stdscr, y, x);
 	sprintf(energyStr, "%d", energy);
 	mvprintw(y, x, energyStr);
 
-	mvprintw(yMax - 2, (xMax * 0.75) + offset, "Whiffles: ");
+	mvprintw(yMax - 2, (xMax * viewPortRatio) + offset, "Whiffles: ");
 	getyx(stdscr, y, x);
 	sprintf(whiffStr, "%d", whiffles);
 	mvprintw(y, x, whiffStr);

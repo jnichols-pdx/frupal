@@ -8,6 +8,7 @@
 #include "hero.h"
 #include "grovnik.h"
 #include "terrain.h"
+#include "menu.h"
 
 using namespace std;
 
