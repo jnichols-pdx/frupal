@@ -1,18 +1,13 @@
 #include <fstream>
 #include <iostream>
-
-// is this needed? TODO #include <string> 
-// is this needed? TODO #include <sstream>
-// is this needed? TODO #include <unistd.h>
-
+#include <string> 
+#include <sstream>
 #include <ncurses.h>
 #include <random>
+
 #include "hero.h"
 #include "grovnik.h"
 #include "terrain.h"
-
-//temp for debug...
-#include <iostream>
 
 using namespace std;
 
