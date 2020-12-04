@@ -313,7 +313,7 @@ void Frupal::lkup()
   if(yCur < 0)
     yCur = 0;
   else if(yCur >= winYMax)
-    yCur = winYMax;
+    yCur = winYMax -1 ;
   curs_set(1); //Display cursor when it moves
 	wmove(curWin, yCur, xCur);
 }
@@ -325,7 +325,7 @@ void Frupal::lkdn()
   if(yCur < 0)
     yCur = 0;
   else if(yCur >= winYMax)
-    yCur = winYMax;
+    yCur = winYMax - 1;
   curs_set(1); //Display cursor when it moves
 	wmove(curWin, yCur, xCur);
 }
@@ -337,7 +337,7 @@ void Frupal::lklt()
   if(xCur < 0)
     xCur = 0;
   else if(xCur >= winXMax)
-    xCur = xMax;
+    xCur = xMax -1;
   curs_set(1); //Display cursor when it moves
 	wmove(curWin, yCur, xCur);
 }
@@ -348,7 +348,7 @@ void Frupal::lkrt()
   if(xCur < 0)
     xCur = 0;
   else if(xCur >= winXMax)
-    xCur = winXMax;
+    xCur = winXMax -1;
   curs_set(1); //Display cursor when it moves
 	wmove(curWin, yCur, xCur);
 }
