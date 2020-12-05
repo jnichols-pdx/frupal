@@ -127,9 +127,15 @@ void binocular::read(istream & source) {
   if(cost <= 0 && source.fail())
     throw("Incorrect binoculars: missing or invalid <cost>.");
 
+  if(cost > 9999)
+    throw "Maximum allowed whiffle <cost> is 9999.";
+
   source >> range;
   if(range <= 0 && source.fail())
     throw("Incorrect binoculars: missing or invalid <distance>.");
+
+  if(range > 999)
+    throw "Maximum allowed <distance> is 999.";
 
   string temp;
   getline(source,temp);
@@ -195,7 +201,9 @@ void ship::read(istream & source)
 
   source >> cost;
   if(cost <= 0 && source.fail())
-    throw "Incorrect ship: missing or invalid energy <cost>.";
+    throw "Incorrect ship: missing or invalid whiffle <cost>.";
+  if(cost > 9999)
+    throw "Maximum allowed whiffle <cost> is 9999.";
 
   string temp;
   getline(source,temp);
@@ -470,12 +478,15 @@ void obstacle::read(istream & source)
   string temp;
   source >> temp; //Holds obstacle kind
   if(temp.length() == 0)
-    throw "Incomplete obstacle: missing <kind>, energy <cost> and <description>.";
+    throw "Incomplete obstacle: missing <kind>, <energy cost> and <description>.";
 
   kind = add_obstacle_typename(temp.c_str());
   source >> b_energy;
   if(b_energy <= 0 && source.fail())
-    throw "Incorrect obstacle: missing or invalid energy <cost>.";
+    throw "Incorrect obstacle: missing or invalid <energy <cost>.";
+
+  if(b_energy > 9999)
+    throw "Maximum allowed <energy cost> is 9999.";
 
   //strip leading whitespace before using getline()
   source >> ws;
@@ -540,7 +551,7 @@ tool::tool(tool & to_copy){
 int tool::display_info()
 {
 	char costStr[5] = {0};
-	char divisorStr[3] = {0};
+	char divisorStr[5] = {0};
 
 	int row = 4;
 	clearLines(row);
@@ -624,7 +635,7 @@ void tool::read(istream & source)
   string temp;
   source >> temp; //holds tool kind
   if(temp.length() == 0)
-    throw "Incomplete tool: missing <kind>, <target_count>, <targets...>, <divisor, <cost> and <description>.";
+    throw "Incomplete tool: missing <kind>, <target_count>, <targets...>, <divisor>, <cost> and <description>.";
 
   kind = add_tool_typename(temp);
 
@@ -638,7 +649,7 @@ void tool::read(istream & source)
   {
     source >> temp;
     if(temp.length() == 0)
-      throw "Incomplete tool: missing (or too few) <targets...>, <divisor, <cost> and <description>.";
+      throw "Incomplete tool: missing (or too few) <targets...>, <divisor>, <cost> and <description>.";
     targets[i] = add_obstacle_typename(temp);
     temp.erase();
   }
@@ -646,10 +657,14 @@ void tool::read(istream & source)
   source >> divisor;
   if(divisor <= 0 && source.fail())
     throw "Incorrect tool: missing or invalid <divisor>.";
+  if(divisor > 9999)
+    throw "Maximum allowed <divisor> is 9999.";
 
   source >> cost;
   if(cost <= 0 && source.fail())
     throw "Incorrect tool: missing or invalid <cost>.";
+  if(cost > 9999)
+    throw "Maximum allowed whiffle <cost> is 9999.";
 
   //strip leading whitespace before using getline()
   source >> ws;
@@ -696,7 +711,7 @@ food::~food()
 int food::display_info()
 {
 	char costStr[5] = {0};
-	char energyStr[4] = {0};
+	char energyStr[5] = {0};
 
 	int row = 4;
 	clearLines(row);
@@ -744,10 +759,14 @@ void food::read(istream & source)
   source >> cost;
   if(cost<= 0 && source.fail())
     throw "Incorrect food: missing or invalid energy <cost>.";
+  if(cost > 9999)
+    throw "Maximum allowed whiffle <cost> is 9999.";
 
   source >> energy;
   if(energy <= 0 && source.fail())
     throw "Incorrect food: missing or invalid energy <energy>.";
+  if(energy > 9999)
+    throw "Maximum allowed <energy> is 9999.";
 
   //strip leading whitespace before using getline()
   source >> ws;
