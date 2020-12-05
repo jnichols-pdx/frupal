@@ -4,6 +4,8 @@
 #include <ncurses.h>
 #include <cstring>
 
+#define viewPortRatio 0.65
+
 namespace menu{
   //clears menu between start/end
   //if end isn't given, instead clears between start and the Energy: display

@@ -1,6 +1,8 @@
 #include "frupal.h"
 #include <unistd.h>
 
+using namespace::menu;
+
 Frupal::Frupal(WINDOW * win, int y, int x)
 {
   curWin = win;
@@ -313,7 +315,7 @@ void Frupal::lkup()
   if(yCur < 0)
     yCur = 0;
   else if(yCur >= winYMax)
-    yCur = winYMax;
+    yCur = winYMax -1 ;
   curs_set(1); //Display cursor when it moves
 	wmove(curWin, yCur, xCur);
 }
@@ -325,7 +327,7 @@ void Frupal::lkdn()
   if(yCur < 0)
     yCur = 0;
   else if(yCur >= winYMax)
-    yCur = winYMax;
+    yCur = winYMax - 1;
   curs_set(1); //Display cursor when it moves
 	wmove(curWin, yCur, xCur);
 }
@@ -337,7 +339,7 @@ void Frupal::lklt()
   if(xCur < 0)
     xCur = 0;
   else if(xCur >= winXMax)
-    xCur = xMax;
+    xCur = xMax -1;
   curs_set(1); //Display cursor when it moves
 	wmove(curWin, yCur, xCur);
 }
@@ -348,13 +350,15 @@ void Frupal::lkrt()
   if(xCur < 0)
     xCur = 0;
   else if(xCur >= winXMax)
-    xCur = winXMax;
+    xCur = winXMax -1;
   curs_set(1); //Display cursor when it moves
 	wmove(curWin, yCur, xCur);
 }
 
 //moves character by offsets passed in
 char Frupal::heroMove(int yOffset, int xOffset){
+  //Clear cursor highlight info or messages like 'breaking obstacle' when next we move.
+  menu::clearLines(4);
 	char status = validMove(yHero + yOffset, xHero + xOffset);
 	if(status == ' '){ //valid move
 
@@ -535,6 +539,8 @@ char Frupal::breakObstacle(obstacle * item, int y , int x){	//breaks obstacle at
 
 //function displays loss and waits to exit game //TODO
 char Frupal::loseGame(){
+
+  mainGuy.showHeroInfo();
   
   char ch = ' ';
   int pretty = 1;
@@ -566,6 +572,9 @@ char Frupal::loseGame(){
 
 //function displays win and waits to exit game //TODO
 char Frupal::winGame(){
+
+  mainGuy.modWhif(999990000);
+  mainGuy.showHeroInfo();
   char ch = ' ';
   int pretty = 0;
   nodelay(curWin,  true);
@@ -739,7 +748,8 @@ int Frupal::showCurInfo(int y, int x){
   }
 
 	terrainInfo.display_info('0');
-	mvprintw(4, COLS*.75 + 4, "Darkness rules here");
+  int row = 4;
+  displayStat(row, "Darkness rules here", 3);
 	refresh();
 	return 5;
 }

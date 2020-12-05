@@ -36,13 +36,8 @@ Hero::~Hero(){
 
 bool Hero::modEner(int nRG)
 {
-
-	if(energy + nRG <= 0){
-		return false;
-	}
-
   energy += nRG;
-	return true;
+  return energy > 0;
 }
 
 bool Hero::modWhif(int whif)
@@ -64,17 +59,17 @@ void Hero::showHeroInfo(){
 
 	getmaxyx(stdscr, yMax, xMax);
 
-	move(yMax - 3, (xMax * .75) + offset);
+	move(yMax - 3, (xMax * viewPortRatio) + offset);
 	clrtoeol(); 
-	move(yMax - 2, (xMax * .75) + offset);
+	move(yMax - 2, (xMax * viewPortRatio) + offset);
 	clrtoeol(); 
 
-	mvprintw(yMax - 3, (xMax * 0.75) + offset, "Energy: ");
+	mvprintw(yMax - 3, (xMax * viewPortRatio) + offset, "Energy: ");
 	getyx(stdscr, y, x);
 	sprintf(energyStr, "%d", energy);
 	mvprintw(y, x, energyStr);
 
-	mvprintw(yMax - 2, (xMax * 0.75) + offset, "Whiffles: ");
+	mvprintw(yMax - 2, (xMax * viewPortRatio) + offset, "Whiffles: ");
 	getyx(stdscr, y, x);
 	sprintf(whiffStr, "%d", whiffles);
 	mvprintw(y, x, whiffStr);
@@ -153,17 +148,28 @@ bool Hero::selectTool(tool * & item, int obstacleType, int menuRow){	//selects a
 	}
 	if(counter == 0) return false;	//no items, return
 
+  menuRow += 1;
+  wattron(stdscr, COLOR_PAIR(11));//'highlighted' text
 	displayStat(menuRow, "Would you like to \nselect a tool? (Y/N)");
 	refresh();
+
 	userInput = getch();
 	clearLines(startRow);
 	refresh();
-	if(userInput == 'N' || userInput == 'n') return false;
-
-	displayStat(startRow, "Select tool by pressing RETURN");
-	refresh();
+	if(userInput == 'N' || userInput == 'n') {
+    wattroff(stdscr, COLOR_PAIR(11));  
+    return false;
+  }
+ 
+  menuRow -= 2;
+  //Instructions at top.
+  int instructRow = 0;
+  clearLines(0,2);
+	displayStat(instructRow, "UP/DOWN to find tool");
+	displayStat(instructRow, "RETURN to select tool");
 
 	arrPos = select(obstacleType, menuRow + 2);	//which tool in inventory is selected
+  wattroff(stdscr, COLOR_PAIR(11));  
 	clearLines(4);
 	refresh();
 
@@ -232,7 +238,9 @@ int Hero::select(int obstacleType, int menuRow){
 bool Hero::purchaseItem(grovnik * item){
 
 	int row = item->display_info() + 1;
+  wattron(stdscr, COLOR_PAIR(11));//'highlighted' text
 	displayStat(row, "Purchase? (Y/N)");
+  wattroff(stdscr, COLOR_PAIR(11));
 		
 	int userInput = 0;
 	userInput = getch();

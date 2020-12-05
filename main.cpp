@@ -1,4 +1,5 @@
 #include "frupal.h"
+#include "menu.h"
 
 int main(int argc, char ** argv)
 {
@@ -13,15 +14,12 @@ int main(int argc, char ** argv)
     getmaxyx(stdscr, y, x); //Initialize y + x with the appropriate values for the screen / terminal's current size
   
   
-    WINDOW * mapwin = newwin(y, x*0.75, 0, 0); //Create a new window y lines high, and 75% of x value as described by the standard screen (terminal window size)
+    WINDOW * mapwin = newwin(y, x * viewPortRatio, 0, 0); //Create a new window y lines high, and 75% of x value as described by the standard screen (terminal window size)
 
 	  //vertical line seperating menu and map
-	  move(0, x*.75);
+	  move(0, x * viewPortRatio);
 	  vline('#', y);
 
-	  mvwprintw(stdscr, 0, x*0.75+13, "Arrow Keys to Move Cursor"); //Print out instructions to the menu
-    mvwprintw(stdscr, 1, x*0.75+13, "WASD Keys to Move Cursor"); //Print out instructions to the menu
-    refresh();
 
     Frupal * g;
     bool goodMapFile = false;
@@ -51,14 +49,23 @@ int main(int argc, char ** argv)
     init_pair(8,COLOR_CYAN, COLOR_WHITE);
     init_pair(9,COLOR_RED, COLOR_BLACK);
     init_pair(10,COLOR_BLACK, COLOR_RED);
+    init_pair(11,COLOR_BLACK, COLOR_YELLOW);
 
 	  bkgd(COLOR_PAIR(6));
 	  refresh();
     g->showMap();
     wrefresh(mapwin);
     curs_set(0);
+
+    int cursorX = 0, cursorY = 0;
     while(ch !='q' && ch!= 'r')
     {
+      getyx(mapwin, cursorY,cursorX);  //Remember cursor position
+      int row = 0;
+      menu::displayStat(row, "WASD Keys to Move Hero",1); //Print out instructions to the menu
+      menu::displayStat(row, "Arrow Keys to Look Around",1);
+      move(cursorY,cursorX); //DisplayStat moved the cursor, put it back where it started.
+      refresh();
       ch = g->getmv();
     }
     if(ch == 'r')

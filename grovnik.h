@@ -4,18 +4,14 @@
 #define GROVNIK_H
 #include <ncurses.h>
 
-
-#include <cmath> //do we need this? TODO
 #include <stdio.h>
+#include <cstring>
 
-//i think we only need to stick to one of these
-//or remove both and stick to char arrays TODO
+//Used for reading from files.
 #include <string> 
-#include <sstream>
-#include <vector>
+#include <istream>
 
-//what is this for? TODO
-#include <unistd.h>
+#include <vector>
 
 #include "menu.h"
 
