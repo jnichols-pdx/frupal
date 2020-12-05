@@ -20,10 +20,6 @@ int main(int argc, char ** argv)
 	  move(0, x * viewPortRatio);
 	  vline('#', y);
 
-    int row = 0;
-    menu::displayStat(row, "WASD Keys to Move Hero",1); //Print out instructions to the menu
-	  menu::displayStat(row, "Arrow Keys to Look Around",1); //Print out instructions to the menu
-    refresh();
 
     Frupal * g;
     bool goodMapFile = false;
@@ -53,6 +49,7 @@ int main(int argc, char ** argv)
     init_pair(8,COLOR_CYAN, COLOR_WHITE);
     init_pair(9,COLOR_RED, COLOR_BLACK);
     init_pair(10,COLOR_BLACK, COLOR_RED);
+    init_pair(11,COLOR_BLACK, COLOR_YELLOW);
 
 	  bkgd(COLOR_PAIR(6));
 	  refresh();
@@ -61,6 +58,10 @@ int main(int argc, char ** argv)
     curs_set(0);
     while(ch !='q' && ch!= 'r')
     {
+      int row = 0;
+      menu::displayStat(row, "WASD Keys to Move Hero",1); //Print out instructions to the menu
+      menu::displayStat(row, "Arrow Keys to Look Around",1); //Print out instructions to the menu
+      refresh();
       ch = g->getmv();
     }
     if(ch == 'r')
