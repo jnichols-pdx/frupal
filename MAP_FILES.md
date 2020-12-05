@@ -24,7 +24,7 @@ The following elements are required for a complete game map: [`Frupal_Kingdom:`]
 
 The following elements are optional, but are suggested for a more interesting game experience: [`treasure:`](#treasure), [`food:`](#food), [`clue:`](#clues), [`ship:`](#ship), [`binoculars:`](#binoculars), [`obstacle:`](#obstacles), [`tool:`](#tools)
 
-[Quick Usage Referenced](#quick-usage-reference)  
+Link to: [Quick Usage Reference](#quick-usage-reference)  
 
 ## Elements
 
