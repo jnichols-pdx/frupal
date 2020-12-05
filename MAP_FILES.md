@@ -196,7 +196,7 @@ tool: *<x location\>* *<y location\>* *<kind\>* *<target_count\>* *<targets...\>
 
 Specifies one of many tools on a map, which can lower the energy cost of removing obstacles.  
 Displayed in game as a black **T**.  
-*<kind\>* is a short name for the 'class' or 'type' of tool. 
+*<kind\>* is a short name for the 'class' or 'type' of tool.  
 *<kind\>* should be a single plural word without spaces like 'saws' or 'hammers'.  
 *<target_count\>* is how many different kinds of obstacle this tool can remove.  
 *<targets...\>* is a whitespace separated list of kinds of obstacles that this tool removes.  
