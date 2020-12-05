@@ -357,6 +357,8 @@ void Frupal::lkrt()
 
 //moves character by offsets passed in
 char Frupal::heroMove(int yOffset, int xOffset){
+  //Clear cursor highlight info or messages like 'breaking obstacle' when next we move.
+  menu::clearLines(4);
 	char status = validMove(yHero + yOffset, xHero + xOffset);
 	if(status == ' '){ //valid move
 
