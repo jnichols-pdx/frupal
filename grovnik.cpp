@@ -434,9 +434,6 @@ int obstacle::display_info()
 	displayStat(row, "Description: ");
 	displayStat(row, description, 4); //offset of 7
 
-	displayStat(row, "Break w/ ");
-	//displayStat(row, name_b, 4); //TODO - list tools in our inventory that can break this.
-
 	displayStat(row, "Energy: ");
 	displayStat(row, itos(b_energy, energyStr), 4);	
 
