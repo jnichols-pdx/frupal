@@ -128,14 +128,14 @@ void binocular::read(istream & source) {
     throw("Incorrect binoculars: missing or invalid <cost>.");
 
   if(cost > 9999)
-    throw "Maximum allowed whiffle <cost> is 9999.";
+    throw "Incorrect binoculars: maximum allowed whiffle <cost> is 9999.";
 
   source >> range;
   if(range <= 0 && source.fail())
     throw("Incorrect binoculars: missing or invalid <distance>.");
 
   if(range > 999)
-    throw "Maximum allowed <distance> is 999.";
+    throw "Incorrect binoculars: maximum allowed <distance> is 999.";
 
   string temp;
   getline(source,temp);
@@ -203,7 +203,7 @@ void ship::read(istream & source)
   if(cost <= 0 && source.fail())
     throw "Incorrect ship: missing or invalid whiffle <cost>.";
   if(cost > 9999)
-    throw "Maximum allowed whiffle <cost> is 9999.";
+    throw "Incorrect ship: maximum allowed whiffle <cost> is 9999.";
 
   string temp;
   getline(source,temp);
@@ -486,7 +486,7 @@ void obstacle::read(istream & source)
     throw "Incorrect obstacle: missing or invalid <energy <cost>.";
 
   if(b_energy > 9999)
-    throw "Maximum allowed <energy cost> is 9999.";
+    throw "Incorrect obstacle: maximum allowed <energy cost> is 9999.";
 
   //strip leading whitespace before using getline()
   source >> ws;
@@ -658,13 +658,13 @@ void tool::read(istream & source)
   if(divisor <= 0 && source.fail())
     throw "Incorrect tool: missing or invalid <divisor>.";
   if(divisor > 9999)
-    throw "Maximum allowed <divisor> is 9999.";
+    throw "Incorrect tool: maximum allowed <divisor> is 9999.";
 
   source >> cost;
   if(cost <= 0 && source.fail())
     throw "Incorrect tool: missing or invalid <cost>.";
   if(cost > 9999)
-    throw "Maximum allowed whiffle <cost> is 9999.";
+    throw "Incorrect tool: maximum allowed whiffle <cost> is 9999.";
 
   //strip leading whitespace before using getline()
   source >> ws;
@@ -760,13 +760,13 @@ void food::read(istream & source)
   if(cost<= 0 && source.fail())
     throw "Incorrect food: missing or invalid energy <cost>.";
   if(cost > 9999)
-    throw "Maximum allowed whiffle <cost> is 9999.";
+    throw "Incorrect food: maximum allowed whiffle <cost> is 9999.";
 
   source >> energy;
   if(energy <= 0 && source.fail())
     throw "Incorrect food: missing or invalid energy <energy>.";
   if(energy > 9999)
-    throw "Maximum allowed <energy> is 9999.";
+    throw "Incorrect food: maximum allowed <energy> is 9999.";
 
   //strip leading whitespace before using getline()
   source >> ws;
