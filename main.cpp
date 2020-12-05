@@ -56,11 +56,15 @@ int main(int argc, char ** argv)
     g->showMap();
     wrefresh(mapwin);
     curs_set(0);
+
+    int cursorX = 0, cursorY = 0;
     while(ch !='q' && ch!= 'r')
     {
+      getyx(mapwin, cursorY,cursorX);  //Remember cursor position
       int row = 0;
       menu::displayStat(row, "WASD Keys to Move Hero",1); //Print out instructions to the menu
-      menu::displayStat(row, "Arrow Keys to Look Around",1); //Print out instructions to the menu
+      menu::displayStat(row, "Arrow Keys to Look Around",1);
+      move(cursorY,cursorX); //DisplayStat moved the cursor, put it back where it started.
       refresh();
       ch = g->getmv();
     }
