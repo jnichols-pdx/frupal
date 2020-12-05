@@ -18,12 +18,13 @@ Map files may have any filename, but typically will end with the ".fmap" suffix.
 * Empty lines are ignored.  
 * Lines beginning with `#` are ignored. This may be used to include comments in a map file.  
 * X,Y locations are zero indexed. The `0 0` origin is at the top left (northwest) corner of the map.
-* X,Y locations must be between 0 and 1 less than the x and y dimensions givein in `terrain:`
+* X,Y locations must be between 0 and 1 less than the x and y dimensions given in `terrain:`
 
 The following elements are required for a complete game map: [`Frupal_Kingdom:`](#frupal_kingdom), [`terrain:`](#terrain), [`start:`](#start), [`diamonds:`](#diamonds).
 
 The following elements are optional, but are suggested for a more interesting game experience: [`treasure:`](#treasure), [`food:`](#food), [`clue:`](#clues), [`ship:`](#ship), [`binoculars:`](#binoculars), [`obstacle:`](#obstacles), [`tool:`](#tools)
 
+[Quick Usage Referenced](#quick-usage-reference)  
 
 ## Elements
 
