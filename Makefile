@@ -22,7 +22,7 @@ menu.o: menu.h menu.cpp
 	g++ $(CPPFLAGS) -c menu.cpp
 
 clean:
-	rm *.o frupal
+	-rm *.o frupal
 
 run:
 	make && ./frupal
