@@ -1,7 +1,7 @@
 CPPFLAGS = -g -Wall -Werror
 
 frupal: grovnik.o terrain.o frupal.o hero.o main.o menu.o
-	g++ $(CPPFLAGS) main.o frupal.o hero.o grovnik.o terrain.o menu.o -o frupal -lncurses
+	g++ $(CPPFLAGS) main.o frupal.o hero.o grovnik.o terrain.o menu.o -o frupal -lncurses -ltinfo
   
 main.o: main.cpp menu.h
 	g++ $(CPPFLAGS) -c main.cpp
@@ -26,3 +26,7 @@ clean:
 
 run:
 	make && ./frupal
+
+test: grovnik.o terrain.o frupal.o hero.o main.o menu.o
+	g++ $(CPPFLAGS) frupal.o hero.o grovnik.o terrain.o menu.o tests.cpp -o testEXE -lncurses -ltinfo -lgtest
+

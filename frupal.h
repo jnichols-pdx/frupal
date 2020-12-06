@@ -14,6 +14,7 @@ using namespace std;
 
 class Frupal
 {
+  friend class GrovnikTest;
   public:
     Frupal(WINDOW * win, int y, int x);
     Frupal(WINDOW * win, char * mapFileName);
