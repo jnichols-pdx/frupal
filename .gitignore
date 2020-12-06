@@ -34,6 +34,7 @@
 *.out
 *.app
 frupal
+testEXE
 
 #vi/vim swap files:
 *.swp
