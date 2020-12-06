@@ -80,6 +80,7 @@ As rendered in game:
 ### Start
 
 start: *<x location\>* *<y location\>*
+
 Specifies the starting location of the Hero.  
 This element may only be specified **once**.  
 The following example places the Hero just inside of the northwest corner of the map.
