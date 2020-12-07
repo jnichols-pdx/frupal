@@ -45,7 +45,6 @@ istream &operator>>(istream &source, grovnik &destination) {
 }
 
 //-------------------------------------------------------------------
-// TODO
 
 binocular::binocular() : grovnik('B'), cost(0), range(2) {}
 
@@ -121,7 +120,6 @@ void binocular::read(istream &source) {
 }
 
 //-------------------------------------------------------------------
-// TODO
 
 // default constructor
 ship::ship() : grovnik('S'), cost(0) {}
@@ -204,7 +202,7 @@ int treasure_chest::display_info() {
     displayStat(row, "Cursor Grovnik Info: ");
     displayStat(row, "Treasure: ");
     --row;
-    displayStat(row, name, 11); // offset of 7
+    displayStat(row, name, 11);
     displayStat(row, "Collecting Treasure");
   } else {
     displayStat(row, "???", 4);
@@ -220,7 +218,7 @@ int treasure_chest::get_amount() { return amount; }
 
 void treasure_chest::discover() { discovered = true; }
 
-// virtual helper to allow istream  >> treasureChestObject
+// virtual helper to allow istream  >> treasure_chestObject
 void treasure_chest::read(istream &source) {
   // override values from default constructor to allow error checking
   amount = -1;
@@ -253,10 +251,10 @@ void treasure_chest::read(istream &source) {
 }
 
 //-------------------------------------------------------------------
-// TODO
 
-royal_diamond::royal_diamond()
-    : grovnik('%') //$ is already in use for treasure_chest
+//$ is already in use for treasure_chest
+//% will be special cased to display a white $ on cyan
+royal_diamond::royal_diamond() : grovnik('%')
 {}
 
 royal_diamond::~royal_diamond() {}
@@ -272,7 +270,7 @@ int royal_diamond::display_info() {
   return row;
 }
 
-// virtual helper to allow istream  >> clueObject
+// virtual helper to allow istream  >> diamondsObject
 void royal_diamond::read(istream &source) {
   string temp;
   getline(source, temp);
@@ -284,27 +282,31 @@ void royal_diamond::read(istream &source) {
 
 //-------------------------------------------------------------------
 
+//Forward declarations of static members in toolObstacle
 vector<string> toolObstacle::toolTypes;
 vector<string> toolObstacle::obstacleTypes;
 
+
+//Intermediate derived class from which both tool and obstacle derive
+//common functionality
 toolObstacle::toolObstacle() {}
 
 toolObstacle::toolObstacle(char disp) : grovnik(disp) {}
 
-// returns index of the specified index of toFind in toolTypes, or -1 if not
-// found.
+// Returns index of the location of the toFind string if it is present in 
+// toolTypes, or -1 if toFind is not in the toolTypeslist
 int toolObstacle::find_tool_by_typename(const char *toFind) {
   return find_string(toolTypes, toFind);
 }
 
-// returns index of the specified index of toFind in obstacleTypes, or -1 if not
-// found.
+// Returns index of the location of the toFind string if it is present in 
+// obstacleTypes, or -1 if toFind is not in the obstacleTypes list
 int toolObstacle::find_obstacle_by_typename(const char *toFind) {
 
   return find_string(obstacleTypes, toFind);
 }
 
-// appends toAdd to the toolTypes vector if it isn't already present
+// Appends toAdd to the toolTypes vector if it isn't already present
 // returns the index where toAdd was found or placed in toolTypes
 int toolObstacle::add_tool_typename(const string toAdd) {
   int loc = find_string(toolTypes, toAdd.c_str());
@@ -315,7 +317,7 @@ int toolObstacle::add_tool_typename(const string toAdd) {
     return loc;
 }
 
-// appends toAdd to the obstacleTypes vector if it isn't already present
+// Appends toAdd to the obstacleTypes vector if it isn't already present
 // returns the index where toAdd was found or placed in obstacleTypes
 int toolObstacle::add_obstacle_typename(const string toAdd) {
   int loc = find_string(obstacleTypes, toAdd.c_str());
@@ -326,6 +328,7 @@ int toolObstacle::add_obstacle_typename(const string toAdd) {
     return loc;
 }
 
+// Returns the index of the given string within the given vector of strings, or -1 if the string is not found in the vector.
 int toolObstacle::find_string(const vector<string> &vec, const char *toFind) {
   for (int i = 0; i < (int)vec.size(); ++i) {
     if (vec[i].compare(toFind) == 0)
@@ -447,8 +450,8 @@ tool::tool(char *description, int kind, int cost, int divisor)
   this->cost = cost;
 
   this->divisor = divisor;
-  target_count = 0; // TODO - functions to add targets after initialization? or
-                    // pass a list object?
+  target_count = 0; // Refactor possibilities: functions to add targets after initialization? or
+                    // pass a data structure with multiple targets in it to the constructor?
 }
 
 tool::~tool() {

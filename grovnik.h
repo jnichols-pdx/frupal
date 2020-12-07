@@ -141,8 +141,9 @@ public:
   tool(tool &to_copy); // copy constructor
   ~tool();
   int display_info(); // displays tool description in the menu
-  void display_name(
-      int y); // displays tool name in the menu at specific y coordinate
+
+  // displays tool name in the menu at specific y coordinate
+  void display_name( int y); 
   const char *get_description();
   const char *get_kind_text();
   int get_cost();
@@ -153,10 +154,10 @@ public:
 protected:
   char *description;
   int *targets; // Numeric IDs for what kind of obstacle this tool helps remove,
-  int target_count;
+  int target_count; // Length of targets array
   int kind; // Numeric index into
-  int cost;
-  int divisor;
+  int cost; // Purchase price in whiffles
+  int divisor; // integer to divide an obstacles cost by when using this tool
   virtual void read(std::istream &source);
 
 private:
@@ -191,7 +192,7 @@ public:
   void discover();
 
 protected:
-  bool discovered;
+  bool discovered; // whether the hero has landed on this clue
   char *clueText; // clue string
   virtual void read(std::istream &source);
 };

@@ -38,10 +38,11 @@ private:
   char loseGame(); // called when player runs out of energy
   char winGame();  // called when player gets royal diamond
 
-  char breakObstacle(obstacle *item, int y,
-                     int x); // breaks obstacle at coordinates
+  // breaks obstacle at coordinates
+  char breakObstacle(obstacle *item, int y, int x);
 
   bool loadMap(char *mapFileName); // loads map from a filename
+
   // Parse one line/element
   bool parseLine(string line, ifstream &mapFile, bool &terrain, bool &start,
                  bool &diamonds);
@@ -57,9 +58,10 @@ private:
 
   int xHero, yHero; // hero location
   Hero mainGuy;
+ 
+  // map that holds items such as clues, food, tools etc.
+  grovnik *itemMap[128] [128]; 
 
-  grovnik *itemMap[128]
-                  [128]; // map that holds items such as clues, food, tools etc.
   bool visitMap[128][128];   // map to track discovered places
   char terrainMap[128][128]; // map that holds terrain
   terrain terrainInfo;       // terrain info object

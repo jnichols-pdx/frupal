@@ -23,7 +23,6 @@ Hero::Hero(int whif, int nRG, int range) {
     inventory[i] = NULL;
   }
   vision = range;
-  // inventory[0] = new tool("ship");
   waterWalk = false;
 }
 
@@ -85,7 +84,7 @@ bool Hero::checkInventory(const char *item) {
   if (item == NULL)
     return false; // empty string return false
 
-  // XXX quick and dirty check for ship, suggest refactoring.
+  // XXX quick and dirty check for ship based on the original proposal to have the ship be an actual item in the inventory. Candidate for refactoring in future sprints.
   if (0 == strcmp(item, "ship"))
     return waterWalk;
 
@@ -172,7 +171,7 @@ bool Hero::selectTool(
   }
 
   menuRow -= 2;
-  // Instructions at top.
+  // Show more detailed instructions at top of menu when choosing a tool.
   int instructRow = 0;
   clearLines(0, 2);
   displayStat(instructRow, "UP/DOWN to find tool");
@@ -180,7 +179,7 @@ bool Hero::selectTool(
 
   arrPos =
       select(obstacleType, menuRow + 2); // which tool in inventory is selected
-  wattroff(stdscr, COLOR_PAIR(11));
+  wattroff(stdscr, COLOR_PAIR(11)); //Stop highlighting text.
   clearLines(4);
   refresh();
 
@@ -208,11 +207,9 @@ int Hero::select(int obstacleType, int menuRow) {
         inventory[arrPos]->check_if_targets(obstacleType) == false) {
       menuRow = startRow;
       clearLines(startRow);
-      displayStat(
-          menuRow,
-          "You need to select a\ncorrect tool"); // this has a problem of
-                                                 // displaying continuous lines
-                                                 // after TODO
+
+      // this has a problem of displaying continuous lines after TODO
+      displayStat( menuRow, "You need to select a\ncorrect tool");
     } else {
       clearLines(startRow);
     }

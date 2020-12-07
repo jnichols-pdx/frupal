@@ -12,13 +12,11 @@ int main(int argc, char **argv) {
               // x are the size of the entire terminal
     getmaxyx(stdscr, y, x); // Initialize y + x with the appropriate values for
                             // the screen / terminal's current size
+                            //
+    // Create a new window y lines high, and a percentage of x columns wide, as described by the standard screen (terminal window size)
+    WINDOW *mapwin = newwin(y, x * viewPortRatio, 0, 0);
 
-    WINDOW *mapwin =
-        newwin(y, x * viewPortRatio, 0,
-               0); // Create a new window y lines high, and 75% of x value as
-                   // described by the standard screen (terminal window size)
-
-    // vertical line seperating menu and map
+    // vertical line separating menu and map
     move(0, x * viewPortRatio);
     vline('#', y);
 
@@ -32,12 +30,13 @@ int main(int argc, char **argv) {
       if (!goodMapFile)
         delete g;
     }
-    // If we were not given a map file, or the map file wasn't correct, load the
-    // default map.
+
+    // If we were not given a map file, drop the player into a limbo of empty meadows.
+    // XXX refactor opportunity: should this instead display usage information and exit?
     if (!goodMapFile) {
       g = new Frupal(mapwin, 5, 5);
     }
-    start_color(); // star ncurses color
+    start_color(); // start ncurses color
 
     // series of inits initializes our color pairs for drawing the map
     init_pair(1, COLOR_YELLOW, COLOR_RED);
@@ -62,8 +61,9 @@ int main(int argc, char **argv) {
     while (ch != 'q' && ch != 'r') {
       getyx(mapwin, cursorY, cursorX); // Remember cursor position
       int row = 0;
-      menu::displayStat(row, "WASD Keys to Move Hero",
-                        1); // Print out instructions to the menu
+
+      // Print out instructions to the menu
+      menu::displayStat(row, "WASD Keys to Move Hero", 1);
       menu::displayStat(row, "Arrow Keys to Look Around", 1);
       move(cursorY, cursorX); // DisplayStat moved the cursor, put it back where
                               // it started.

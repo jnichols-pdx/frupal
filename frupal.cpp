@@ -156,8 +156,8 @@ bool Frupal::parseLine(string line, ifstream &mapFile, bool &terrain,
       cerr << "Failed to load the map!" << endl;
       cerr << "Found \"terrain:\" more than once in the map file." << endl;
       cerr << "\"terrain:\" may only be specified once." << endl;
-      cerr << "Offending line in map file:" << std::endl;
-      cerr << ">>>" << line << "<<<" << std::endl;
+      cerr << "Offending line in map file:" << endl;
+      cerr << ">>>" << line << "<<<" << endl;
       exit(-1);
     }
 
@@ -169,8 +169,8 @@ bool Frupal::parseLine(string line, ifstream &mapFile, bool &terrain,
       cerr << "Invalid or unsupported terrain size: " << xMax << " x " << yMax
            << endl;
       cerr << "Allowed range is 2 x 2 to 128 x 128" << endl;
-      cerr << "Offending line in map file:" << std::endl;
-      cerr << ">>>" << line << "<<<" << std::endl;
+      cerr << "Offending line in map file:" << endl;
+      cerr << ">>>" << line << "<<<" << endl;
       exit(-1);
     }
 
@@ -207,8 +207,8 @@ bool Frupal::parseLine(string line, ifstream &mapFile, bool &terrain,
     cerr << "\"terrain:\" must be specified before all other elements, except "
             "\"Frupal_Kingdom:\"."
          << endl;
-    cerr << "Offending line in map file:" << std::endl;
-    cerr << ">>>" << line << "<<<" << std::endl;
+    cerr << "Offending line in map file:" << endl;
+    cerr << ">>>" << line << "<<<" << endl;
     exit(-1);
   }
 
@@ -218,13 +218,13 @@ bool Frupal::parseLine(string line, ifstream &mapFile, bool &terrain,
       cerr << "Failed to load the map!" << endl;
       cerr << "Found \"start:\" more than once in the map file." << endl;
       cerr << "\"start:\" may only be specified once." << endl;
-      cerr << "Offending line in map file:" << std::endl;
-      cerr << ">>>" << line << "<<<" << std::endl;
+      cerr << "Offending line in map file:" << endl;
+      cerr << ">>>" << line << "<<<" << endl;
       exit(-1);
     }
     lineStream >> xHero >> yHero;
-    // reject map if hero starts out of bounds
 
+    // reject map if hero starts out of bounds
     if (xHero < 0 || xHero >= xMax || yHero < 0 || yHero >= yMax) {
 
       endwin();
@@ -232,8 +232,8 @@ bool Frupal::parseLine(string line, ifstream &mapFile, bool &terrain,
       cerr << "Hero starting location out of range: " << xHero << "," << yHero
            << endl;
       cerr << "Allowed range is 0,0 to " << xMax << "," << yMax << endl;
-      cerr << "Offending line in map file:" << std::endl;
-      cerr << ">>>" << line << "<<<" << std::endl;
+      cerr << "Offending line in map file:" << endl;
+      cerr << ">>>" << line << "<<<" << endl;
       exit(-1);
     }
 
@@ -247,8 +247,8 @@ bool Frupal::parseLine(string line, ifstream &mapFile, bool &terrain,
       cerr << "Failed to load the map!" << endl;
       cerr << "Found \"diamonds:\" more than once in the map file." << endl;
       cerr << "\"diamonds:\" may only be specified once." << endl;
-      cerr << "Offending line in map file:" << std::endl;
-      cerr << ">>>" << line << "<<<" << std::endl;
+      cerr << "Offending line in map file:" << endl;
+      cerr << ">>>" << line << "<<<" << endl;
       exit(-1);
     }
     newItem = new royal_diamond();
@@ -273,24 +273,23 @@ bool Frupal::parseLine(string line, ifstream &mapFile, bool &terrain,
       endwin();
       cerr << "Failed to load the map!" << endl;
       cerr << "Found unkown element: " << elemName << endl;
-      cerr << "Offending line in map file:" << std::endl;
-      cerr << ">>>" << line << "<<<" << std::endl;
+      cerr << "Offending line in map file:" << endl;
+      cerr << ">>>" << line << "<<<" << endl;
       exit(-1);
     }
   }
 
   if (newItem) {
     lineStream >> x >> y;
-    if (x < 0 || x >= xMax || y < 0 ||
-        y >= yMax) // reject if grovnik out of bounds
-    {
+    // reject if grovnik out of bounds
+    if (x < 0 || x >= xMax || y < 0 || y >= yMax) {
       endwin();
       cerr << "Failed to load the map!" << endl;
       cerr << elemName << " location is out of range: " << x << "," << y
            << endl;
       cerr << "Allowed range is 0,0 to " << xMax << "," << yMax << endl;
-      cerr << "Offending line in map file:" << std::endl;
-      cerr << ">>>" << line << "<<<" << std::endl;
+      cerr << "Offending line in map file:" << endl;
+      cerr << ">>>" << line << "<<<" << endl;
       exit(-1);
     }
 
@@ -300,8 +299,8 @@ bool Frupal::parseLine(string line, ifstream &mapFile, bool &terrain,
       cerr << "Failed to load the map!" << endl;
       cerr << "Items may not be placed on walls, as they would be inaccessible."
            << endl;
-      cerr << "Offending line in map file:" << std::endl;
-      cerr << ">>>" << line << "<<<" << std::endl;
+      cerr << "Offending line in map file:" << endl;
+      cerr << ">>>" << line << "<<<" << endl;
       exit(-1);
     }
 
@@ -310,8 +309,8 @@ bool Frupal::parseLine(string line, ifstream &mapFile, bool &terrain,
       endwin();
       cerr << "Failed to load the map!" << endl;
       cerr << "Item location is already in use: " << x << "," << y << endl;
-      cerr << "Offending line in map file:" << std::endl;
-      cerr << ">>>" << line << "<<<" << std::endl;
+      cerr << "Offending line in map file:" << endl;
+      cerr << ">>>" << line << "<<<" << endl;
       exit(-1);
     }
 
@@ -320,11 +319,12 @@ bool Frupal::parseLine(string line, ifstream &mapFile, bool &terrain,
     } catch (const char *s) {
       endwin();
       cerr << "Failed to load the map!" << endl;
-      cerr << s << std::endl;
-      cerr << "Offending line in map file:" << std::endl;
-      cerr << ">>>" << line << "<<<" << std::endl;
+      cerr << s << endl;
+      cerr << "Offending line in map file:" << endl;
+      cerr << ">>>" << line << "<<<" << endl;
       exit(-1);
     }
+
     itemMap[y][x] = newItem;
   }
 
@@ -531,16 +531,16 @@ char Frupal::validMove(int y, int x) {
   return ' ';
 }
 
-char Frupal::breakObstacle(obstacle *item, int y,
-                           int x) { // breaks obstacle at coordinates
+// breaks obstacle at coordinates
+char Frupal::breakObstacle(obstacle *item, int y, int x) {
 
   tool *copy = NULL;
   char status = ' ';
 
   int menuRow = item->display_info(); // displays obstacle info
 
-  if (!mainGuy.selectTool(copy, item->get_kind_int(),
-                          menuRow)) { // no tool selected
+  // no tool selected
+  if (!mainGuy.selectTool(copy, item->get_kind_int(), menuRow)) { 
     if (!mainGuy.modEner(item->get_b_energy())) {
       status = loseGame();
 
@@ -571,7 +571,7 @@ char Frupal::breakObstacle(obstacle *item, int y,
   return status;
 }
 
-// function displays loss and waits to exit game //TODO
+// function displays loss and waits to exit game
 char Frupal::loseGame() {
 
   mainGuy.showHeroInfo();
@@ -603,7 +603,7 @@ char Frupal::loseGame() {
   return 'r';
 }
 
-// function displays win and waits to exit game //TODO
+// function displays win and waits to exit game
 char Frupal::winGame() {
 
   mainGuy.modWhif(999990000);
@@ -745,6 +745,8 @@ void Frupal::showMap() {
                  ' ');                   // write space to map
         wattroff(curWin, COLOR_PAIR(6)); // turn off color BLACK
       }
+
+      // Unfinished addition of # border around playable map area
       // if(((y == (winYMax/2)-yHero-1) && x >= (winXMax/2)-xHero-1 && x <=
       // (winXMax/2)+xHero+1) || (y >= (winYMax/2)-yHero-1 && y <=
       // (winXMax/2)+yHero+1 && x == (winXMax/2)-xHero-1))
