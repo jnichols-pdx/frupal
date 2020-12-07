@@ -15,16 +15,18 @@ Example: `./frupal maps/castle.fmap`
 
 Other maps included with frupal can be found [here](./maps/)
 
-The on-disk format for map files (.fmap) can be found [here](./MAP_FILES.md)
+A description of the contents of a .fmap map file can be found [here](./MAP_FILES.md)
 
 After launching the game you can use arrow keys to move the cursor.
 You can use w,a,s,d keys to move your hero.
 To buy an item move up to it and press y to buy or n to skip.
 After buying a tool you can approach an obstacle and decide if
 you want to use a tool to help remove it. Select y for yes and n
-for no. After selecting y, press return to complete the action.
+for no. After selecting y to use a tool, press up or down to 
+look through the tools in the hero's inventory, then press return
+to use the selected tool, if possible, to break the obstacle.
 Moving up to an obstacle without an appropriate tool in the 
-hero's inventory will break the obstacle immediately.
+hero's inventory, or selecting n will break the obstacle immediately.
 
 
 Features:
