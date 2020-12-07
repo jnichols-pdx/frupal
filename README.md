@@ -28,6 +28,7 @@ to use the selected tool, if possible, to break the obstacle.
 Moving up to an obstacle without an appropriate tool in the 
 hero's inventory, or selecting n will break the obstacle immediately.
 
+A github 'projects' page was used as a task kanban, found [here](https://github.com/jnichols-pdx/frupal/projects/1)
 
 Features:
 
