@@ -214,7 +214,7 @@ Example: `tool: 61 0 hammers 1 boulders 2 100 Rock smashing hammer X2`
 
 The following example places some dynamite, costing 50 grovniks, with divisor 1000, that affects four things: boulders, tress, train tracks and whales, along the northern edge of a 128x128 map:  
 
-Example: `tool: 61 0 explosives 4 boulders trees train-tracks whales 1000 50 Dynamite of ultimate destructino X1000`  
+Example: `tool: 61 0 explosives 4 boulders trees train-tracks whales 1000 50 Dynamite of ultimate destruction X1000`  
 
 ---
 ### Quick Usage Reference
