@@ -1,6 +1,6 @@
 Frupal_Kingdom:
 
-# This map file is intentionally broken on line 22, and is expected
+# This map file is intentionally broken on line 23, and is expected
 # to FAIL if you try to load it with frupal.
 
 # This is a comment
