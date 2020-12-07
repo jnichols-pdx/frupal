@@ -233,7 +233,7 @@ start: 125 97
 clue: 124 97 Welcome to The Kingdom of Frupal
 clue: 123 97 The town is left from here
 clue: 122 97 Have a welcoming treat.
-food: 121 97 0 25 Tamale
+food: 121 97 1 25 Tamale
 clue: 79 96 Two competing convenience stores.
 #left store
 food: 59 91 20 20 Peanuts
@@ -310,7 +310,7 @@ food: 53 69 1 15 Chips
 
 #neighborhood
 obstacle: 98 68 Door 20 Fancy Door
-food: 95 70 0 175 Golden Steak
+food: 95 69 1 175 Golden Steak
 obstacle: 106 67 Door 25 Fancier Door
 clue: 104 69 The owners spent all their money on the door
 
@@ -322,7 +322,7 @@ clue: 74 35 The spirit that lives north from here can be vanished with this simp
 #items in castle
 treasure: 9 24 800 treasure of a fallen warrior
 food: 3 31 300 150 Shredded Beef Soft Tacos
-food: 15 29 1000 1000 Eternal Sandwich
+food: 24 40 1000 1000 Eternal Sandwich
 obstacle: 48 7 Spirit 1000 Guardian of Blessed Weapon
 tool: 48 6 Mythical 1 Beast 50 100 Blessed Spear X50
 obstacle: 18 6 Beast 9999 Protector of Royal Diamonds

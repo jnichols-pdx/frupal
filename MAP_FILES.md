@@ -18,11 +18,13 @@ Map files may have any filename, but typically will end with the ".fmap" suffix.
 * Empty lines are ignored.  
 * Lines beginning with `#` are ignored. This may be used to include comments in a map file.  
 * X,Y locations are zero indexed. The `0 0` origin is at the top left (northwest) corner of the map.
+* X,Y locations must be between 0 and 1 less than the x and y dimensions given in `terrain:`
 
 The following elements are required for a complete game map: [`Frupal_Kingdom:`](#frupal_kingdom), [`terrain:`](#terrain), [`start:`](#start), [`diamonds:`](#diamonds).
 
 The following elements are optional, but are suggested for a more interesting game experience: [`treasure:`](#treasure), [`food:`](#food), [`clue:`](#clues), [`ship:`](#ship), [`binoculars:`](#binoculars), [`obstacle:`](#obstacles), [`tool:`](#tools)
 
+Link to: [Quick Usage Reference](#quick-usage-reference)  
 
 ## Elements
 
@@ -47,8 +49,8 @@ terrain: *<x dimension\>* *<y dimension\>*
 *<last row of terrain characters\>*  
 
 Defines the dimensions of and the kind of terrain grovnik at every location on the map.  
-*<x dimension\>* is at most 128.
-*<y dimension\>* is at most 128. 
+*<x dimension\>* must be between 2 and 128.  
+*<y dimension\>* must be between 2 and 128.  
 The only element allowed before `terrain:` in the map file is `Frupal_Kingdom:`.  
 Each row of terrain characters **must** have the same number of characters as *<x dimension\>*.  
 There **must** be as many rows of terrain characters as *<y dimension\>*.  
@@ -105,6 +107,7 @@ treasure: *<x location\>* *<y location\>* *<value\>* *<description\>*
 Specifies one of many treasure items on the map.
 Displayed in game as a black **$**.  
 *<value\>* is how many whiffles the player gains when collecting this treasure.
+*<value\>* must be between 1 and 9999.  
 The following example places a gold bar worth 4000 whiffles in the southwest region of a 128x128 map:  
 
 Example: `treasure: 10 127 4000 A medium sized gold bar.`
@@ -117,7 +120,9 @@ food: *<x location\>* *<y location\>* *<cost\>* *<energy\>* *<description\>*
 Specifies one of many food items on a map.  
 Displayed in game as a black **F**.  
 *<cost\>* is the price in whiffles to purchase this food item.  
+*<cost\>* must be between 1 and 9999.  
 *<energy\>* is the number units of energy buying and eating this food will give to the player.  
+*<energy\>* must be between 1 and 9999.  
 The following example places a hotdog worth 10 energy, costing 2 whiffles near the center of a 128x128 map:  
 
 Example: `food: 60 77 2 10 Hotdog with relish and mustard.`
@@ -144,7 +149,8 @@ ship: *<x location\>* *<y location\>* *<cost\>*
 Specifies the location of the Ship on the map, which allows a player to travel on water grovniks.  
 Displayed in game as a black **S**.  
 *<cost\>* is the price in whiffles to purchase the ship.  
-This element may only be specified **once**.  
+*<cost\>* must be between 1 and 9999.  
+This element is normally only specified once, but multiple ships are allowed on a map.  
 The following example places the Ship, with a purchase price of 10000 whiffles, along the eastern edge of a 128x128 map:  
 
 Example: `ship: 128 64 10000`
@@ -158,8 +164,10 @@ Specifies the location of the Binoculars on the map.
 Displayed in game as a black **B**.  
 The Binoculars allow a player to see two grovniks around themselves, instead of one.  
 *<cost\>* is the price in whiffles to purchase the Binoculars.  
+*<cost\>* must be between 1 and 9999.  
 *<distance\>* is how far in grovniks a hero can see if they own these binoculars.  
-This element may only be specified **once**.  
+*<distance\>* must be between 1 and 999.  
+This element is normally only specified once, but multiple pairs of binoculars are allowed on a map.  
 The following example places the Binoculars, which cost 500 whiffles to purchase, along the southern edge of a 128x128 map:  
 
 Example: `binoculars: 70 128 500 5`
@@ -176,6 +184,7 @@ Displayed in game as a black **!**.
 This name will be used by tools to determine which obstacles they affect.  
 *<kind\>* may not contain whitespace, and is not visible to the player.  
 *<energy cost\>* is the amount of energy required for a player to remove this obstacle without the appropriate tool.  
+*<energy cost\>* must be between 1 and 9999.  
 *<description\>* Should be used for the player-visible description of an obstacle instead of *<kind\>*.  
 The following example places a boulder requiring 15 energy to remove on the western edge of a 128x128 map:  
 
@@ -188,18 +197,46 @@ tool: *<x location\>* *<y location\>* *<kind\>* *<target_count\>* *<targets...\>
 
 Specifies one of many tools on a map, which can lower the energy cost of removing obstacles.  
 Displayed in game as a black **T**.  
-*<kind\>* is a short name for the 'class' or 'type' of tool. 
+*<kind\>* is a short name for the 'class' or 'type' of tool.  
 *<kind\>* should be a single plural word without spaces like 'saws' or 'hammers'.  
 *<target_count\>* is how many different kinds of obstacle this tool can remove.  
 *<targets...\>* is a whitespace separated list of kinds of obstacles that this tool removes.  
 These should match the *<kind\>* names of obstacles on the map.  
-there **MUST** be exactly as any targets as *<target_count\>*  
+there **MUST** be exactly as many *<targets\>* as *<target_count\>*  
 *<divisor\>* is a number that will be used to divide the energy cost of an obstacle.  
 A tool with a divisor of `3` would make the obstacle it removes cost only 1/3 as much energy to remove.  
+*<divisor\>* must be between 1 and 9999.  
 *<cost\>* is the price in whiffles to purchase this tool.  
+*<cost\>* must be between 1 and 9999.  
 The following example places a hammer, costing 100 grovnicks, with divisor 2, that affects boulders, along the northern edge of a 128x128 map:  
 
 Example: `tool: 61 0 hammers 1 boulders 2 100 Rock smashing hammer X2`  
 
 The following example places some dynamite, costing 50 grovniks, with divisor 1000, that affects four things: boulders, tress, train tracks and whales, along the northern edge of a 128x128 map:  
-Example: `tool: 61 0 explosives 4 boulders trees train-tracks whales 1000 50 Dynamite of ultimate destructino X1000`  
+
+Example: `tool: 61 0 explosives 4 boulders trees train-tracks whales 1000 50 Dynamite of ultimate destruction X1000`  
+
+---
+### Quick Usage Reference
+
+Frupal_Kindgom:
+
+terrain: *<x dimension\>* *<y dimension\>*  
+
+start: *<x location\>* *<y location\>*
+
+diamonds: *<x location\>* *<y location\>*
+
+treasure: *<x location\>* *<y location\>* *<value\>* *<description\>*
+
+food: *<x location\>* *<y location\>* *<cost\>* *<energy\>* *<description\>*
+
+clue: *<x location\>* *<y location\>* *<text\>*
+
+ship: *<x location\>* *<y location\>* *<cost\>*
+
+binoculars: *<x location\>* *<y location\>* *<cost\>* *<distance\>*
+
+obstacle: *<x location\>* *<y location\>* *<kind\>* *<energy cost\>* *<description\>*
+
+tool: *<x location\>* *<y location\>* *<kind\>* *<target_count\>* *<targets...\>* *<divisor\>* *<cost\>* *<description\>*

@@ -124,12 +124,26 @@ void binocular::read(istream & source) {
   range = -1; 
 
   source >> cost;
-  if(cost <= 0 && source.fail())
-    throw("Incorrect binoculars: missing or invalid <cost>.");
+  if(cost <= 0){
+    if(source.fail())
+      throw("Incorrect binoculars: missing or invalid <cost>.");
+    else
+      throw "Incorrect binoculars: minimum allowed whiffle <cost> is 1.";
+  }
+
+  if(cost > 9999)
+    throw "Incorrect binoculars: maximum allowed whiffle <cost> is 9999.";
 
   source >> range;
-  if(range <= 0 && source.fail())
-    throw("Incorrect binoculars: missing or invalid <distance>.");
+  if(range <= 0) {
+    if(source.fail())
+      throw("Incorrect binoculars: missing or invalid <distance>.");
+    else
+      throw("Incorrect binoculars: minimum allowed <distance> is 1.");
+  }
+
+  if(range > 999)
+    throw "Incorrect binoculars: maximum allowed <distance> is 999.";
 
   string temp;
   getline(source,temp);
@@ -194,8 +208,15 @@ void ship::read(istream & source)
   cost = -1;
 
   source >> cost;
-  if(cost <= 0 && source.fail())
-    throw "Incorrect ship: missing or invalid energy <cost>.";
+  if(cost <= 0) {
+    if(source.fail())
+      throw "Incorrect ship: missing or invalid whiffle <cost>.";
+    else
+      throw "Incorrect ship: minimum allowed whiffle <cost> is 1.";
+  }
+
+  if(cost > 9999)
+    throw "Incorrect ship: maximum allowed whiffle <cost> is 9999.";
 
   string temp;
   getline(source,temp);
@@ -268,8 +289,12 @@ void treasure_chest::read(istream & source)
   amount = -1;
 
   source >> amount;
-  if(amount <= 0 && source.fail())
-    throw "Incorrect treasure: missing or invalid <value>";
+  if(amount <= 0) {
+    if(source.fail())
+      throw "Incorrect treasure: missing or invalid <value>";
+    else
+      throw "Incorrect treasure: minimum allowed <value> is 1.";
+  }
 
   //strip leading whitespace before using getline()
   source >> ws;
@@ -470,12 +495,19 @@ void obstacle::read(istream & source)
   string temp;
   source >> temp; //Holds obstacle kind
   if(temp.length() == 0)
-    throw "Incomplete obstacle: missing <kind>, energy <cost> and <description>.";
+    throw "Incomplete obstacle: missing <kind>, <energy cost> and <description>.";
 
   kind = add_obstacle_typename(temp.c_str());
   source >> b_energy;
-  if(b_energy <= 0 && source.fail())
-    throw "Incorrect obstacle: missing or invalid energy <cost>.";
+  if(b_energy <= 0) {
+    if(source.fail())
+      throw "Incorrect obstacle: missing or invalid <energy cost>.";
+    else
+      throw "Incorrect obstacle: minimum allowed <energy cost> is 1.";
+  }
+
+  if(b_energy > 9999)
+    throw "Incorrect obstacle: maximum allowed <energy cost> is 9999.";
 
   //strip leading whitespace before using getline()
   source >> ws;
@@ -540,7 +572,7 @@ tool::tool(tool & to_copy){
 int tool::display_info()
 {
 	char costStr[5] = {0};
-	char divisorStr[3] = {0};
+	char divisorStr[5] = {0};
 
 	int row = 4;
 	clearLines(row);
@@ -624,13 +656,17 @@ void tool::read(istream & source)
   string temp;
   source >> temp; //holds tool kind
   if(temp.length() == 0)
-    throw "Incomplete tool: missing <kind>, <target_count>, <targets...>, <divisor, <cost> and <description>.";
+    throw "Incomplete tool: missing <kind>, <target_count>, <targets...>, <divisor>, <cost> and <description>.";
 
   kind = add_tool_typename(temp);
 
   source >> target_count; 
-  if(target_count <= 0 && source.fail())
-    throw "Incorrect tool: missing or invalid <target_count>.";
+  if(target_count <= 0) {
+    if(source.fail())
+      throw "Incorrect tool: missing or invalid <target_count>.";
+    else
+      throw "Incorrect tool: minimum allowed <target_count> is 1.";
+  }
 
   temp.erase();
   targets = new int[target_count];
@@ -638,18 +674,31 @@ void tool::read(istream & source)
   {
     source >> temp;
     if(temp.length() == 0)
-      throw "Incomplete tool: missing (or too few) <targets...>, <divisor, <cost> and <description>.";
+      throw "Incomplete tool: missing (or too few) <targets...>, <divisor>, <cost> and <description>.";
     targets[i] = add_obstacle_typename(temp);
     temp.erase();
   }
 
   source >> divisor;
-  if(divisor <= 0 && source.fail())
-    throw "Incorrect tool: missing or invalid <divisor>.";
+  if(divisor <= 0) {
+    if(source.fail())
+      throw "Incorrect tool: missing or invalid <divisor>.";
+    else
+      throw "Incorrect tool: minimum allowed <divisor> is 1.";
+  }
+  if(divisor > 9999)
+    throw "Incorrect tool: maximum allowed <divisor> is 9999.";
 
   source >> cost;
-  if(cost <= 0 && source.fail())
-    throw "Incorrect tool: missing or invalid <cost>.";
+  if(cost <= 0) {
+    if(source.fail())
+      throw "Incorrect tool: missing or invalid whiffle <cost>.";
+    else
+      throw "Incorrect tool: minimum allowed whiffle <cost> is 1.";
+  }
+
+  if(cost > 9999)
+    throw "Incorrect tool: maximum allowed whiffle <cost> is 9999.";
 
   //strip leading whitespace before using getline()
   source >> ws;
@@ -696,7 +745,7 @@ food::~food()
 int food::display_info()
 {
 	char costStr[5] = {0};
-	char energyStr[4] = {0};
+	char energyStr[5] = {0};
 
 	int row = 4;
 	clearLines(row);
@@ -742,12 +791,26 @@ void food::read(istream & source)
   energy = -1;
 
   source >> cost;
-  if(cost<= 0 && source.fail())
-    throw "Incorrect food: missing or invalid energy <cost>.";
+  if(cost<= 0) {
+    if(source.fail())
+      throw "Incorrect food: missing or invalid whiffle <cost>.";
+    else
+      throw "Incorrect food: minimum allowed whiffle <cost> is 1.";
+  }
+
+  if(cost > 9999)
+    throw "Incorrect food: maximum allowed whiffle <cost> is 9999.";
 
   source >> energy;
-  if(energy <= 0 && source.fail())
-    throw "Incorrect food: missing or invalid energy <energy>.";
+  if(energy <= 0) {
+    if(source.fail())
+      throw "Incorrect food: missing or invalid energy <energy>.";
+    else
+      throw "Incorrect food: minimum allowed <energy> is 1.";
+  }
+
+  if(energy > 9999)
+    throw "Incorrect food: maximum allowed <energy> is 9999.";
 
   //strip leading whitespace before using getline()
   source >> ws;
