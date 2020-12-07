@@ -3,7 +3,7 @@ Repository for Fall 2020 CS300 Group 2's final project: the [Kingdom Of Frupal.]
 
 [Presentation video](https://media.pdx.edu/media/t/1_umxa2xeh)
 
-Fully playable map name: bigmap_1.fmap
+Fully playable map names: bigmap_1.fmap, castle.fmap
 
 Use the following to build:
 
