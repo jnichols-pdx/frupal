@@ -1,4 +1,13 @@
 Frupal_Kingdom:
+
+# This map file expands on the contents of small_example.fmap
+# by tiling the terrain from the smaller map out to fill a 
+# full 128x128 map.
+#
+# Examples of all interactive items can be found in the top
+# left corner of the map.
+
+
 terrain: 128 128
 ...........=...................=...................=...................=...................=...................=................
 .....======..............======..............======..............======..............======..............======..............===
