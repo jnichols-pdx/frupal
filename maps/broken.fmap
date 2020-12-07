@@ -1,0 +1,57 @@
+Frupal_Kingdom:
+# This is a comment
+terrain: 20 10
+...........=........
+.....======.........
+....."""""..........
+....."""""..........
+....................
+.....~~~~~...~~~~~~~
+.....~~~~~...~~.....
+.....~~~~~~~~~~.....
+....................
+....................
+start: 1 1
+
+#empty lines are permitted
+
+diamonds: 18 8
+treasure: 2 2 ASDFNOTANUMBER500 Small Ruby
+treasure: 12 0 1000 Bag of Gold Coins
+food: 2 3 0
+clue: 0 0 This is the northwest corner of the map.\nThe Royal Diamonds are near\nthe opposite corner of the map.
+food: 15 4 20 50 Loaf of Bread
+ship: 4 6 1450
+clue: 11 1 Killroy was here! He hid the Royal Diamonds right behind you!
+binoculars: 10 6 25 2
+obstacle: 5 4 trees 30 An overgrown Willow TREE blocks the thin path of dry ground between the lake and the marshlands.
+obstacle: 17 8 trees 100 The diamonds are trapped between sturdy Ironwood TREES.
+tool: 0 8 axes 1 trees 2 100 Woodsman's axe X2
+obstacle: 19 8 trees 100 The diamonds are trapped between sturdy Ironwood TREES.
+obstacle: 18 7 trees 100 The diamonds are trapped between sturdy Ironwood TREES.
+obstacle: 18 9 trees 100 The diamonds are trapped between sturdy Ironwood TREES.
+tool: 1 0 chainsaws 2 trees stumps 10 600 Chainsaw of Tree Felling x10
+tool: 18 3 hammers 1 boulders 3 800 Sledgehammer X3
+obstacle: 18 4 boulders 15 A lone BOULDER lies half buried in the banks of the river. You could topple it into the water, but why bother?
+obstacle: 3 0 stumps 40 An ironwood tree was cut down here. The STUMP still presents a tripping hazard.
+clue: 0 3 A short clue
+treasure: 7 1 500 Small Sapphire
+
+
+#diamonds: 18 8
+#treasure: 2 2 500 Small Ruby
+#treasure: 12 0 1000 Bag of Gold Coins
+#food: 2 3 10 5 Ceasar Salad
+#clue: 0 0 This is the northwest corner of the map. The Royal Diamonds are near the opposite corner of the map.
+#food: 15 4 20 50 Loaf of Bread
+#ship: 4 6 1450
+#clue: 11 1 Killroy was here! He hid the Royal Diamonds right behind you!
+#binoculars: 10 6 25    5
+#obstacle: 5 4 tree 30 An overgrown Willow TREE blocks the thin path of dry ground between the lake and the marshlands.
+#obstacle: 17 8 tree 100 The diamonds are trapped between sturdy Ironwood TREES.
+#tool: 0 8 tree 2 100 Woodsman's axe X2
+#obstacle: 19 8 tree 100 The diamonds are trapped between sturdy Ironwood TREES.
+#obstacle: 18 7 tree 100 The diamonds are trapped between sturdy Ironwood TREES.
+#obstacle: 18 9 tree 100 The diamonds are trapped between sturdy Ironwood TREES.
+#tool: 19 0 tree 10 600 hainsaw of Tree Felling x10
+#obstacle: 18 4 boulder 15 A lone BOULDER lies half buried in the banks of the river. You could topple it into the water, but why bother?
