@@ -9,9 +9,13 @@ Use the following to build:
 
 1. make
 
-To launch the game type ./frupal "nameofmap".fmap
+To launch the game type ./frupal <path to "nameofmap".fmap\>
 
-Other maps can be found [here](./MAP_FILES.md)
+Example: `./frupal maps/castle.fmap`
+
+Other maps included with frupal can be found [here](./maps/)
+
+The on-disk format for map files (.fmap) can be found [here](./MAP_FILES.md)
 
 After launching the game you can use arrow keys to move the cursor.
 You can use w,a,s,d keys to move your hero.
@@ -19,6 +23,8 @@ To buy an item move up to it and press y to buy or n to skip.
 After buying a tool you can approach an obstacle and decide if
 you want to use a tool to help remove it. Select y for yes and n
 for no. After selecting y, press return to complete the action.
+Moving up to an obstacle without an appropriate tool in the 
+hero's inventory will break the obstacle immediately.
 
 
 Features:
