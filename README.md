@@ -9,7 +9,7 @@ Use the following to build:
 
 1. make
 
-To launch the game type ./frupal <nameofmap>.fmap
+To launch the game type ./frupal "nameofmap".fmap
 
 Other maps can be found [here](./MAP_FILES.md)
 
