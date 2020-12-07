@@ -150,7 +150,7 @@ Specifies the location of the Ship on the map, which allows a player to travel o
 Displayed in game as a black **S**.  
 *<cost\>* is the price in whiffles to purchase the ship.  
 *<cost\>* must be between 1 and 9999.  
-This element may only be specified **once**.  
+This element is normally only specified once, but multiple ships are allowed on a map.  
 The following example places the Ship, with a purchase price of 10000 whiffles, along the eastern edge of a 128x128 map:  
 
 Example: `ship: 128 64 10000`
@@ -167,7 +167,7 @@ The Binoculars allow a player to see two grovniks around themselves, instead of 
 *<cost\>* must be between 1 and 9999.  
 *<distance\>* is how far in grovniks a hero can see if they own these binoculars.  
 *<distance\>* must be between 1 and 999.  
-This element may only be specified **once**.  
+This element is normally only specified once, but multiple pairs of binoculars are allowed on a map.  
 The following example places the Binoculars, which cost 500 whiffles to purchase, along the southern edge of a 128x128 map:  
 
 Example: `binoculars: 70 128 500 5`

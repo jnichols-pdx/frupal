@@ -117,13 +117,13 @@ bool Frupal::loadMap(char * mapFileName)
     cerr << "Failed to load the map!" << endl;
 
     if(!foundTerrain)
-      cerr << "Map did not contain the terrain: element." << endl;
+      cerr << "Map did not contain the \"terrain:\" element." << endl;
 
     if(!foundStart)
-      cerr << "Map did not contain the start: element." << endl;
+      cerr << "Map did not contain the \"start:\" element." << endl;
 
     if(!foundDiamonds)
-      cerr << "Map did not contain the diamonds: element." << endl;
+      cerr << "Map did not contain the \"diamonds:\" element." << endl;
 
     exit(-1);
   }
@@ -154,6 +154,19 @@ bool Frupal::parseLine(string line, ifstream & mapFile, bool & terrain, bool & s
   lineStream >> elemName;
 
   if(elemName.compare("terrain:") == 0) {
+
+    if(terrain)
+    {
+      endwin();
+      cerr << "Failed to load the map!" << endl;
+      cerr << "Found \"terrain:\" more than once in the map file." << endl;
+      cerr << "\"terrain:\" may only be specified once." << endl;
+      cerr << "Offending line in map file:"<< std::endl;
+      cerr << ">>>" << line << "<<<" << std::endl;
+      exit(-1);
+    }
+
+
     lineStream >> xMax >> yMax;
     //reject map if map size too large or small
     if(xMax < 2 || xMax > 128 || yMax < 2 || yMax > 128)
@@ -189,8 +202,31 @@ bool Frupal::parseLine(string line, ifstream & mapFile, bool & terrain, bool & s
       mapFile.ignore(1000, '\n');
     }
     terrain = true;
+    return true;
   }
-  else if(elemName.compare("start:") == 0) {
+
+  if(!terrain)
+  {
+    endwin();
+    cerr << "Failed to load the map!" << endl;
+    cerr << "Found \"" << elemName << "\" before \"terrain:\" in the map file." << endl;
+    cerr << "\"terrain:\" must be specified before all other elements, except \"Frupal_Kingdom:\"." << endl;
+    cerr << "Offending line in map file:"<< std::endl;
+    cerr << ">>>" << line << "<<<" << std::endl;
+    exit(-1);
+  }
+
+  if(elemName.compare("start:") == 0) {
+    if(start)
+    {
+      endwin();
+      cerr << "Failed to load the map!" << endl;
+      cerr << "Found \"start:\" more than once in the map file." << endl;
+      cerr << "\"start:\" may only be specified once." << endl;
+      cerr << "Offending line in map file:"<< std::endl;
+      cerr << ">>>" << line << "<<<" << std::endl;
+      exit(-1);
+    }
     lineStream >> xHero >> yHero;
     //reject map if hero starts out of bounds
 
@@ -211,6 +247,16 @@ bool Frupal::parseLine(string line, ifstream & mapFile, bool & terrain, bool & s
     start = true;
   }
   else if (elemName.compare("diamonds:") == 0) {
+    if(diamonds)
+    {
+      endwin();
+      cerr << "Failed to load the map!" << endl;
+      cerr << "Found \"diamonds:\" more than once in the map file." << endl;
+      cerr << "\"diamonds:\" may only be specified once." << endl;
+      cerr << "Offending line in map file:"<< std::endl;
+      cerr << ">>>" << line << "<<<" << std::endl;
+      exit(-1);
+    }
     newItem = new royal_diamond();
     diamonds = true;
   }
@@ -257,6 +303,17 @@ bool Frupal::parseLine(string line, ifstream & mapFile, bool & terrain, bool & s
       cerr << "Failed to load the map!" << endl;
       cerr << elemName << " location is out of range: " << x << "," << y << endl;
       cerr << "Allowed range is 0,0 to " << xMax << "," << yMax << endl;
+      cerr << "Offending line in map file:"<< std::endl;
+      cerr << ">>>" << line << "<<<" << std::endl;
+      exit(-1);
+    }
+
+    //Prevent placing items on top of walls.
+    if('=' == terrainMap[y][x])
+    {
+      endwin();
+      cerr << "Failed to load the map!" << endl;
+      cerr << "Items may not be placed on walls, as they would be inaccessible." << endl;
       cerr << "Offending line in map file:"<< std::endl;
       cerr << ">>>" << line << "<<<" << std::endl;
       exit(-1);
