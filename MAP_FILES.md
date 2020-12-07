@@ -202,7 +202,7 @@ Displayed in game as a black **T**.
 *<target_count\>* is how many different kinds of obstacle this tool can remove.  
 *<targets...\>* is a whitespace separated list of kinds of obstacles that this tool removes.  
 These should match the *<kind\>* names of obstacles on the map.  
-there **MUST** be exactly as any targets as *<target_count\>*  
+there **MUST** be exactly as many *<targets\>* as *<target_count\>*  
 *<divisor\>* is a number that will be used to divide the energy cost of an obstacle.  
 A tool with a divisor of `3` would make the obstacle it removes cost only 1/3 as much energy to remove.  
 *<divisor\>* must be between 1 and 9999.  
@@ -213,6 +213,7 @@ The following example places a hammer, costing 100 grovnicks, with divisor 2, th
 Example: `tool: 61 0 hammers 1 boulders 2 100 Rock smashing hammer X2`  
 
 The following example places some dynamite, costing 50 grovniks, with divisor 1000, that affects four things: boulders, tress, train tracks and whales, along the northern edge of a 128x128 map:  
+
 Example: `tool: 61 0 explosives 4 boulders trees train-tracks whales 1000 50 Dynamite of ultimate destructino X1000`  
 
 ---
