@@ -8,16 +8,16 @@ public:
   Hero();                                 // Hero constructor
   Hero(int whif, int nRG, int range = 1); // Hero constructor
   ~Hero();
-  bool modEner(int nRG); // modify energy - adds by default. To lower energy,
-                         // send in negative number
+  bool modEner(int nRG);  // modify energy - adds by default. To lower energy,
+                          // send in negative number
   bool modWhif(int whif); // modify whiffles - adds by default. To lower number
                           // of whiffles, send in negative number
   void showHeroInfo();
   int visionRange(); // Returns how far the hero can see.
 
   bool checkInventory(
-      const char *item); // check if the hero has this in their inventory,
-                         // returns false when its not in it
+      const char *item);    // check if the hero has this in their inventory,
+                            // returns false when its not in it
   bool addTool(tool *item); // returns false if inventory is full, unless a ship
                             // is being added it will add the ship
   bool selectTool(tool *&item, int obstacleType,

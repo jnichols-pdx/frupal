@@ -58,9 +58,9 @@ private:
 
   int xHero, yHero; // hero location
   Hero mainGuy;
- 
+
   // map that holds items such as clues, food, tools etc.
-  grovnik *itemMap[128] [128]; 
+  grovnik *itemMap[128][128];
 
   bool visitMap[128][128];   // map to track discovered places
   char terrainMap[128][128]; // map that holds terrain

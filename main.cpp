@@ -13,7 +13,8 @@ int main(int argc, char **argv) {
     getmaxyx(stdscr, y, x); // Initialize y + x with the appropriate values for
                             // the screen / terminal's current size
                             //
-    // Create a new window y lines high, and a percentage of x columns wide, as described by the standard screen (terminal window size)
+    // Create a new window y lines high, and a percentage of x columns wide, as
+    // described by the standard screen (terminal window size)
     WINDOW *mapwin = newwin(y, x * viewPortRatio, 0, 0);
 
     // vertical line separating menu and map
@@ -31,8 +32,10 @@ int main(int argc, char **argv) {
         delete g;
     }
 
-    // If we were not given a map file, drop the player into a limbo of empty meadows.
-    // XXX refactor opportunity: should this instead display usage information and exit?
+    // If we were not given a map file, drop the player into a limbo of empty
+    // meadows.
+    // XXX refactor opportunity: should this instead display usage information
+    // and exit?
     if (!goodMapFile) {
       g = new Frupal(mapwin, 5, 5);
     }

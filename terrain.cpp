@@ -59,8 +59,9 @@ int terrain::get_travel_cost(char terType) {
 // terrain type passed in as character representation
 bool terrain::display_info(char terType) {
 
-  // change this variable to move the position of the text up or down in the menu
-  int row = 4; 
+  // change this variable to move the position of the text up or down in the
+  // menu
+  int row = 4;
   // change this to move it right or left in the menu
   int offset = 5;
   clearLines(row);

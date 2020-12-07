@@ -84,7 +84,9 @@ bool Hero::checkInventory(const char *item) {
   if (item == NULL)
     return false; // empty string return false
 
-  // XXX quick and dirty check for ship based on the original proposal to have the ship be an actual item in the inventory. Candidate for refactoring in future sprints.
+  // XXX quick and dirty check for ship based on the original proposal to have
+  // the ship be an actual item in the inventory. Candidate for refactoring in
+  // future sprints.
   if (0 == strcmp(item, "ship"))
     return waterWalk;
 
@@ -147,7 +149,7 @@ bool Hero::selectTool(
   int startRow = menuRow; // where the inventory starts in the menu      -
                           // change this variable to change y position of where
                           // inventory starts in the menu
-  int arrPos = 0; // array position
+  int arrPos = 0;         // array position
   int userInput = 0;
   for (int i = 0; i < items; ++i) {
     if (inventory[i]->check_if_targets(obstacleType) == true)
@@ -179,7 +181,7 @@ bool Hero::selectTool(
 
   arrPos =
       select(obstacleType, menuRow + 2); // which tool in inventory is selected
-  wattroff(stdscr, COLOR_PAIR(11)); //Stop highlighting text.
+  wattroff(stdscr, COLOR_PAIR(11));      // Stop highlighting text.
   clearLines(4);
   refresh();
 
@@ -209,7 +211,7 @@ int Hero::select(int obstacleType, int menuRow) {
       clearLines(startRow);
 
       // this has a problem of displaying continuous lines after TODO
-      displayStat( menuRow, "You need to select a\ncorrect tool");
+      displayStat(menuRow, "You need to select a\ncorrect tool");
     } else {
       clearLines(startRow);
     }

@@ -254,8 +254,7 @@ void treasure_chest::read(istream &source) {
 
 //$ is already in use for treasure_chest
 //% will be special cased to display a white $ on cyan
-royal_diamond::royal_diamond() : grovnik('%')
-{}
+royal_diamond::royal_diamond() : grovnik('%') {}
 
 royal_diamond::~royal_diamond() {}
 
@@ -282,24 +281,23 @@ void royal_diamond::read(istream &source) {
 
 //-------------------------------------------------------------------
 
-//Forward declarations of static members in toolObstacle
+// Forward declarations of static members in toolObstacle
 vector<string> toolObstacle::toolTypes;
 vector<string> toolObstacle::obstacleTypes;
 
-
-//Intermediate derived class from which both tool and obstacle derive
-//common functionality
+// Intermediate derived class from which both tool and obstacle derive
+// common functionality
 toolObstacle::toolObstacle() {}
 
 toolObstacle::toolObstacle(char disp) : grovnik(disp) {}
 
-// Returns index of the location of the toFind string if it is present in 
+// Returns index of the location of the toFind string if it is present in
 // toolTypes, or -1 if toFind is not in the toolTypeslist
 int toolObstacle::find_tool_by_typename(const char *toFind) {
   return find_string(toolTypes, toFind);
 }
 
-// Returns index of the location of the toFind string if it is present in 
+// Returns index of the location of the toFind string if it is present in
 // obstacleTypes, or -1 if toFind is not in the obstacleTypes list
 int toolObstacle::find_obstacle_by_typename(const char *toFind) {
 
@@ -328,7 +326,8 @@ int toolObstacle::add_obstacle_typename(const string toAdd) {
     return loc;
 }
 
-// Returns the index of the given string within the given vector of strings, or -1 if the string is not found in the vector.
+// Returns the index of the given string within the given vector of strings, or
+// -1 if the string is not found in the vector.
 int toolObstacle::find_string(const vector<string> &vec, const char *toFind) {
   for (int i = 0; i < (int)vec.size(); ++i) {
     if (vec[i].compare(toFind) == 0)
@@ -450,8 +449,9 @@ tool::tool(char *description, int kind, int cost, int divisor)
   this->cost = cost;
 
   this->divisor = divisor;
-  target_count = 0; // Refactor possibilities: functions to add targets after initialization? or
-                    // pass a data structure with multiple targets in it to the constructor?
+  target_count = 0; // Refactor possibilities: functions to add targets after
+                    // initialization? or pass a data structure with multiple
+                    // targets in it to the constructor?
 }
 
 tool::~tool() {

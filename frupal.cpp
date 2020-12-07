@@ -129,8 +129,8 @@ bool Frupal::loadMap(char *mapFileName) {
 // Parse most elements from a single line string
 // Takes a reference to the mapFile stream so the terrain: element may read
 // multiple lines Sets terrain, start, and diamonds booleans to true when those
-// elements are found so that the calling function can verify that these Required
-// elements have been loaded.
+// elements are found so that the calling function can verify that these
+// Required elements have been loaded.
 bool Frupal::parseLine(string line, ifstream &mapFile, bool &terrain,
                        bool &start, bool &diamonds) {
   int x = -1, y = -1;
@@ -540,7 +540,7 @@ char Frupal::breakObstacle(obstacle *item, int y, int x) {
   int menuRow = item->display_info(); // displays obstacle info
 
   // no tool selected
-  if (!mainGuy.selectTool(copy, item->get_kind_int(), menuRow)) { 
+  if (!mainGuy.selectTool(copy, item->get_kind_int(), menuRow)) {
     if (!mainGuy.modEner(item->get_b_energy())) {
       status = loseGame();
 
