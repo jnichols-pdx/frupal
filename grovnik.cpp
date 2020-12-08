@@ -196,6 +196,7 @@ treasure_chest::~treasure_chest() {
 
 int treasure_chest::display_info() {
   int row = 4;
+  char valueStr[5] = {0};
   clearLines(row);
 
   if (discovered) {
@@ -203,7 +204,11 @@ int treasure_chest::display_info() {
     displayStat(row, "Treasure: ");
     --row;
     displayStat(row, name, 11);
-    displayStat(row, "Collecting Treasure");
+    displayStat(row, "Collecting Treasure:");
+
+    displayStat(row, "Whiffles +", 2);
+    row -= 1;
+    displayStat(row, itos(amount, valueStr), 13);
   } else {
     displayStat(row, "???", 4);
   }
