@@ -1,0 +1,16 @@
+Frupal was developed by students at Portland State University for CS300
+Introduction to Software Engineering. Multiple versions were created by
+different groups of students. This version was created by Group 2, FA2020.
+
+CS300 FA2020 GROUP 2
+--------------------
+
+Anthony Bobrovnikov
+
+Arturo Gutierrez Bravo
+
+Mallory Hawke
+
+James Nichols
+
+Karl Rosenberg
