@@ -102,27 +102,24 @@ bool Hero::checkInventory(const char *item) {
   return false;
 }
 
-bool Hero::addTool(tool *item) { // returns false if inventory is full, unless a
-                                 // ship is being added it will add the ship
+bool Hero::addTool(tool *item) { // returns false if inventory is full
   if (item == NULL) {
     return false;
   }
 
-    for(int i = 0; i < INVSIZE; ++i) {
-      if (inventory[i] == NULL) { // theres space add here
-        inventory[i] = new tool(*item);
-        ++items;
-        return true;
-      }
+  for (int i = 0; i < INVSIZE; ++i) {
+    if (inventory[i] == NULL) { // theres space add here
+      inventory[i] = new tool(*item);
+      ++items;
+      return true;
     }
+  }
 
   return false; // inventory was full
 }
-
-bool Hero::selectTool(
-    tool *&item, int obstacleType,
-    int menuRow) { // selects a tool and copies it into the item argument,
-                   // returns false if inventory is empty
+// selects a tool and copies it into the item argument,
+// returns false if inventory is empty
+bool Hero::selectTool(tool *&item, int obstacleType, int menuRow) {
   if (item != NULL) {
     delete item;
     item = NULL;
@@ -269,7 +266,7 @@ bool Hero::purchaseItem(grovnik *item) {
     tool *toolPtr = dynamic_cast<tool *>(item);
     if (toolPtr) { // its a tool, add to inventory
       if (items == INVSIZE) {
-	displayStat(row, "Inventory full");
+        displayStat(row, "Inventory full");
         return false;
       } // full inventory
 
@@ -282,8 +279,8 @@ bool Hero::purchaseItem(grovnik *item) {
       }
 
       // adds tool to inventory
-      if (addTool(toolPtr) ==
-          false) { // if something went wrong while adding to inventory	
+      if (addTool(toolPtr) == false) {
+        // if something went wrong while adding to inventory
         toolPtr = NULL;
         return false;
       }
