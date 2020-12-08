@@ -1,4 +1,9 @@
 Frupal_Kingdom:
+
+# This is a testing map used to quickly gather a lot of energy, and to 
+# see how the hero interacts with items that are not placed on a
+# meadow tile.
+
 # This is a comment
 terrain: 20 10
 ...........=........
