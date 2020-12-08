@@ -104,31 +104,17 @@ bool Hero::checkInventory(const char *item) {
 
 bool Hero::addTool(tool *item) { // returns false if inventory is full, unless a
                                  // ship is being added it will add the ship
-  if (item == NULL)
+  if (item == NULL) {
     return false;
-  if (item->check_equal("ship") == true) { // if we are adding the ship
-    for (int i = 0; i < INVSIZE; ++i) { // first check if theres space available
-      if (inventory[i] == NULL) {
-        inventory[i] = new tool(*item); // copy item into inventory
-        ++items;
-        return true;
-      }
-    }
-    delete inventory[0]; // there wasn't space, free space and add.
-                         // element 0 is just a placeholder
-                         // we can discuss where we want to place the ship
-    inventory[0] = new tool(*item);
-    whiffles = whiffles - item->get_cost();
-    return true;
-  } else {
-    for (int i = 0; i < INVSIZE; ++i) {
+  }
+
+    for(int i = 0; i < INVSIZE; ++i) {
       if (inventory[i] == NULL) { // theres space add here
         inventory[i] = new tool(*item);
         ++items;
         return true;
       }
     }
-  }
 
   return false; // inventory was full
 }
@@ -210,7 +196,6 @@ int Hero::select(int obstacleType, int menuRow) {
       menuRow = startRow;
       clearLines(startRow);
 
-      // this has a problem of displaying continuous lines after TODO
       displayStat(menuRow, "You need to select a\ncorrect tool");
     } else {
       clearLines(startRow);
@@ -284,6 +269,7 @@ bool Hero::purchaseItem(grovnik *item) {
     tool *toolPtr = dynamic_cast<tool *>(item);
     if (toolPtr) { // its a tool, add to inventory
       if (items == INVSIZE) {
+	displayStat(row, "Inventory full");
         return false;
       } // full inventory
 
@@ -297,7 +283,7 @@ bool Hero::purchaseItem(grovnik *item) {
 
       // adds tool to inventory
       if (addTool(toolPtr) ==
-          false) { // if something went wrong while adding to inventory
+          false) { // if something went wrong while adding to inventory	
         toolPtr = NULL;
         return false;
       }
