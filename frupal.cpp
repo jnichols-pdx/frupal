@@ -419,36 +419,38 @@ char Frupal::heroMove(int yOffset, int xOffset) {
   return status;
 }
 
-// checks if a move is valid
+// Checks if a move is valid
 char Frupal::validMove(int y, int x) {
-  // checks for out of bounds
+  // Checks for out of bounds
   if (y < 0 || y >= yMax) {
     return 'n';
   } else if (x < 0 || x >= xMax) {
     return 'n';
 
-    // checks for a wall
+    // Checks for a wall
   } else if (terrainMap[y][x] == '=') {
     if (!mainGuy.modEner(-1)) {
       return loseGame();
     }
     return 'n';
 
-    // checks for water
+    // Checks for water
   } else if (terrainMap[y][x] == '~') {
     if (mainGuy.checkInventory("ship")) {
       int menuRow = (rand() % 2) + 4;
       menu::clearLines(3);
       menu::displayStat(menuRow, "v^v^ W~~A~~V~~E ^v^v");
-      return ' ';
+      // Don't immediately return if we have a ship,
+      // This allows us to interact with items that are on water.
     } else {
       if (!mainGuy.modEner(-1)) {
         return loseGame();
       }
       return 'n';
     }
+  }
 
-  } else if (itemMap[y][x]) {
+  if (itemMap[y][x]) {
     food *foodptr = dynamic_cast<food *>(itemMap[y][x]);
     if (foodptr) {
       if (mainGuy.purchaseItem(foodptr) == true) {
